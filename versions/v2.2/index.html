@@ -1,0 +1,4235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Self-contained AAC Picture Communication Board with voice recording and camera support.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>AAC Picture Board</title>
+  <style>
+    /* Reset & Base Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* Layout 1 — "Huge": 2x2 grid (4 tiles), warm palette (soft orange/cream), chunky rounded corners, thick borders */
+    body.layout-1 {
+      --bg-color: #faf4eb;
+      --topbar-bg: #f3e7d5;
+      --topbar-border: #e2d2bd;
+      --topbar-text: #452d14;
+      --btn-bg: #fffbf5;
+      --btn-border: #d4bda4;
+      --btn-text: #593e22;
+      --btn-active-bg: #d97724;
+      --btn-active-text: #ffffff;
+      --tile-bg: #fffaf2;
+      --tile-border: 4px solid #e8b982;
+      --tile-radius: 24px;
+      --tile-shadow: 0 8px 20px rgba(180, 110, 40, 0.14);
+      --tile-empty-bg: #fdf5e8;
+      --tile-empty-icon: #b37e4c;
+      --label-bg: rgba(255, 248, 238, 0.94);
+      --label-text: #3c2410;
+      --label-border: 1px solid rgba(232, 185, 130, 0.6);
+      --accent: #d97724;
+      --accent-rgb: 217, 119, 36;
+      --slot-badge-bg: rgba(69, 45, 20, 0.14);
+      --slot-badge-text: #452d14;
+      --grid-cols: 2;
+      --grid-rows: 2;
+      --grid-gap: 16px;
+      --tile-font-size: 1.5rem;
+      --badge-size: 38px;
+    }
+
+    /* Layout 2 — "Classic": 3x3 grid (9 tiles), medium size, cool palette (soft blue/slate), standard borders */
+    body.layout-2 {
+      --bg-color: #f1f5f9;
+      --topbar-bg: #e2e8f0;
+      --topbar-border: #cbd5e1;
+      --topbar-text: #1e293b;
+      --btn-bg: #ffffff;
+      --btn-border: #94a3b8;
+      --btn-text: #334155;
+      --btn-active-bg: #2563eb;
+      --btn-active-text: #ffffff;
+      --tile-bg: #ffffff;
+      --tile-border: 2px solid #94a3b8;
+      --tile-radius: 16px;
+      --tile-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+      --tile-empty-bg: #f8fafc;
+      --tile-empty-icon: #64748b;
+      --label-bg: rgba(255, 255, 255, 0.94);
+      --label-text: #0f172a;
+      --label-border: 1px solid rgba(148, 163, 184, 0.4);
+      --accent: #2563eb;
+      --accent-rgb: 37, 99, 235;
+      --slot-badge-bg: rgba(30, 41, 59, 0.12);
+      --slot-badge-text: #1e293b;
+      --grid-cols: 3;
+      --grid-rows: 3;
+      --grid-gap: 12px;
+      --tile-font-size: 1.15rem;
+      --badge-size: 32px;
+    }
+
+    /* Layout 3 — "Dense": 4x3 grid (12 tiles), smaller, high-contrast dark theme (near-black bg, white outline), bright accent */
+    body.layout-3 {
+      --bg-color: #0d1117;
+      --topbar-bg: #161b22;
+      --topbar-border: #30363d;
+      --topbar-text: #f0f6fc;
+      --btn-bg: #21262d;
+      --btn-border: #30363d;
+      --btn-text: #c9d1d9;
+      --btn-active-bg: #00ffcc;
+      --btn-active-text: #000000;
+      --tile-bg: #161b22;
+      --tile-border: 2px solid #ffffff;
+      --tile-radius: 8px;
+      --tile-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+      --tile-empty-bg: #0d1117;
+      --tile-empty-icon: #8b949e;
+      --label-bg: rgba(13, 17, 23, 0.92);
+      --label-text: #ffffff;
+      --label-border: 1px solid rgba(255, 255, 255, 0.4);
+      --accent: #00ffcc;
+      --accent-rgb: 0, 255, 204;
+      --slot-badge-bg: rgba(255, 255, 255, 0.2);
+      --slot-badge-text: #ffffff;
+      --grid-cols: 4;
+      --grid-rows: 3;
+      --grid-gap: 8px;
+      --tile-font-size: 0.9rem;
+      --badge-size: 26px;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      color: var(--topbar-text);
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+      width: 100vw;
+      position: relative;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background-color: var(--topbar-bg);
+      border-bottom: 1px solid var(--topbar-border);
+      gap: 12px;
+      z-index: 20;
+      flex-shrink: 0;
+      height: 56px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .top-bar-left, .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.06);
+      padding: 3px;
+      border-radius: 8px;
+    }
+
+    body.layout-3 .btn-group {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Standard Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 6px;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn-layout {
+      min-width: 36px;
+      height: 32px;
+      padding: 0 8px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: inherit;
+    }
+
+    .btn-layout.active {
+      background: var(--btn-active-bg);
+      color: var(--btn-active-text);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-edit {
+      height: 38px;
+      padding: 0 12px;
+    }
+
+    .btn-edit.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0369a1;
+    }
+
+    .btn-lock {
+      height: 38px;
+      padding: 0 14px;
+      font-weight: 700;
+    }
+
+    /* Pinned = the only visible effect of Lock. Board stays fully usable. */
+    .btn-lock.pinned {
+      background: #dc2626 !important;
+      color: #ffffff !important;
+      border-color: #b91c1c !important;
+      box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+    }
+
+    /* Main Grid Board */
+    .board-main {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--grid-gap);
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .tiles-grid {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: repeat(var(--grid-cols), 1fr);
+      grid-template-rows: repeat(var(--grid-rows), 1fr);
+      gap: var(--grid-gap);
+      box-sizing: border-box;
+    }
+
+    /* Tile Components */
+    .tile {
+      position: relative;
+      background-color: var(--tile-bg);
+      border: var(--tile-border);
+      border-radius: var(--tile-radius);
+      box-shadow: var(--tile-shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+      box-sizing: border-box;
+    }
+
+    .tile:active {
+      transform: scale(0.97);
+    }
+
+    /* Edit Mode Visual Cue */
+    body.edit-mode .tile {
+      outline: 3px dashed #0284c7;
+      outline-offset: -5px;
+    }
+
+    /* Playing Pulse Animation */
+    .tile.playing {
+      animation: tile-pulse 0.6s infinite alternate ease-in-out;
+      border-color: var(--accent) !important;
+      z-index: 5;
+    }
+
+    @keyframes tile-pulse {
+      0% {
+        transform: scale(0.98);
+        box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.7);
+      }
+      100% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 14px rgba(var(--accent-rgb), 0);
+      }
+    }
+
+    .tile-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .tile-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--tile-empty-icon);
+      background-color: var(--tile-empty-bg);
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      text-align: center;
+      padding: 8px;
+    }
+
+    .tile-empty-icon {
+      width: 48px;
+      height: 48px;
+      opacity: 0.85;
+    }
+
+    body.layout-1 .tile-empty-icon {
+      width: 72px;
+      height: 72px;
+    }
+
+    body.layout-3 .tile-empty-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .tile-empty-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+      opacity: 0.85;
+      max-width: 100%;
+      max-height: 60%;
+      overflow: hidden;
+      line-height: 1.15;
+    }
+
+    body.layout-3 .tile-empty-text {
+      font-size: 0.75rem;
+    }
+
+    .tile-slot-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: var(--slot-badge-bg);
+      color: var(--slot-badge-text);
+      padding: 2px 7px;
+      border-radius: 6px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .tile-speaker-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: var(--badge-size);
+      height: var(--badge-size);
+      border-radius: 50%;
+      background: var(--accent);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    body.layout-3 .tile-speaker-badge {
+      color: #000000;
+    }
+
+    .tile-speaker-badge svg {
+      width: 60%;
+      height: 60%;
+    }
+
+    .tile.playing .tile-speaker-badge {
+      animation: speaker-bounce 0.4s infinite alternate;
+    }
+
+    @keyframes speaker-bounce {
+      0% { transform: scale(0.9); }
+      100% { transform: scale(1.15); }
+    }
+
+    .tile-label {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      background: var(--label-bg);
+      color: var(--label-text);
+      border: var(--label-border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: var(--tile-font-size);
+      text-align: center;
+      overflow: hidden;
+      /* The editor can scale a label well past one line, so it wraps -- but it
+         is capped at part of the tile so it can never grow off the top edge,
+         and it breaks at spaces only (never mid-word). fitTextToBox() shrinks
+         whatever still does not fit. */
+      white-space: normal;
+      overflow-wrap: normal;
+      word-break: normal;
+      max-height: 55%;
+      line-height: 1.15;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    body.layout-3 .tile-label {
+      bottom: 4px;
+      left: 4px;
+      right: 4px;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    /* Modal Styles */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      color: #1e293b;
+      width: 100%;
+      max-width: 500px;
+      max-height: 92vh;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modal-scale 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modal-scale {
+      from { transform: scale(0.94); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+      flex-shrink: 0;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    .modal-close-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .modal-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .editor-section {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Photo Area in Modal */
+    .photo-preview-box {
+      width: 100%;
+      height: 180px;
+      border-radius: 8px;
+      background: #e2e8f0;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #cbd5e1;
+    }
+
+    .photo-preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Audio Area in Modal */
+    .audio-status-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+
+    .audio-recording-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: #dc2626;
+      font-size: 0.95rem;
+    }
+
+    .rec-dot {
+      width: 12px;
+      height: 12px;
+      background: #dc2626;
+      border-radius: 50%;
+      animation: pulse-dot 0.8s infinite alternate;
+    }
+
+    @keyframes pulse-dot {
+      0% { opacity: 0.3; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.1); }
+    }
+
+    .text-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #0f172a;
+      outline: none;
+      background: #ffffff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .text-input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    /* Modal Footer */
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #1d4ed8;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+
+    /* Toast Notification */
+    /* ---- Full-screen Camera + Photo Editor ---- */
+    .camera-fs {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: #000;
+      display: none;
+      overflow: hidden;
+    }
+
+    .camera-fs.open {
+      display: block;
+    }
+
+    .camera-fs-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    .camera-fs-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+    }
+
+    /* The editor shows the whole frame, so it is contained, not cropped. */
+    .camera-fs-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .camera-fs-message {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+      color: #f1f5f9;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .camera-fs-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(15, 23, 42, 0.65);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: manipulation;
+      z-index: 3;
+    }
+
+    .camera-fs-close svg {
+      width: 30px;
+      height: 30px;
+      fill: currentColor;
+    }
+
+    .camera-fs-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 20px 24px calc(28px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0));
+      z-index: 3;
+    }
+
+    .camera-fs-shutter {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 6px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      touch-action: manipulation;
+      flex: 0 0 auto;
+    }
+
+    .camera-fs-shutter:active {
+      transform: scale(0.94);
+    }
+
+    .camera-fs-side {
+      width: 56px;
+      height: 56px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      border: none;
+      background: rgba(15, 23, 42, 0.65);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .camera-fs-side svg {
+      width: 28px;
+      height: 28px;
+      fill: currentColor;
+    }
+
+    .camera-fs-side.ghost {
+      visibility: hidden;
+    }
+
+    .camera-fs-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 16px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.88);
+      z-index: 3;
+    }
+
+    .camera-fs-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .camera-fs-row .btn {
+      flex: 1;
+      height: 52px;
+      font-size: 1rem;
+    }
+
+    .camera-fs-slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .camera-fs-slider-row input[type="range"] {
+      width: 100%;
+      height: 36px;
+      accent-color: #2563eb;
+    }
+
+    /* ---------------- Background editor (v2.1) ----------------
+     * The editor is a stage (the photo, zoomable/pannable) above a fixed
+     * control panel, rather than controls floating over the picture -- on a
+     * phone the old overlay covered exactly the part of the photo you were
+     * trying to judge.
+     */
+    .bgx-stage {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      overflow: hidden;
+      background:
+        repeating-conic-gradient(#182234 0% 25%, #0f1626 0% 50%) 50% / 22px 22px;
+      touch-action: none;
+      z-index: 1;
+    }
+
+    .bgx-stage .camera-fs-canvas {
+      transform-origin: center center;
+      will-change: transform;
+      background: transparent;
+    }
+
+    /* Live ring showing the brush footprint while a paint tool is armed. */
+    .bgx-brush-ring {
+      position: absolute;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.55), inset 0 0 0 2px rgba(0, 0, 0, 0.35);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+      transform: translate(-50%, -50%);
+    }
+
+    .bgx-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 9px 10px calc(9px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      background: rgba(9, 14, 26, 0.97);
+      border-top: 1px solid rgba(148, 163, 184, 0.28);
+      z-index: 4;
+    }
+
+    .bgx-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .bgx-row .bgx-chip {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .bgx-chip {
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1px solid rgba(148, 163, 184, 0.38);
+      background: rgba(30, 41, 59, 0.92);
+      color: #e2e8f0;
+      border-radius: 11px;
+      padding: 8px 4px;
+      min-height: 46px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.06s ease;
+    }
+
+    .bgx-chip:active { transform: scale(0.96); }
+    .bgx-chip[disabled] { opacity: 0.38; pointer-events: none; }
+
+    /* One class marks "this is the state you are in" everywhere in the panel. */
+    .bgx-chip.active-fill {
+      background: #2563eb;
+      border-color: #93c5fd;
+      color: #ffffff;
+    }
+    .bgx-chip.bgx-light.active-fill {
+      background: #f8fafc;
+      border-color: #ffffff;
+      color: #0f172a;
+    }
+    .bgx-chip.bgx-dark.active-fill {
+      background: #020617;
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+    .bgx-chip.bgx-go {
+      background: #16a34a;
+      border-color: #4ade80;
+      color: #ffffff;
+    }
+
+    .bgx-slider {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .bgx-slider > span {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #cbd5e1;
+      letter-spacing: 0.02em;
+    }
+
+    .bgx-slider > span b:last-child { color: #7dd3fc; }
+
+    .bgx-slider input[type="range"] {
+      width: 100%;
+      height: 30px;
+      accent-color: #38bdf8;
+    }
+
+    .bgx-hint {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-align: center;
+      min-height: 1.05em;
+      line-height: 1.2;
+    }
+
+    .bgx-busy {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(2, 6, 23, 0.82);
+      color: #e2e8f0;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 7px 14px;
+      border-radius: 999px;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 500;
+      pointer-events: none;
+      width: max-content;
+      max-width: 90vw;
+    }
+
+    .toast {
+      background: #1e293b;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      animation: toast-in 0.25s ease-out;
+      pointer-events: auto;
+      text-align: center;
+    }
+
+    .toast.error {
+      background: #b91c1c;
+    }
+
+    .toast.success {
+      background: #15803d;
+    }
+
+    @keyframes toast-in {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Dark fill button (black-background action in the photo editor) */
+    .btn-dark {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
+
+    /* Marks which background fill is currently applied */
+    .btn.active-fill {
+      outline: 3px solid #38bdf8;
+      outline-offset: -3px;
+    }
+
+    /* Word-size control in the tile editor */
+    .label-size-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .label-size-row input[type="range"] {
+      width: 100%;
+      height: 36px;
+      accent-color: #2563eb;
+    }
+
+    /* Sized at render time to a REAL tile's label box, so the preview is
+       honest about what will fit on the board. */
+    .label-size-preview {
+      align-self: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 64px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px dashed #cbd5e1;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    #label-size-preview-text {
+      display: block;
+      width: 100%;
+      max-height: 100%;
+      overflow: hidden;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      white-space: normal;
+      overflow-wrap: normal;
+      word-break: normal;
+      line-height: 1.15;
+    }
+
+    /* SVG utility classes */
+    .icon {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="layout-2">
+  <div id="app-container">
+    <!-- Top Bar (Always Visible) -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <span class="brand-title">
+          <svg class="icon" viewBox="0 0 24 24" style="width: 22px; height: 22px;">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+            <circle cx="8" cy="10" r="1.5"/>
+            <circle cx="12" cy="10" r="1.5"/>
+            <circle cx="16" cy="10" r="1.5"/>
+          </svg>
+          Talk Tiles
+        </span>
+        <div class="btn-group" role="group" aria-label="Layout Grid Templates">
+          <button id="btn-layout-1" class="btn btn-layout" title="Huge (2x2)" onclick="setLayout(1)">1</button>
+          <button id="btn-layout-2" class="btn btn-layout active" title="Classic (3x3)" onclick="setLayout(2)">2</button>
+          <button id="btn-layout-3" class="btn btn-layout" title="Dense (4x3)" onclick="setLayout(3)">3</button>
+        </div>
+      </div>
+
+      <div class="top-bar-right">
+        <button id="btn-edit-mode" class="btn btn-edit" title="Toggle Edit Mode" onclick="toggleEditMode()">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          <span>Edit</span>
+        </button>
+
+        <button id="btn-lock" class="btn btn-lock" title="Pin this app on screen (App Pinning)" onclick="toggleLock()">
+          <svg id="lock-icon" class="icon" viewBox="0 0 24 24">
+            <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>
+          </svg>
+          <span id="lock-btn-label">Lock</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Board Grid -->
+    <main class="board-main">
+      <div id="tiles-grid" class="tiles-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Tile Editor Modal -->
+  <div id="editor-modal" class="modal-backdrop">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+      <div class="modal-header">
+        <h2 id="modal-title-text" class="modal-title">
+          <svg class="icon" viewBox="0 0 24 24" style="color: #2563eb;">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          <span id="modal-slot-title">Edit Tile #1</span>
+        </h2>
+        <button class="modal-close-btn" onclick="closeEditor()" title="Close editor">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Photo Section -->
+        <div class="editor-section">
+          <div class="section-title">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+            </svg>
+            <span>Photo / Image</span>
+          </div>
+
+          <div class="photo-preview-box" id="photo-preview-container">
+            <img id="modal-photo-img" class="photo-preview-img" alt="Tile Preview" style="display: none;">
+            <div id="modal-photo-placeholder" style="color: #64748b; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" style="width: 48px; height: 48px; fill: currentColor;">
+                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+              </svg>
+              <span style="font-size: 0.85rem; font-weight: 600;">No photo set</span>
+            </div>
+          </div>
+
+          <!-- Normal Photo Controls -->
+          <div id="photo-controls-default" class="btn-row">
+            <button class="btn" type="button" onclick="startCamera()">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span>Take Photo</span>
+            </button>
+            <button class="btn" type="button" onclick="triggerFileInput()">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+              </svg>
+              <span>Upload Image</span>
+            </button>
+            <button id="btn-edit-photo" class="btn" type="button" onclick="editPendingPhoto()" style="display: none;">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
+              <span>Edit Background</span>
+            </button>
+            <button id="btn-remove-photo" class="btn btn-danger" type="button" onclick="removePhoto()" style="display: none;">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+              </svg>
+              <span>Remove</span>
+            </button>
+            <input type="file" id="photo-file-input" accept="image/*" style="display: none;" onchange="handleFileSelected(event)">
+          </div>
+        </div>
+
+        <!-- Audio Recording Section -->
+        <div class="editor-section">
+          <div class="section-title">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+            <span>Voice Recording</span>
+          </div>
+
+          <!-- Audio State Display -->
+          <div class="audio-status-box">
+            <div id="audio-status-text" style="font-size: 0.9rem; font-weight: 600; color: #475569;">
+              No voice recording
+            </div>
+            <div id="audio-recording-active" class="audio-recording-bar" style="display: none;">
+              <div class="rec-dot"></div>
+              <span id="recording-timer">Recording: 0:00 / 0:15</span>
+            </div>
+          </div>
+
+          <!-- Audio Buttons -->
+          <div class="btn-row">
+            <!-- Normal Record button -->
+            <button id="btn-record-voice" class="btn" type="button" onclick="startRecording()">
+              <svg class="icon" viewBox="0 0 24 24" style="color: #dc2626;">
+                <circle cx="12" cy="12" r="7"/>
+              </svg>
+              <span id="btn-record-text">Record Voice</span>
+            </button>
+
+            <!-- Stop Recording button -->
+            <button id="btn-stop-record" class="btn btn-danger" type="button" onclick="stopRecording()" style="display: none;">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M6 6h12v12H6z"/>
+              </svg>
+              <span>Stop</span>
+            </button>
+
+            <!-- Play Test Audio button -->
+            <button id="btn-play-preview" class="btn" type="button" onclick="togglePlayAudioPreview()" style="display: none;">
+              <svg id="play-preview-icon" class="icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+              <span id="play-preview-text">Play Test</span>
+            </button>
+
+            <!-- Remove Audio button -->
+            <button id="btn-remove-audio" class="btn btn-danger" type="button" onclick="removeAudio()" style="display: none;">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+              </svg>
+              <span>Remove Voice</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Text Label Section -->
+        <div class="editor-section">
+          <div class="section-title">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/>
+            </svg>
+            <span>Label Caption (Optional)</span>
+          </div>
+          <input type="text" id="modal-label-input" class="text-input" placeholder="e.g., Water, Eat, Yes, Help..." maxlength="30" oninput="onLabelSizeInput()">
+
+          <label class="label-size-row">
+            <span>Word size on the tile: <b id="label-size-value">1.0&times;</b></span>
+            <input id="modal-label-size" type="range" min="0.6" max="3" step="0.1" value="1" oninput="onLabelSizeInput()">
+          </label>
+          <div class="label-size-preview">
+            <span id="label-size-preview-text">Label</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-danger" type="button" onclick="clearTileWithConfirm()">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+          </svg>
+          <span>Clear Tile</span>
+        </button>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn" type="button" onclick="closeEditor()">Cancel</button>
+          <button class="btn btn-primary" type="button" onclick="saveEditorTile()">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+            </svg>
+            <span>Save</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-screen Camera Capture + Photo Editor -->
+  <div id="camera-fs" class="camera-fs" aria-hidden="true">
+
+    <!-- Live preview -->
+    <div id="camera-fs-live" class="camera-fs-layer">
+      <video id="camera-fs-video" class="camera-fs-video" playsinline autoplay muted></video>
+      <div id="camera-fs-message" class="camera-fs-message" style="display: none;"></div>
+
+      <button class="camera-fs-close" type="button" onclick="closeCameraFullscreen()" aria-label="Close camera">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+
+      <div class="camera-fs-bottom">
+        <button class="camera-fs-side" type="button" onclick="flipCamera()" aria-label="Switch camera">
+          <svg viewBox="0 0 24 24"><path d="M9.01 14H2v2h7.01v3L13 15l-3.99-4v3zm5.98-1v-3H22V8h-7.01V5L11 9l3.99 4z"/></svg>
+        </button>
+        <button id="camera-fs-shutter" class="camera-fs-shutter" type="button" onclick="capturePhoto()" aria-label="Capture photo"></button>
+        <span class="camera-fs-side ghost" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <!-- Captured photo editor -->
+    <div id="camera-fs-editor" class="camera-fs-layer" style="display: none;">
+      <div id="bgx-stage" class="bgx-stage">
+        <canvas id="camera-fs-canvas" class="camera-fs-canvas"></canvas>
+        <div id="bgx-brush-ring" class="bgx-brush-ring" style="display: none;"></div>
+      </div>
+
+      <div id="bgx-busy" class="bgx-busy" style="display: none;">Working…</div>
+
+      <button class="camera-fs-close" type="button" onclick="closeCameraFullscreen()" aria-label="Discard photo">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+
+      <div id="bgx-panel" class="bgx-panel">
+        <div class="bgx-row">
+          <button id="btn-bg-white" class="bgx-chip bgx-light" type="button" onclick="edSetFill('white')">White</button>
+          <button id="btn-bg-black" class="bgx-chip bgx-dark" type="button" onclick="edSetFill('black')">Black</button>
+          <button id="btn-bg-none" class="bgx-chip" type="button" onclick="edSetFill('none')">Original</button>
+        </div>
+
+        <label class="bgx-slider" id="bgx-amount-row">
+          <span><b id="bgx-amount-label">How much background to remove</b><b id="wb-tolerance-value">28</b></span>
+          <input id="wb-tolerance" type="range" min="6" max="80" step="1" value="28" oninput="onToleranceInput()">
+        </label>
+
+        <label class="bgx-slider" id="bgx-brush-row" style="display: none;">
+          <span><b>Brush size</b><b id="bgx-brush-value">40</b></span>
+          <input id="bgx-brush" type="range" min="8" max="200" step="2" value="40" oninput="edOnBrushInput()">
+        </label>
+
+        <div class="bgx-row">
+          <button id="bgx-tool-erase" class="bgx-chip active-fill" type="button" onclick="edSetTool('erase')">Erase</button>
+          <button id="bgx-tool-restore" class="bgx-chip" type="button" onclick="edSetTool('restore')">Restore</button>
+          <button id="bgx-btn-undo" class="bgx-chip" type="button" onclick="edUndo()">Undo</button>
+          <button id="bgx-btn-reset" class="bgx-chip" type="button" onclick="edReset()">Reset</button>
+        </div>
+
+        <div class="bgx-row">
+          <button id="btn-photo-retake" class="bgx-chip" type="button" onclick="retakePhoto()">Retake</button>
+          <button id="bgx-btn-crop" class="bgx-chip" type="button" onclick="edCropToSubject()">Fit subject</button>
+          <button id="bgx-btn-save" class="bgx-chip bgx-go" type="button" onclick="saveCapturedToTile()">Save to tile</button>
+        </div>
+
+        <div id="bgx-hint" class="bgx-hint">Tap a patch to erase it · drag to paint · pinch to zoom</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Offline subject-segmentation runtime, bundled in the APK. If it is
+       missing the board still works; background removal just falls back to
+       the colour-only pass. -->
+  <script src="assets/ort.min.js"></script>
+
+  <script>
+    /* AAC Picture Board - Main Application Logic */
+
+    // IndexedDB Setup
+    const DB_NAME = 'aac-board';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'tiles';
+
+    let dbInstance = null;
+    let cachedTiles = new Map(); // id -> { id, photo, audio, label, updatedAt }
+    let activeObjectURLs = new Map(); // id -> blobUrl
+
+    // Application State
+    let currentLayout = 2; // 1, 2, or 3
+    // Live OS app-pinning state only. Never persisted: pinning belongs to
+    // Android, not to the board, and the board is fully usable while pinned.
+    let isPinned = false;
+    let isEditMode = false;
+    let currentPlayingAudio = null;
+    let currentPlayingSlot = null;
+
+    // Editor State
+    let currentEditingSlot = null;
+    let editorOpenedAt = 0;
+    let modalPointerDownSeen = false;
+    let pendingPhotoBlob = null;
+    /*
+     * The editor hands its result over by writing pendingPhotoBlob, but
+     * canvas -> JPEG is asynchronous. Anything that reads pendingPhotoBlob has
+     * to wait on this first, or it stores the photo as it was BEFORE the
+     * background was removed and throws the edit away without a word.
+     */
+    let pendingPhotoWrite = null;
+    let pendingAudioBlob = null;
+    let cameraStream = null;
+    let cameraFacingMode = 'environment';
+    let capturedImageData = null;   // untouched capture; every filter pass reads this
+    let captureWidth = 0;
+    let captureHeight = 0;
+    let bgFillMode = null;          // null | 'white' | 'black'
+    let photoEditorSource = 'camera'; // 'camera' | 'existing' (photo already on the tile)
+    let mediaRecorder = null;
+    let audioStream = null;
+    let recordedAudioChunks = [];
+    let recordIntervalTimer = null;
+    let recordAutoStopTimer = null;
+    let recordSecondsElapsed = 0;
+    let recordMimeType = '';
+    let recordingFinalized = true;
+    let recordSafetyTimer = null;
+    let previewAudioPlayer = null;
+
+    // Per-tile label scale. 1 = the layout's normal label size.
+    const LABEL_SIZE_MIN = 0.6;
+    const LABEL_SIZE_MAX = 3;
+
+    // Controls that Lock takes away: the layout numbers and Edit. Tiles stay live.
+    const LOCKABLE_CONTROLS = ['btn-layout-1', 'btn-layout-2', 'btn-layout-3', 'btn-edit-mode'];
+    const controlTitles = new Map();
+
+    // Layout configuration
+    const LAYOUT_COUNTS = {
+      1: 4,  // 2x2
+      2: 9,  // 3x3
+      3: 12  // 4x3
+    };
+
+    /* --- Database Helpers --- */
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function loadAllTilesFromDB() {
+      if (!dbInstance) dbInstance = await openDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.getAll();
+        req.onsuccess = () => {
+          cachedTiles.clear();
+          const items = req.result || [];
+          for (const item of items) {
+            cachedTiles.set(item.id, item);
+          }
+          resolve(cachedTiles);
+        };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function saveTileToDB(tile) {
+      if (!dbInstance) dbInstance = await openDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.put(tile);
+        req.onsuccess = () => {
+          cachedTiles.set(tile.id, tile);
+          resolve(tile);
+        };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function deleteTileFromDB(id) {
+      if (!dbInstance) dbInstance = await openDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.delete(id);
+        req.onsuccess = () => {
+          cachedTiles.delete(id);
+          resolve();
+        };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    /* --- Toast Notification --- */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    /* --- Board Rendering & Layout --- */
+    function setLayout(layoutNum) {
+      if (isPinned) return;   // layout numbers are locked while pinned
+      currentLayout = layoutNum;
+      localStorage.setItem('aac_layout', layoutNum);
+      updateThemeClasses();
+      renderBoard();
+    }
+
+    function toggleEditMode() {
+      // Locked while pinned -- but always allow the turn-OFF direction, which is
+      // how pinning clears an edit session that was already running.
+      if (isPinned && !isEditMode) return;
+      isEditMode = !isEditMode;
+      const btn = document.getElementById('btn-edit-mode');
+      if (isEditMode) {
+        btn.classList.add('active');
+        document.body.classList.add('edit-mode');
+        showToast('Edit Mode ON: Tap any tile to edit');
+      } else {
+        btn.classList.remove('active');
+        document.body.classList.remove('edit-mode');
+      }
+    }
+
+    /*
+     * Lock = Android App Pinning PLUS an in-app edit lock. Every tile keeps
+     * playing while pinned, and the notification shade, home, recents and back
+     * keep behaving the way Android normally makes them behave -- but the
+     * layout numbers, the Edit button and the tile editor are all sealed so a
+     * handed-over phone cannot have its board rearranged or wiped.
+     */
+    function toggleLock() {
+      setPinnedState(!isPinned, true);
+      showToast(isPinned
+        ? 'App pinned — tiles play, editing locked'
+        : 'App unpinned — editing unlocked', 'info');
+    }
+
+    /*
+     * The one funnel for pin state. `notifyNative` is true when the USER asked
+     * for the change (so Android must be told), and false when Android is
+     * telling US what its real lock-task state is -- e.g. after the user exits
+     * pinning with the system's own back+overview gesture. Bouncing the command
+     * back in that case would fight the OS.
+     */
+    function setPinnedState(pinned, notifyNative) {
+      pinned = !!pinned;
+      const changed = (pinned !== isPinned);
+      isPinned = pinned;
+
+      if (notifyNative && window.TalkTiles) {
+        try {
+          if (isPinned) TalkTiles.lock(); else TalkTiles.unlock();
+        } catch (e) {
+          console.error('TalkTiles bridge call failed', e);
+        }
+      }
+
+      if (isPinned) {
+        if (isEditMode) toggleEditMode();   // never sit in edit mode while pinned
+        closeEditor();                      // and never leave the editor open
+      }
+      applyLockState();
+      if (changed) console.log('[TT] pin state -> ' + (isPinned ? 'PINNED' : 'UNPINNED'));
+    }
+
+    function applyLockState() {
+      const lockBtn = document.getElementById('btn-lock');
+      const lockBtnLabel = document.getElementById('lock-btn-label');
+      const lockIcon = document.getElementById('lock-icon');
+
+      lockBtn.classList.toggle('pinned', isPinned);
+      lockBtn.setAttribute('aria-pressed', isPinned ? 'true' : 'false');
+
+      // Seal the board controls: numbers + Edit go dead while pinned.
+      LOCKABLE_CONTROLS.forEach((id) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        if (!controlTitles.has(id)) controlTitles.set(id, btn.title);
+        btn.disabled = isPinned;
+        btn.setAttribute('aria-disabled', isPinned ? 'true' : 'false');
+        btn.title = isPinned ? 'Locked while the app is pinned' : controlTitles.get(id);
+      });
+
+      if (isPinned) {
+        lockBtnLabel.textContent = 'Pinned';
+        lockBtn.title = 'App is pinned — tap to unpin';
+        // Closed padlock icon SVG
+        lockIcon.innerHTML = '<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>';
+      } else {
+        lockBtnLabel.textContent = 'Lock';
+        lockBtn.title = 'Pin this app on screen (App Pinning)';
+        // Open padlock icon SVG
+        lockIcon.innerHTML = '<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>';
+      }
+    }
+
+    function updateThemeClasses() {
+      document.body.classList.remove('layout-1', 'layout-2', 'layout-3');
+      document.body.classList.add(`layout-${currentLayout}`);
+
+      document.getElementById('btn-layout-1').classList.toggle('active', currentLayout === 1);
+      document.getElementById('btn-layout-2').classList.toggle('active', currentLayout === 2);
+      document.getElementById('btn-layout-3').classList.toggle('active', currentLayout === 3);
+    }
+
+    function renderBoard() {
+      const grid = document.getElementById('tiles-grid');
+      const count = LAYOUT_COUNTS[currentLayout];
+
+      // Revoke old object URLs for tiles no longer in view or re-rendered
+      activeObjectURLs.forEach((url) => URL.revokeObjectURL(url));
+      activeObjectURLs.clear();
+
+      grid.innerHTML = '';
+
+      for (let slotId = 1; slotId <= count; slotId++) {
+        const tileData = cachedTiles.get(slotId) || null;
+        const tileEl = createTileElement(slotId, tileData);
+        grid.appendChild(tileEl);
+      }
+
+      fitAllLabels();
+
+      /*
+       * On a cold WebView start the grid can still be settling when the first
+       * pass runs, which measures every label against the wrong box and locks
+       * it small for the rest of the session (seen on-device: a 1x "MILK"
+       * rendered visibly smaller on the first launch after install than on
+       * every launch after). Re-fit once layout has actually settled -- the
+       * pass is idempotent, so a second run is free when nothing moved.
+       */
+      requestAnimationFrame(() => requestAnimationFrame(fitAllLabels));
+    }
+
+    /** Re-fits every label on the board against its current box. */
+    function fitAllLabels() {
+      const grid = document.getElementById('tiles-grid');
+      if (!grid) return;
+      grid.querySelectorAll('.tile-label, .tile-empty-text').forEach(fitTextToBox);
+    }
+
+    function createTileElement(slotId, data) {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.id = `tile-slot-${slotId}`;
+      tile.setAttribute('data-slot', slotId);
+      tile.setAttribute('role', 'button');
+      tile.setAttribute('tabindex', '0');
+
+      // Slot badge (top-left)
+      const slotBadge = document.createElement('div');
+      slotBadge.className = 'tile-slot-badge';
+      slotBadge.textContent = slotId;
+      tile.appendChild(slotBadge);
+
+      // Has photo?
+      if (data && data.photo) {
+        const img = document.createElement('img');
+        img.className = 'tile-image';
+        img.alt = data.label || `Tile ${slotId}`;
+        const photoUrl = URL.createObjectURL(data.photo);
+        activeObjectURLs.set(slotId, photoUrl);
+        img.src = photoUrl;
+        tile.appendChild(img);
+      } else {
+        // Placeholder empty view
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'tile-empty';
+        emptyDiv.innerHTML = `
+          <svg class="tile-empty-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+          </svg>
+          <span class="tile-empty-text">${data && data.label ? escapeHtml(data.label) : 'Tap to edit'}</span>
+        `;
+        // A photo-less tile shows its label as the placeholder text, so the
+        // same per-tile word size has to reach it too.
+        if (data && data.label) {
+          const emptyText = emptyDiv.querySelector('.tile-empty-text');
+          if (emptyText) {
+            emptyText.style.fontSize = labelFontSizeCss(data.labelSize);
+            emptyText.dataset.requestedSize = emptyText.style.fontSize;
+          }
+        }
+        tile.appendChild(emptyDiv);
+      }
+
+      // Has audio? Speaker badge
+      if (data && data.audio) {
+        const speakerBadge = document.createElement('div');
+        speakerBadge.className = 'tile-speaker-badge';
+        speakerBadge.title = 'Has voice recording';
+        speakerBadge.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </svg>
+        `;
+        tile.appendChild(speakerBadge);
+      }
+
+      // Label (if exists and tile has photo). Its size is per-tile: the
+      // editor's "Word size" multiplies the layout's base label size.
+      if (data && data.label && data.photo) {
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'tile-label';
+        labelDiv.textContent = data.label;
+        labelDiv.style.fontSize = labelFontSizeCss(data.labelSize);
+        labelDiv.dataset.requestedSize = labelDiv.style.fontSize;
+        tile.appendChild(labelDiv);
+      }
+
+      // Attach pointer / tap / hold listeners
+      setupTileInteractions(tile, slotId);
+
+      return tile;
+    }
+
+    /** Clamps a stored/typed label scale into the supported range. */
+    function normalizeLabelSize(value) {
+      const n = parseFloat(value);
+      if (!Number.isFinite(n)) return 1;
+      return Math.min(LABEL_SIZE_MAX, Math.max(LABEL_SIZE_MIN, n));
+    }
+
+    /*
+     * The word-size slider is a request, not a promise: a 3x label on a dense
+     * grid cannot physically fit. Shrink the applied size until the text sits
+     * inside its box, rather than letting it spill off the top of the tile.
+     * Reads layout, so call it once per render pass, after the DOM is built.
+     */
+    function fitTextToBox(el) {
+      if (!el) return;
+      // Reset to what the user actually asked for. Without this a re-fit can
+      // only ever shrink further, so one bad early measurement would be
+      // permanent.
+      if (el.dataset.requestedSize) el.style.fontSize = el.dataset.requestedSize;
+      let size = parseFloat(getComputedStyle(el).fontSize);
+      if (!Number.isFinite(size) || size <= 0) return;
+
+      const MIN_PX = 9;
+      let guard = 60;
+      while (guard-- > 0 && size > MIN_PX
+             && (el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1)) {
+        size = Math.max(MIN_PX, size * 0.92);
+        el.style.fontSize = size + 'px';
+      }
+    }
+
+    /** Per-tile label size expressed against the current layout's base size. */
+    function labelFontSizeCss(size) {
+      return 'calc(var(--tile-font-size) * ' + normalizeLabelSize(size) + ')';
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    /* --- Tile Touch / Hold & Playback Interactions --- */
+    function setupTileInteractions(tileEl, slotId) {
+      let holdTimer = null;
+      let holdTriggered = false;
+      let startX = 0;
+      let startY = 0;
+
+      const startHold = (e) => {
+        holdTriggered = false;
+        startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        startY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+
+        holdTimer = setTimeout(() => {
+          holdTriggered = true;
+          openEditor(slotId);
+        }, 600);
+      };
+
+      const moveHold = (e) => {
+        if (!holdTimer) return;
+        const currentX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        const currentY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+        if (Math.hypot(currentX - startX, currentY - startY) > 12) {
+          clearTimeout(holdTimer);
+          holdTimer = null;
+        }
+      };
+
+      const endHold = (e) => {
+        if (holdTimer) {
+          clearTimeout(holdTimer);
+          holdTimer = null;
+        }
+      };
+
+      tileEl.addEventListener('pointerdown', startHold);
+      tileEl.addEventListener('pointermove', moveHold);
+      tileEl.addEventListener('pointerup', (e) => {
+        endHold(e);
+        if (holdTriggered) return;
+        handleTileTap(slotId);
+      });
+      tileEl.addEventListener('pointercancel', endHold);
+
+      // Keyboard accessibility
+      tileEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleTileTap(slotId);
+        }
+      });
+    }
+
+    function handleTileTap(slotId) {
+      if (isEditMode) {
+        openEditor(slotId);
+        return;
+      }
+
+      const tileData = cachedTiles.get(slotId);
+      if (tileData && tileData.audio) {
+        playTileAudio(slotId, tileData.audio);
+      } else {
+        // Empty tile or no audio -> open editor
+        openEditor(slotId);
+      }
+    }
+
+    function playTileAudio(slotId, audioBlob) {
+      console.log('[TT] playing tile ' + slotId + ' (' + audioBlob.size + ' bytes)');
+      stopBoardAudio();
+
+      const tileEl = document.getElementById(`tile-slot-${slotId}`);
+      if (tileEl) tileEl.classList.add('playing');
+
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      currentPlayingAudio = audio;
+      currentPlayingSlot = slotId;
+
+      const cleanup = () => {
+        if (tileEl) tileEl.classList.remove('playing');
+        URL.revokeObjectURL(audioUrl);
+        if (currentPlayingAudio === audio) {
+          currentPlayingAudio = null;
+          currentPlayingSlot = null;
+        }
+      };
+
+      audio.onended = cleanup;
+      audio.onerror = () => {
+        cleanup();
+        showToast('Could not play audio', 'error');
+      };
+
+      audio.play().catch((err) => {
+        cleanup();
+        showToast('Playback failed', 'error');
+      });
+    }
+
+    function stopBoardAudio() {
+      if (currentPlayingAudio) {
+        currentPlayingAudio.pause();
+        currentPlayingAudio.currentTime = 0;
+        currentPlayingAudio = null;
+      }
+      if (currentPlayingSlot) {
+        const prevTile = document.getElementById(`tile-slot-${currentPlayingSlot}`);
+        if (prevTile) prevTile.classList.remove('playing');
+        currentPlayingSlot = null;
+      }
+    }
+
+    /* --- Tile Editor Modal Implementation --- */
+    function openEditor(slotId) {
+      if (isPinned) {
+        showToast('Editing is locked while the app is pinned', 'info');
+        return;
+      }
+      stopBoardAudio();
+      currentEditingSlot = slotId;
+
+      const existingData = cachedTiles.get(slotId);
+      pendingPhotoBlob = (existingData && existingData.photo) || null;
+      pendingAudioBlob = (existingData && existingData.audio) || null;
+
+      document.getElementById('modal-slot-title').textContent = `Edit Tile #${slotId}`;
+      document.getElementById('modal-label-input').value = (existingData && existingData.label) || '';
+      document.getElementById('modal-label-size').value =
+        String(normalizeLabelSize(existingData && existingData.labelSize));
+      onLabelSizeInput();
+
+      updateModalPhotoPreview();
+      updateModalAudioPreview();
+
+      const modal = document.getElementById('editor-modal');
+      modal.classList.add('open');
+      editorOpenedAt = performance.now();
+      modalPointerDownSeen = false;
+      console.log('[TT] editor opened for tile ' + slotId);
+    }
+
+    function closeEditor() {
+      closeCameraFullscreen();
+      stopAudioStream();
+      stopRecordingTimer();
+      stopAudioPreview();
+
+      pendingPhotoBlob = null;
+      pendingAudioBlob = null;
+      currentEditingSlot = null;
+
+      const modal = document.getElementById('editor-modal');
+      modal.classList.remove('open');
+    }
+
+    async function saveEditorTile() {
+      if (!currentEditingSlot) return;
+      if (pendingPhotoWrite) await pendingPhotoWrite;
+
+      const labelText = document.getElementById('modal-label-input').value.trim();
+      const labelSize = normalizeLabelSize(document.getElementById('modal-label-size').value);
+      const updatedTile = {
+        id: currentEditingSlot,
+        photo: pendingPhotoBlob,
+        audio: pendingAudioBlob,
+        label: labelText,
+        labelSize: labelSize,
+        updatedAt: Date.now()
+      };
+
+      try {
+        await saveTileToDB(updatedTile);
+        console.log('[TT] saved tile ' + updatedTile.id
+          + ' photo=' + (updatedTile.photo ? updatedTile.photo.size + 'b' : 'none')
+          + ' audio=' + (updatedTile.audio ? updatedTile.audio.size + 'b' : 'none')
+          + ' label="' + updatedTile.label + '" size=' + updatedTile.labelSize + 'x');
+        closeEditor();
+        renderBoard();
+        showToast(`Tile #${updatedTile.id} saved!`, 'success');
+      } catch (err) {
+        showToast('Failed to save tile', 'error');
+      }
+    }
+
+    async function clearTileWithConfirm() {
+      if (!currentEditingSlot) return;
+      const slot = currentEditingSlot;
+      const existing = cachedTiles.get(slot);
+      if (!existing && !pendingPhotoBlob && !pendingAudioBlob) {
+        closeEditor();
+        return;
+      }
+
+      if (confirm(`Are you sure you want to clear Tile #${slot}?`)) {
+        try {
+          await deleteTileFromDB(slot);
+          closeEditor();
+          renderBoard();
+          showToast(`Tile #${slot} cleared`, 'success');
+        } catch (err) {
+          showToast('Failed to clear tile', 'error');
+        }
+      }
+    }
+
+    /** Live preview of how big the caption will sit on the tile. */
+    function onLabelSizeInput() {
+      const size = normalizeLabelSize(document.getElementById('modal-label-size').value);
+      const readout = document.getElementById('label-size-value');
+      if (readout) readout.textContent = size.toFixed(1) + '\u00d7';
+
+      const preview = document.getElementById('label-size-preview-text');
+      if (!preview) return;
+      const typed = document.getElementById('modal-label-input').value.trim();
+      preview.textContent = typed || 'Label';
+
+      // Match the preview box to a real tile's label area in the current
+      // layout, so the slider shows what the board will actually show.
+      const box = preview.parentElement;
+      const tile = document.querySelector('.tile');
+      if (box && tile && tile.clientWidth > 0) {
+        box.style.width = Math.max(72, tile.clientWidth - 16) + 'px';
+        box.style.height = Math.max(48, Math.round(tile.clientHeight * 0.55)) + 'px';
+      }
+
+      preview.style.fontSize = labelFontSizeCss(size);
+      preview.dataset.requestedSize = preview.style.fontSize;
+      fitTextToBox(preview);
+    }
+
+    /* --- Photo Capture & Management --- */
+    function updateModalPhotoPreview() {
+      const imgEl = document.getElementById('modal-photo-img');
+      const placeholder = document.getElementById('modal-photo-placeholder');
+      const removeBtn = document.getElementById('btn-remove-photo');
+      const editBtn = document.getElementById('btn-edit-photo');
+      const defaultControls = document.getElementById('photo-controls-default');
+
+      defaultControls.style.display = 'flex';
+
+      if (pendingPhotoBlob) {
+        imgEl.src = URL.createObjectURL(pendingPhotoBlob);
+        imgEl.style.display = 'block';
+        placeholder.style.display = 'none';
+        removeBtn.style.display = 'inline-flex';
+        editBtn.style.display = 'inline-flex';
+      } else {
+        imgEl.src = '';
+        imgEl.style.display = 'none';
+        placeholder.style.display = 'flex';
+        removeBtn.style.display = 'none';
+        editBtn.style.display = 'none';
+      }
+    }
+
+    /* --- Full-screen Camera --- */
+
+    /** Entry point from the editor's "Take Photo" button. */
+    function startCamera() {
+      photoEditorSource = 'camera';
+      openCameraFullscreen();
+      showCameraLiveLayer();
+      startCameraStream();
+    }
+
+    function openCameraFullscreen() {
+      const fs = document.getElementById('camera-fs');
+      fs.classList.add('open');
+      fs.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeCameraFullscreen() {
+      stopCamera();
+      const fs = document.getElementById('camera-fs');
+      fs.classList.remove('open');
+      fs.setAttribute('aria-hidden', 'true');
+      showCameraLiveLayer();
+      capturedImageData = null;
+      captureWidth = 0;
+      captureHeight = 0;
+      bgFillMode = null;
+      photoEditorSource = 'camera';
+      updateBgFillButtons();
+    }
+
+    function showCameraLiveLayer() {
+      document.getElementById('camera-fs-live').style.display = 'block';
+      document.getElementById('camera-fs-editor').style.display = 'none';
+    }
+
+    function showCameraEditorLayer() {
+      document.getElementById('camera-fs-live').style.display = 'none';
+      document.getElementById('camera-fs-editor').style.display = 'block';
+      // "Retake" only means something when the camera is what got us here.
+      const retake = document.getElementById('btn-photo-retake');
+      if (retake) retake.style.display = (photoEditorSource === 'camera') ? 'inline-flex' : 'none';
+      edLayoutStage();
+    }
+
+    /*
+     * The panel is a fixed strip at the bottom and the stage is everything
+     * above it. Measuring rather than hard-coding the split matters because
+     * the panel's height changes with the safe-area inset and with whether
+     * Retake is showing -- and a stage that runs under the panel hides exactly
+     * the part of the photo the buttons are there to fix.
+     */
+    function edLayoutStage() {
+      const stage = document.getElementById('bgx-stage');
+      const panel = document.getElementById('bgx-panel');
+      if (!stage || !panel) return;
+      requestAnimationFrame(() => {
+        stage.style.bottom = panel.offsetHeight + 'px';
+        edRender();
+      });
+    }
+
+    function setCameraMessage(text) {
+      const msg = document.getElementById('camera-fs-message');
+      if (!msg) return;
+      if (text) {
+        msg.textContent = text;
+        msg.style.display = 'flex';
+      } else {
+        msg.textContent = '';
+        msg.style.display = 'none';
+      }
+    }
+
+    async function startCameraStream() {
+      const videoEl = document.getElementById('camera-fs-video');
+      setCameraMessage('');
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setCameraMessage('Camera not available here.\nUse "Upload Image" instead.');
+        showToast('Camera not supported — use Upload Image', 'error');
+        return;
+      }
+
+      try {
+        stopCamera();
+        const constraints = {
+          video: {
+            facingMode: { ideal: cameraFacingMode },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          }
+        };
+
+        try {
+          cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (e) {
+          // Fallback to simple video: true
+          cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        }
+
+        videoEl.srcObject = cameraStream;
+        await videoEl.play();
+        console.log('[TT] camera live ' + videoEl.videoWidth + 'x' + videoEl.videoHeight
+          + ' facing=' + cameraFacingMode);
+      } catch (err) {
+        // Keep the full-screen view up so the user can read the reason and
+        // close it deliberately.
+        stopCamera();
+        setCameraMessage('Camera blocked.\nAllow camera access, then try again.');
+        showToast('Camera blocked — allow camera access', 'error');
+      }
+    }
+
+    /** Stops the live stream. Does NOT close the full-screen view. */
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+      const videoEl = document.getElementById('camera-fs-video');
+      if (videoEl) videoEl.srcObject = null;
+    }
+
+    function flipCamera() {
+      cameraFacingMode = (cameraFacingMode === 'environment') ? 'user' : 'environment';
+      startCameraStream();
+    }
+
+    /* ===================================================================
+     * Subject segmentation (offline neural model)
+     * -------------------------------------------------------------------
+     * Everything above this point decides what is background by comparing a
+     * pixel to its neighbours. That is why it does well on an object on a
+     * table and falls apart on a child at a playground: colour similarity has
+     * no idea what an object IS. Every app that does this convincingly runs a
+     * trained model, so this one does too -- U^2-Net, ~4.6 MB, bundled in the
+     * APK and run through ONNX Runtime's WASM build so the board stays
+     * completely offline.
+     *
+     * The model is the semantics; it is not the finish. It returns a blurry
+     * 320x320 opinion, which is upsampled and then snapped onto the real
+     * edges in the photo with a guided filter. The colour pass stays as the
+     * instant first answer and as the fallback if the model cannot load.
+     * =================================================================== */
+
+    /* Long enough for a cold start on a slow phone, short enough that nobody
+     * is left staring at an uncut photo wondering if it broke. */
+    const SEG_TIMEOUT_MS = 12000;
+
+    const SEG = {
+      ready: null,          // in-flight or settled load promise
+      session: null,
+      status: 'idle',       // 'idle' | 'loading' | 'ready' | 'unavailable'
+      size: 320,
+      lastMs: 0
+    };
+
+    // Lets the colour-path tests run without the model racing them.
+    window.TT_AI = { enabled: true };
+
+    /** XHR, not fetch: fetch refuses file:// URLs even when XHR is allowed. */
+    function loadArrayBuffer(url) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = 'arraybuffer';
+        // A file:// read reports status 0 on success, so the payload is the
+        // only trustworthy signal here.
+        xhr.onload = () => (xhr.response && xhr.response.byteLength)
+          ? resolve(xhr.response)
+          : reject(new Error('empty response for ' + url));
+        xhr.onerror = () => reject(new Error('could not read ' + url));
+        xhr.send();
+      });
+    }
+
+    /**
+     * Loads the runtime and the model exactly once. Failure is a normal
+     * outcome, not an error: the board must keep working without this.
+     */
+    function segLoad() {
+      if (SEG.ready) return SEG.ready;
+      SEG.ready = (async () => {
+        if (typeof ort === 'undefined') { SEG.status = 'unavailable'; return null; }
+        try {
+          SEG.status = 'loading';
+          // A file:// page is never cross-origin isolated, so SharedArrayBuffer
+          // -- and with it multi-threaded WASM -- is not available. Asking for
+          // threads anyway just makes the runtime fail to start.
+          ort.env.wasm.numThreads = 1;
+          ort.env.wasm.simd = true;
+          ort.env.wasm.proxy = false;
+          /*
+           * The runtime wants to fetch its own .wasm by URL, and a file://
+           * page cannot fetch anything -- not its own directory, not itself.
+           * So the bytes are read with XHR (which file:// does allow) and
+           * handed back as a blob: URL, which fetch will accept from any
+           * origin. This is also why the runtime is pinned to 1.17: 1.20
+           * loads its WASM glue as an ES module, and a bare module specifier
+           * cannot be resolved from file:// at all.
+           */
+          const wasmBytes = await loadArrayBuffer('assets/ort-wasm-simd.wasm');
+          const wasmUrl = URL.createObjectURL(new Blob([wasmBytes], { type: 'application/wasm' }));
+          ort.env.wasm.wasmPaths = { 'ort-wasm-simd.wasm': wasmUrl };
+          const model = await loadArrayBuffer('assets/subject.onnx');
+          SEG.session = await ort.InferenceSession.create(model, {
+            executionProviders: ['wasm'],
+            graphOptimizationLevel: 'all'
+          });
+          SEG.status = 'ready';
+          console.log('[TT] subject model ready');
+          return SEG.session;
+        } catch (e) {
+          console.log('[TT] subject model unavailable: ' + e.message);
+          SEG.status = 'unavailable';
+          SEG.session = null;
+          return null;
+        }
+      })();
+      return SEG.ready;
+    }
+
+    /**
+     * Runs the model. Returns a Float32Array of "subjectness" at SEG.size
+     * squared, 0..1, or null if the model is not available.
+     */
+    async function segmentSubject(srcData) {
+      const session = await segLoad();
+      if (!session) return null;
+      const S = SEG.size;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = S; canvas.height = S;
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      const tmp = document.createElement('canvas');
+      tmp.width = srcData.width; tmp.height = srcData.height;
+      tmp.getContext('2d').putImageData(srcData, 0, 0);
+      ctx.drawImage(tmp, 0, 0, S, S);
+      const px = ctx.getImageData(0, 0, S, S).data;
+
+      const N = S * S;
+      const input = new Float32Array(3 * N);
+      let peak = 0;
+      for (let i = 0; i < N; i++) {
+        for (let c = 0; c < 3; c++) { const v = px[i * 4 + c] / 255; if (v > peak) peak = v; }
+      }
+      if (peak <= 0) peak = 1;
+      const mean = [0.485, 0.456, 0.406], std = [0.229, 0.224, 0.225];
+      for (let i = 0; i < N; i++) {
+        for (let c = 0; c < 3; c++) {
+          input[c * N + i] = ((px[i * 4 + c] / 255 / peak) - mean[c]) / std[c];
+        }
+      }
+
+      const t0 = performance.now();
+      const feeds = {};
+      feeds[session.inputNames[0]] = new ort.Tensor('float32', input, [1, 3, S, S]);
+      const output = await session.run(feeds);
+      SEG.lastMs = Math.round(performance.now() - t0);
+
+      const raw = output[session.outputNames[0]].data;
+      let lo = Infinity, hi = -Infinity;
+      for (let i = 0; i < N; i++) { const v = raw[i]; if (v < lo) lo = v; if (v > hi) hi = v; }
+      const span = (hi - lo) || 1;
+      const subject = new Float32Array(N);
+      for (let i = 0; i < N; i++) subject[i] = (raw[i] - lo) / span;
+      return subject;
+    }
+
+    /* ---------------------- edge-accurate refinement ------------------- */
+
+    /** Separable box blur over floats -- the workhorse of the guided filter. */
+    function boxBlurF32(src, w, h, r) {
+      const win = r * 2 + 1;
+      const tmp = new Float32Array(w * h);
+      const out = new Float32Array(w * h);
+      for (let y = 0; y < h; y++) {
+        const row = y * w;
+        let sum = 0;
+        for (let k = -r; k <= r; k++) sum += src[row + Math.min(w - 1, Math.max(0, k))];
+        for (let x = 0; x < w; x++) {
+          tmp[row + x] = sum / win;
+          sum += src[row + Math.min(w - 1, x + r + 1)] - src[row + Math.max(0, x - r)];
+        }
+      }
+      for (let x = 0; x < w; x++) {
+        let sum = 0;
+        for (let k = -r; k <= r; k++) sum += tmp[Math.min(h - 1, Math.max(0, k)) * w + x];
+        for (let y = 0; y < h; y++) {
+          out[y * w + x] = sum / win;
+          sum += tmp[Math.min(h - 1, y + r + 1) * w + x] - tmp[Math.max(0, y - r) * w + x];
+        }
+      }
+      return out;
+    }
+
+    /**
+     * Guided filter: re-fits the mask to the picture.
+     *
+     * The model's answer is right about WHAT the subject is and vague about
+     * WHERE it ends -- it is a 320px opinion stretched over a 1024px photo, so
+     * its boundary sits a dozen pixels away from the actual outline and cuts
+     * corners round fingers and handles. The guided filter solves, per
+     * neighbourhood, the linear map from the photo's own luminance to the mask
+     * that best explains it, which drags the boundary onto the edge the eye
+     * can actually see. Semantics from the model, geometry from the photo.
+     */
+    function guidedFilter(guide, p, w, h, r, eps) {
+      const n = w * h;
+      const meanI = boxBlurF32(guide, w, h, r);
+      const meanP = boxBlurF32(p, w, h, r);
+      const Ip = new Float32Array(n);
+      const II = new Float32Array(n);
+      for (let i = 0; i < n; i++) { Ip[i] = guide[i] * p[i]; II[i] = guide[i] * guide[i]; }
+      const meanIp = boxBlurF32(Ip, w, h, r);
+      const meanII = boxBlurF32(II, w, h, r);
+      const a = new Float32Array(n);
+      const b = new Float32Array(n);
+      for (let i = 0; i < n; i++) {
+        const cov = meanIp[i] - meanI[i] * meanP[i];
+        const varI = meanII[i] - meanI[i] * meanI[i];
+        a[i] = cov / (varI + eps);
+        b[i] = meanP[i] - a[i] * meanI[i];
+      }
+      const meanA = boxBlurF32(a, w, h, r);
+      const meanB = boxBlurF32(b, w, h, r);
+      const q = new Float32Array(n);
+      for (let i = 0; i < n; i++) q[i] = meanA[i] * guide[i] + meanB[i];
+      return q;
+    }
+
+    /** Model output -> full-resolution, edge-aligned subjectness 0..1. */
+    function segRefine(subject, srcData) {
+      const S = SEG.size, w = srcData.width, h = srcData.height, n = w * h;
+
+      // Upsample the model's opinion to the working size.
+      const small = document.createElement('canvas');
+      small.width = S; small.height = S;
+      const sctx = small.getContext('2d');
+      const sImg = sctx.createImageData(S, S);
+      for (let i = 0; i < S * S; i++) {
+        const v = Math.max(0, Math.min(255, Math.round(subject[i] * 255)));
+        sImg.data[i * 4] = v; sImg.data[i * 4 + 1] = v; sImg.data[i * 4 + 2] = v; sImg.data[i * 4 + 3] = 255;
+      }
+      sctx.putImageData(sImg, 0, 0);
+
+      const big = document.createElement('canvas');
+      big.width = w; big.height = h;
+      const bctx = big.getContext('2d');
+      bctx.imageSmoothingEnabled = true;
+      bctx.imageSmoothingQuality = 'high';
+      bctx.drawImage(small, 0, 0, w, h);
+      const up = bctx.getImageData(0, 0, w, h).data;
+
+      const p = new Float32Array(n);
+      const guide = new Float32Array(n);
+      const d = srcData.data;
+      for (let i = 0; i < n; i++) {
+        p[i] = up[i * 4] / 255;
+        const j = i << 2;
+        guide[i] = (0.299 * d[j] + 0.587 * d[j + 1] + 0.114 * d[j + 2]) / 255;
+      }
+
+      const r = Math.max(4, Math.round(Math.min(w, h) / 110));
+      return guidedFilter(guide, p, w, h, r, 1e-4);
+    }
+
+    /* ------------------------- using the result ------------------------ */
+
+    /**
+     * Threshold on subjectness. The slider drives this once the model has
+     * spoken, so dragging it re-cuts instantly instead of re-running anything.
+     */
+    function segThresholdToHard(subjectFull, w, h, amount) {
+      const cut = Math.max(0.02, Math.min(0.98, amount / 100));
+      const n = w * h;
+      const hard = new Uint8Array(n);
+      for (let i = 0; i < n; i++) hard[i] = subjectFull[i] < cut ? 255 : 0;
+      despeckleMask(hard, w, h, Math.max(12, Math.round(n * 0.0008)));
+      return hard;
+    }
+
+    /** Rejects a model result that is obviously not a usable cut-out. */
+    function segUsable(hard, w, h) {
+      const n = w * h;
+      let removed = 0;
+      for (let i = 0; i < n; i++) if (hard[i] > 127) removed++;
+      const frac = removed / n;
+      return frac > 0.03 && frac < 0.985;
+    }
+
+    /**
+     * Runs the model against the photo currently in the editor and, if it
+     * produces something usable, replaces the colour pass with it.
+     *
+     * Deliberately fire-and-forget. The editor has already opened on the
+     * colour result, so this is an upgrade arriving late rather than a load
+     * the user is made to wait through -- and if the model is missing, slow or
+     * wrong, nothing about the editor changes.
+     */
+    /*
+     * Detects the subject in the photo currently in the editor and turns
+     * everything else into the background.
+     *
+     * The colour pass is reached only from here, and only when this fails:
+     * no model on the device, a model that will not start, one that takes
+     * absurdly long, or one that comes back with something that is plainly
+     * not a cut-out. Falling back is a real outcome, so it is a code path
+     * with a test, not an afterthought.
+     */
+    async function segRefineEditor(token) {
+      if (!ED.src || !window.TT_AI.enabled) { edRunColourAuto(); return; }
+      edSetBusy('Finding the subject…');
+
+      const giveUpAfter = new Promise((resolve) => setTimeout(() => resolve('timeout'), SEG_TIMEOUT_MS));
+
+      try {
+        const subject = await Promise.race([segmentSubject(ED.src), giveUpAfter]);
+
+        // The photo may have been swapped, or the user may have started
+        // working, while the model was thinking. Their work wins outright.
+        if (token !== ED.loadToken || !ED.src) return;
+        if (ED.undo.length) return;
+
+        if (!subject || subject === 'timeout') {
+          console.log('[TT] no subject model (' + (subject === 'timeout' ? 'timed out' : SEG.status) + '), using colour');
+          edRunColourAuto();
+          return;
+        }
+
+        const full = segRefine(subject, ED.src);
+        const amount = 50;
+        const hard = segThresholdToHard(full, ED.w, ED.h, amount);
+        pruneKeptFragments(hard, ED.w, ED.h);
+        if (!segUsable(hard, ED.w, ED.h)) {
+          console.log('[TT] model found no subject, using colour');
+          edRunColourAuto();
+          return;
+        }
+        if (token !== ED.loadToken) return;
+
+        ED.thinking = false;
+        ED.subject = full;
+        ED.engine = 'ai';
+        ED.amount = amount;
+        ED.hard = hard;
+        ED.autoConfident = true;
+        ED.fill = 'white';
+        bgFillMode = 'white';
+        edSyncAmountSlider();
+        edRebuildMask();
+        edRender();
+        edUpdateControls();
+        console.log('[TT] subject found in ' + SEG.lastMs + 'ms');
+      } catch (e) {
+        console.log('[TT] segmentation failed: ' + (e && e.message));
+        if (token === ED.loadToken && ED.src && !ED.undo.length) edRunColourAuto();
+      } finally {
+        edSetBusy(null);
+      }
+    }
+
+    function edSetBusy(text) {
+      const el = document.getElementById('bgx-busy');
+      if (!el) return;
+      if (text) { el.textContent = text; el.style.display = 'block'; }
+      else { el.style.display = 'none'; }
+    }
+
+    /* ===================================================================
+     * Background editor
+     * -------------------------------------------------------------------
+     * The v2.0 editor was a single shot: one border flood fill, one slider,
+     * and a Undo that meant "throw the whole thing away". It failed on the
+     * three things that actually happen when a parent photographs an object
+     * for a tile -- the subject touches the edge of the frame (so the border
+     * fill eats it), a patch of background is a different colour from the
+     * rest (so it survives), and the cut edge is a hard 1-bit staircase.
+     *
+     * This version keeps a MASK instead of a picture. `ED.hard` is the 0/255
+     * decision per pixel; `ED.mask` is that decision softened (dilate + blur)
+     * and is the only thing the renderer reads. Everything -- the automatic
+     * pass, tap-to-erase, tap-to-restore, the brush -- edits `ED.hard`, so
+     * softening is recomputed rather than accumulated, and undo is just a
+     * snapshot of one byte array.
+     * =================================================================== */
+
+    const ED = {
+      src: null,        // ImageData: the untouched photo at working size
+      w: 0, h: 0,
+      hard: null,       // Uint8Array: 0 = keep, 255 = remove. The decision.
+      mask: null,       // Uint8Array: `hard` softened. What the renderer uses.
+      undo: [],         // snapshots of { w, h, src, hard }
+      fill: 'white',    // 'white' | 'black' | 'none'
+      tool: 'erase',    // 'erase' | 'restore'
+      amount: 28,       // auto-pass tolerance
+      brush: 40,        // brush radius, in source pixels
+      out: null,        // reusable render buffer
+      zoom: 1, panX: 0, panY: 0,
+      wired: false,
+      thinking: false,    // an engine is still working; nothing is cut yet
+      engine: 'colour',   // 'colour' | 'ai' -- which pass produced ED.hard
+      subject: null,      // full-res subjectness from the model, if it ran
+      loadToken: 0        // guards a late model result against a newer photo
+    };
+
+    const ED_MAX_EDGE = 1024;      // working size; a tile never shows more
+    const ED_UNDO_LIMIT = 8;
+    const DRIFT_MULTIPLIER = 3;
+
+    const BG_FILLS = {
+      white: [255, 255, 255],
+      black: [0, 0, 0]
+    };
+
+    /* ------------------------- mask primitives ------------------------- */
+
+    /** Every pixel on the frame edge, as flat indices. */
+    function borderSeeds(w, h) {
+      const seeds = [];
+      for (let x = 0; x < w; x++) {
+        seeds.push(x);
+        if (h > 1) seeds.push((h - 1) * w + x);
+      }
+      for (let y = 1; y < h - 1; y++) {
+        seeds.push(y * w);
+        if (w > 1) seeds.push(y * w + w - 1);
+      }
+      return seeds;
+    }
+
+    /**
+     * Multi-source BFS with a LOCAL comparison: a pixel joins the region when
+     * its RGB distance to its PARENT -- the already-accepted pixel that
+     * proposed it -- is within `tolerance`, and it then becomes the reference
+     * for its own neighbours. That walks gradually-varying surfaces (wood
+     * grain, shadow, vignetting, sensor noise) that a fixed seed-relative
+     * threshold cannot cross. `driftLimit` is the leash that stops the same
+     * chain of small steps from strolling into the photographed item across a
+     * soft edge. `allow` optionally restricts the region to pixels the caller
+     * is willing to change. Returns a 0/1 Uint8Array; never touches srcData.
+     */
+    function floodFrom(srcData, seeds, tolerance, driftLimit, allow) {
+      const w = srcData.width, h = srcData.height, src = srcData.data;
+      const total = w * h;
+      const hit = new Uint8Array(total);
+      const queue = new Int32Array(total);
+      const originOf = new Int32Array(total);
+      const tol2 = tolerance * tolerance;
+      const drift = (driftLimit === undefined || driftLimit === null)
+        ? tolerance * DRIFT_MULTIPLIER : driftLimit;
+      const drift2 = drift * drift;
+
+      let head = 0, tail = 0;
+      for (let k = 0; k < seeds.length; k++) {
+        const s = seeds[k];
+        if (s < 0 || s >= total || hit[s]) continue;
+        if (allow && !allow(s)) continue;
+        hit[s] = 1; originOf[s] = s; queue[tail++] = s;
+      }
+
+      const accepts = (n, parent) => {
+        if (allow && !allow(n)) return false;
+        const a = n << 2, b = parent << 2;
+        let dr = src[a] - src[b];
+        let dg = src[a + 1] - src[b + 1];
+        let db = src[a + 2] - src[b + 2];
+        if (dr * dr + dg * dg + db * db > tol2) return false;   // local step
+        const o = originOf[parent] << 2;                        // leash
+        dr = src[a] - src[o];
+        dg = src[a + 1] - src[o + 1];
+        db = src[a + 2] - src[o + 2];
+        return dr * dr + dg * dg + db * db <= drift2;
+      };
+
+      while (head < tail) {
+        const p = queue[head++];
+        const px = p % w;
+        if (px > 0)          { const n = p - 1; if (!hit[n] && accepts(n, p)) { hit[n] = 1; originOf[n] = originOf[p]; queue[tail++] = n; } }
+        if (px < w - 1)      { const n = p + 1; if (!hit[n] && accepts(n, p)) { hit[n] = 1; originOf[n] = originOf[p]; queue[tail++] = n; } }
+        if (p >= w)          { const n = p - w; if (!hit[n] && accepts(n, p)) { hit[n] = 1; originOf[n] = originOf[p]; queue[tail++] = n; } }
+        if (p < total - w)   { const n = p + w; if (!hit[n] && accepts(n, p)) { hit[n] = 1; originOf[n] = originOf[p]; queue[tail++] = n; } }
+      }
+      return hit;
+    }
+
+    /** 4-connected labelling of a 0/255 mask, with per-component areas. */
+    function labelComponents(mask, w, h) {
+      const total = w * h;
+      const label = new Int32Array(total).fill(-1);
+      const stack = new Int32Array(total);
+      const area = [];
+      let comp = 0;
+      for (let s = 0; s < total; s++) {
+        if (label[s] !== -1) continue;
+        const cls = mask[s] > 127 ? 1 : 0;
+        let sp = 0;
+        stack[sp++] = s; label[s] = comp;
+        let n = 0;
+        while (sp > 0) {
+          const p = stack[--sp]; n++;
+          const px = p % w;
+          if (px > 0)        { const q = p - 1; if (label[q] === -1 && (mask[q] > 127 ? 1 : 0) === cls) { label[q] = comp; stack[sp++] = q; } }
+          if (px < w - 1)    { const q = p + 1; if (label[q] === -1 && (mask[q] > 127 ? 1 : 0) === cls) { label[q] = comp; stack[sp++] = q; } }
+          if (p >= w)        { const q = p - w; if (label[q] === -1 && (mask[q] > 127 ? 1 : 0) === cls) { label[q] = comp; stack[sp++] = q; } }
+          if (p < total - w) { const q = p + w; if (label[q] === -1 && (mask[q] > 127 ? 1 : 0) === cls) { label[q] = comp; stack[sp++] = q; } }
+        }
+        area.push(n);
+        comp++;
+      }
+      return { label, area, count: comp };
+    }
+
+    /**
+     * Flips any blob -- removed or kept -- smaller than `minArea` to the other
+     * side. This is what clears the pepper of surviving background specks and
+     * the confetti of stray "kept" pixels that a threshold always leaves in
+     * sensor noise, and it is why the cut looks deliberate rather than eaten
+     * by moths. Labels are computed up front, so flipping in place is safe.
+     */
+    function despeckleMask(mask, w, h, minArea) {
+      const { label, area } = labelComponents(mask, w, h);
+      const total = w * h;
+      for (let i = 0; i < total; i++) {
+        if (area[label[i]] < minArea) mask[i] = mask[i] > 127 ? 0 : 255;
+      }
+    }
+
+    /** Grows the removed region by `r` pixels (4-connected, iterated). */
+    function dilateMask(mask, w, h, r) {
+      const total = w * h;
+      for (let pass = 0; pass < r; pass++) {
+        const prev = Uint8Array.from(mask);
+        for (let i = 0; i < total; i++) {
+          if (prev[i] > 127) continue;
+          const x = i % w;
+          if ((x > 0 && prev[i - 1] > 127) ||
+              (x < w - 1 && prev[i + 1] > 127) ||
+              (i >= w && prev[i - w] > 127) ||
+              (i < total - w && prev[i + w] > 127)) {
+            mask[i] = 255;
+          }
+        }
+      }
+    }
+
+    /** Separable box blur -- turns the 1-bit staircase into an alpha ramp. */
+    function blurMask(mask, w, h, radius) {
+      const total = w * h;
+      if (radius < 1) return Uint8Array.from(mask);
+      const win = radius * 2 + 1;
+      const tmp = new Float32Array(total);
+      const out = new Uint8Array(total);
+
+      for (let y = 0; y < h; y++) {
+        const row = y * w;
+        let sum = 0;
+        for (let k = -radius; k <= radius; k++) sum += mask[row + Math.min(w - 1, Math.max(0, k))];
+        for (let x = 0; x < w; x++) {
+          tmp[row + x] = sum / win;
+          sum += mask[row + Math.min(w - 1, x + radius + 1)] - mask[row + Math.max(0, x - radius)];
+        }
+      }
+      for (let x = 0; x < w; x++) {
+        let sum = 0;
+        for (let k = -radius; k <= radius; k++) sum += tmp[Math.min(h - 1, Math.max(0, k)) * w + x];
+        for (let y = 0; y < h; y++) {
+          out[y * w + x] = sum / win;
+          sum += tmp[Math.min(h - 1, y + radius + 1) * w + x] - tmp[Math.max(0, y - radius) * w + x];
+        }
+      }
+      return out;
+    }
+
+    /** Softening scales with the picture so a thumbnail is not smeared. */
+    function softenRadiusFor(w, h) {
+      return Math.max(1, Math.round(Math.min(w, h) / 420));
+    }
+
+    /**
+     * hard decision -> renderable alpha. The dilation before the blur is not
+     * cosmetic: the ring of pixels along an object's outline is a physical
+     * blend of object and background, so leaving it at partial alpha paints a
+     * ghost of the old background around the cut-out. Eating that ring first
+     * is what makes a white background read as white and not as a grey halo.
+     */
+    function softenMask(hard, w, h) {
+      const grown = Uint8Array.from(hard);
+      const r = softenRadiusFor(w, h);
+      dilateMask(grown, w, h, r);
+      return blurMask(grown, w, h, r);
+    }
+
+    /* ---------------------- the automatic pass ------------------------ */
+
+    /**
+     * Which border pixels are allowed to seed the automatic pass.
+     *
+     * Seeding from the whole frame edge is what made the old editor destroy
+     * any photo where the object stands on the bottom of the frame: the fill
+     * starts INSIDE the object and floods outward through it, and no slider
+     * position can help because the object is a seed. Border pixels are
+     * grouped by colour instead, and a group only gets to seed if it looks
+     * like background -- it owns a corner of the picture, or it covers a fifth
+     * of the perimeter. An object poking through the edge is a short run of a
+     * colour that owns no corner, so it seeds nothing and survives.
+     *
+     * Dropping a group is safe even when that group really was background:
+     * seeds are only starting points, and the local-step walk still reaches
+     * any background connected to some other seed.
+     */
+    const BG_SEED_MAX_CLUSTERS = 48;
+
+    function backgroundSeeds(srcData, tolerance) {
+      const w = srcData.width, h = srcData.height, src = srcData.data;
+      const border = borderSeeds(w, h);
+      if (border.length < 8) return border;
+
+      const radius = Math.max(30, tolerance * 2);
+      const r2 = radius * radius;
+      const clusters = [];                       // { r, g, b, n, corner }
+      const assign = new Int32Array(border.length);
+
+      // "Corner" is a short run along both edges that meet there, not a single
+      // pixel -- one hot pixel in a corner should not decide the whole photo.
+      const corners = new Set();
+      const cw = Math.max(1, Math.round(w * 0.04));
+      const ch = Math.max(1, Math.round(h * 0.04));
+      for (let d = 0; d < cw; d++) {
+        corners.add(d); corners.add(w - 1 - d);
+        corners.add((h - 1) * w + d); corners.add((h - 1) * w + w - 1 - d);
+      }
+      for (let d = 0; d < ch; d++) {
+        corners.add(d * w); corners.add(d * w + w - 1);
+        corners.add((h - 1 - d) * w); corners.add((h - 1 - d) * w + w - 1);
+      }
+
+      for (let k = 0; k < border.length; k++) {
+        const i = border[k] << 2;
+        const R = src[i], G = src[i + 1], B = src[i + 2];
+        let found = -1, bestD = Infinity;
+        for (let c = 0; c < clusters.length; c++) {
+          const cl = clusters[c];
+          const dr = R - cl.r, dg = G - cl.g, db = B - cl.b;
+          const d = dr * dr + dg * dg + db * db;
+          if (d <= r2) { found = c; break; }
+          if (d < bestD) { bestD = d; }
+        }
+        if (found === -1) {
+          if (clusters.length >= BG_SEED_MAX_CLUSTERS) {
+            // Cap reached (a very noisy or heavily graded edge): fall back to
+            // the nearest group rather than growing without bound.
+            let near = 0, nd = Infinity;
+            for (let c = 0; c < clusters.length; c++) {
+              const cl = clusters[c];
+              const dr = R - cl.r, dg = G - cl.g, db = B - cl.b;
+              const d = dr * dr + dg * dg + db * db;
+              if (d < nd) { nd = d; near = c; }
+            }
+            found = near;
+          } else {
+            clusters.push({ r: R, g: G, b: B, n: 0, corner: false });
+            found = clusters.length - 1;
+          }
+        }
+        clusters[found].n++;
+        if (corners.has(border[k])) clusters[found].corner = true;
+        assign[k] = found;
+      }
+
+      const accepted = clusters.map(c => c.corner || (c.n / border.length) >= 0.2);
+      if (!accepted.some(Boolean)) return border;
+
+      const seeds = [];
+      for (let k = 0; k < border.length; k++) if (accepted[assign[k]]) seeds.push(border[k]);
+      return seeds.length ? seeds : border;
+    }
+
+    /** Border flood at `tolerance`, despeckled. Returns a 0/255 hard mask. */
+    function autoHardMask(srcData, tolerance) {
+      const w = srcData.width, h = srcData.height, total = w * h;
+      const hit = floodFrom(srcData, backgroundSeeds(srcData, tolerance), tolerance, undefined, null);
+      const hard = new Uint8Array(total);
+      for (let i = 0; i < total; i++) hard[i] = hit[i] ? 255 : 0;
+      despeckleMask(hard, w, h, Math.max(12, Math.round(total * 0.0012)));
+      pruneKeptFragments(hard, w, h);
+      return hard;
+    }
+
+    /**
+     * Drops surviving scraps that are tiny NEXT TO the thing that survived.
+     *
+     * Despeckling uses an absolute size, so it cannot tell a 900-pixel crumb
+     * on a 0.8-megapixel photo from a small object deliberately photographed:
+     * set it high enough to clear the crumbs and it starts eating real
+     * subjects. Measuring each survivor against the largest survivor instead
+     * is scale-free -- a photo of one object on a table comes back as that
+     * object, and a genuinely small subject is safe because it IS the largest.
+     *
+     * Both bars have to be cleared: a scrap must be small relative to the
+     * subject AND small in absolute terms, so a photo of two objects side by
+     * side never loses one of them.
+     */
+    function pruneKeptFragments(hard, w, h) {
+      const total = w * h;
+      const { label, area } = labelComponents(hard, w, h);
+      let largestKept = 0;
+      for (let i = 0; i < total; i++) {
+        if (hard[i] === 0) { const a = area[label[i]]; if (a > largestKept) largestKept = a; }
+      }
+      if (!largestKept) return;
+      const relative = largestKept * 0.06;
+      const absolute = total * 0.015;
+      for (let i = 0; i < total; i++) {
+        if (hard[i] !== 0) continue;
+        const a = area[label[i]];
+        if (a < relative && a < absolute) hard[i] = 255;
+      }
+    }
+
+    function downscaleImageData(imgData, maxEdge) {
+      const scale = Math.min(1, maxEdge / Math.max(imgData.width, imgData.height));
+      if (scale >= 1) return imgData;
+      const sw = Math.max(1, Math.round(imgData.width * scale));
+      const sh = Math.max(1, Math.round(imgData.height * scale));
+      const a = document.createElement('canvas');
+      a.width = imgData.width; a.height = imgData.height;
+      a.getContext('2d').putImageData(imgData, 0, 0);
+      const b = document.createElement('canvas');
+      b.width = sw; b.height = sh;
+      const bx = b.getContext('2d');
+      bx.imageSmoothingEnabled = true;
+      bx.drawImage(a, 0, 0, sw, sh);
+      return bx.getImageData(0, 0, sw, sh);
+    }
+
+    /** Mean neighbour-to-neighbour colour distance over the whole picture. */
+    function meanGradient(imgData) {
+      const w = imgData.width, h = imgData.height, d = imgData.data;
+      let sum = 0, n = 0;
+      for (let y = 0; y < h - 1; y++) {
+        for (let x = 0; x < w - 1; x++) {
+          const i = y * w + x, a = i << 2;
+          let b = (i + 1) << 2;
+          sum += Math.abs(d[a] - d[b]) + Math.abs(d[a + 1] - d[b + 1]) + Math.abs(d[a + 2] - d[b + 2]);
+          b = (i + w) << 2;
+          sum += Math.abs(d[a] - d[b]) + Math.abs(d[a + 1] - d[b + 1]) + Math.abs(d[a + 2] - d[b + 2]);
+          n += 2;
+        }
+      }
+      return n ? sum / n : 0;
+    }
+
+    /**
+     * How hard the picture disagrees with itself along the cut.
+     *
+     * This is the measurement that catches a fill eating the subject, and
+     * nothing else does. Removing a background leaves a cut that runs along
+     * the object's outline, where the picture changes sharply. Eating into the
+     * object leaves a cut running through skin, or a shirt, or a wall, where
+     * the picture barely changes at all -- and every cheaper metric is blind
+     * to it: the removed fraction looks reasonable, the middle of the frame
+     * survives, and what is left is still one connected blob. Chris's selfie
+     * in a dim room passed all three while the fill was taking his shirt, his
+     * hair and half his face.
+     *
+     * Returned relative to the picture's own average gradient, so a flatly-lit
+     * photo is judged on its own terms rather than against a sunny one.
+     */
+    function boundaryContrast(imgData, hit, avgGradient) {
+      const w = imgData.width, h = imgData.height, d = imgData.data;
+      let sum = 0, n = 0;
+      for (let y = 0; y < h - 1; y++) {
+        for (let x = 0; x < w - 1; x++) {
+          const i = y * w + x;
+          if (hit[i] !== hit[i + 1]) {
+            const a = i << 2, b = (i + 1) << 2;
+            sum += Math.abs(d[a] - d[b]) + Math.abs(d[a + 1] - d[b + 1]) + Math.abs(d[a + 2] - d[b + 2]);
+            n++;
+          }
+          if (hit[i] !== hit[i + w]) {
+            const a = i << 2, b = (i + w) << 2;
+            sum += Math.abs(d[a] - d[b]) + Math.abs(d[a + 1] - d[b + 1]) + Math.abs(d[a + 2] - d[b + 2]);
+            n++;
+          }
+        }
+      }
+      if (!n) return 0;
+      return (sum / n) / Math.max(1, avgGradient);
+    }
+
+    /**
+     * Picks the tolerance the photo actually wants, instead of making the user
+     * hunt for it. Every candidate is scored on a thumbnail against four
+     * things that describe a good cut-out and cost nothing to measure: the
+     * frame edge came out clean, the middle of the picture survived, plenty
+     * was removed, and what survived is one object rather than debris. The
+     * band checks reject the two degenerate answers (removed nothing, removed
+     * everything) before scoring, so the score never has to defend against
+     * them. Returns a tolerance for the slider.
+     */
+    function pickAutoAmount(srcData) {
+      const small = downscaleImageData(srcData, 220);
+      const sw = small.width, sh = small.height, total = sw * sh;
+      const perimeter = borderSeeds(sw, sh);
+      const cx0 = Math.floor(sw * 0.3), cx1 = Math.max(cx0 + 1, Math.ceil(sw * 0.7));
+      const cy0 = Math.floor(sh * 0.3), cy1 = Math.max(cy0 + 1, Math.ceil(sh * 0.7));
+      const kx0 = Math.floor(sw * 0.42), kx1 = Math.max(kx0 + 1, Math.ceil(sw * 0.58));
+      const ky0 = Math.floor(sh * 0.42), ky1 = Math.max(ky0 + 1, Math.ceil(sh * 0.58));
+      const candidates = [8, 11, 14, 18, 22, 26, 31, 37, 44, 52, 62, 74];
+
+      const avgGradient = meanGradient(small);
+      let best = 26, bestScore = -Infinity, sawAny = false;
+      let bestStats = null;
+
+      for (const tol of candidates) {
+        const seeds = backgroundSeeds(small, tol);
+        const hit = floodFrom(small, seeds, tol, undefined, null);
+        let removed = 0;
+        for (let i = 0; i < total; i++) if (hit[i]) removed++;
+        const frac = removed / total;
+        if (frac < 0.12 || frac > 0.985) continue;   // removed nothing / everything
+
+        // The middle of the frame is a GATE, never a reward. Scoring it was
+        // the bug that made every photo pick the gentlest setting: a pass that
+        // removes nothing leaves the centre untouched and so scored highest
+        // for doing nothing at all. It can only veto a candidate that has
+        // clearly chewed into the subject.
+        let centerKept = 0, centerTotal = 0;
+        for (let y = cy0; y < cy1; y++) {
+          for (let x = cx0; x < cx1; x++) {
+            centerTotal++;
+            if (!hit[y * sw + x]) centerKept++;
+          }
+        }
+        const centerFrac = centerTotal ? centerKept / centerTotal : 0;
+        if (centerFrac < 0.45) continue;
+
+        let coreKept = 0, coreTotal = 0;
+        for (let y = ky0; y < ky1; y++) {
+          for (let x = kx0; x < kx1; x++) {
+            coreTotal++;
+            if (!hit[y * sw + x]) coreKept++;
+          }
+        }
+        if (coreTotal && coreKept / coreTotal < 0.8) continue;   // ate the core
+
+        // Scored against the WHOLE perimeter, not just the seeded part --
+        // otherwise dropping seeds would flatter the score for free.
+        let borderRemoved = 0;
+        for (let k = 0; k < perimeter.length; k++) if (hit[perimeter[k]]) borderRemoved++;
+        const borderFrac = borderRemoved / perimeter.length;
+
+        const km = new Uint8Array(total);
+        for (let i = 0; i < total; i++) km[i] = hit[i] ? 255 : 0;
+        const { label, area } = labelComponents(km, sw, sh);
+        let largestKept = 0, keptTotal = 0;
+        for (let i = 0; i < total; i++) {
+          if (!hit[i]) { keptTotal++; const a = area[label[i]]; if (a > largestKept) largestKept = a; }
+        }
+        const compact = keptTotal ? largestKept / keptTotal : 0;
+
+        // What a good cut-out actually looks like: the frame edge came out
+        // clean, plenty was removed, and what survived is one object rather
+        // than debris. `>=` breaks ties toward the larger tolerance -- on a
+        // plateau every setting yields the same mask, and the looser one is
+        // the more robust choice at full resolution.
+        // Normalised so the term still has room to move at the top of its
+        // range: real cuts run 3-10x the picture's average gradient, so
+        // dividing by 3 pinned every candidate at 1.0 and the term did
+        // nothing at all. On Chris's selfie the ratio peaks at 9.25 and then
+        // collapses to 5.24 at exactly the setting where the fill breaks out
+        // of the background and into his shirt -- that collapse is the whole
+        // signal, and it is only visible unsaturated.
+        const contrast = boundaryContrast(small, hit, avgGradient);
+        const edgeFit = Math.min(1, contrast / 10);
+
+        const score = 1.6 * borderFrac + 1.4 * frac + 0.9 * compact + 1.8 * edgeFit;
+        sawAny = true;
+        if (score >= bestScore) {
+          bestScore = score;
+          best = tol;
+          bestStats = { frac: frac, compact: compact, edgeFit: edgeFit, contrast: contrast };
+        }
+      }
+
+      // Nothing scored: a photo with no separable background (a close-up that
+      // fills the frame). The gentlest setting is the least destructive answer.
+      return sawAny ? best : 12;
+    }
+
+    const ED_AUTO_CANDIDATES = [8, 11, 14, 18, 22, 26, 31, 37, 44, 52, 62, 74];
+
+    /**
+     * Scores a finished full-resolution mask, and decides whether it is good
+     * enough to apply without being asked.
+     *
+     * The thumbnail search cannot make this call. Downscaling averages away
+     * the sensor noise that the fill actually has to walk through, so a
+     * setting that looks clean at 220px can be the setting that walks straight
+     * through a dark shirt at full size -- on Chris's selfie the thumbnail
+     * liked 44 while the full-resolution optimum was 31, and 44 is exactly
+     * where his shirt and hair disappear. So the thumbnail only proposes a
+     * neighbourhood and every real decision is made on the real mask.
+     */
+    function edScoreHard(hard, avgGradient) {
+      const w = ED.w, h = ED.h, total = w * h;
+      let removed = 0;
+      for (let i = 0; i < total; i++) if (hard[i] > 127) removed++;
+      const frac = removed / total;
+
+      const perimeter = borderSeeds(w, h);
+      let borderRemoved = 0;
+      for (let k = 0; k < perimeter.length; k++) if (hard[perimeter[k]] > 127) borderRemoved++;
+      const borderFrac = borderRemoved / perimeter.length;
+
+      const { label, area } = labelComponents(hard, w, h);
+      let largestKept = 0, kept = 0;
+      for (let i = 0; i < total; i++) {
+        if (hard[i] === 0) { kept++; const a = area[label[i]]; if (a > largestKept) largestKept = a; }
+      }
+      const compact = kept ? largestKept / kept : 0;
+      const edgeFit = Math.min(1, boundaryContrast(ED.src, hard, avgGradient) / 10);
+
+      const usable = frac >= 0.08 && frac <= 0.985;
+      return {
+        frac: frac, compact: compact, edgeFit: edgeFit,
+        score: usable ? (1.6 * borderFrac + 1.4 * frac + 0.9 * compact + 1.8 * edgeFit) : -Infinity,
+        /*
+         * Some photos have no separable subject at all -- a street seen
+         * through a car window, a cluttered room. The pass still returns its
+         * best answer and the best answer is a nearly blank frame. Opening
+         * onto that is worse than opening onto the untouched photo, so the
+         * cut is computed either way and simply not applied until asked for.
+         */
+        /*
+         * The removed fraction is a weak signal and a bad gate: a small object
+         * on a big table legitimately removes 90% of the frame, and bars tight
+         * enough to reject a failure were rejecting perfectly good cuts. What
+         * actually separates them is whether one object survived (`compact`)
+         * and whether the cut follows edges the picture really has
+         * (`edgeFit`); the fraction is kept only as a sanity limit.
+         */
+        confident: usable && frac < 0.97 && compact > 0.65 && edgeFit > 0.45
+      };
+    }
+
+    /**
+     * Runs the automatic pass properly: a cheap thumbnail search for the
+     * neighbourhood, then a handful of real full-resolution passes around it,
+     * scored on the mask the user is actually going to see. The trials step
+     * DOWNWARD from the guess because the thumbnail systematically over-
+     * estimates -- smoothing hides the noise that makes a loose setting
+     * dangerous, so the guess is an upper bound rather than an answer.
+     */
+    function edAutoBestMask() {
+      const guess = pickAutoAmount(ED.src);
+      const avgGradient = meanGradient(ED.src);
+
+      let idx = ED_AUTO_CANDIDATES.indexOf(guess);
+      if (idx < 0) {
+        idx = 0;
+        for (let i = 0; i < ED_AUTO_CANDIDATES.length; i++) {
+          if (Math.abs(ED_AUTO_CANDIDATES[i] - guess) < Math.abs(ED_AUTO_CANDIDATES[idx] - guess)) idx = i;
+        }
+      }
+
+      // Adjacent steps, not every other one. A sparse ladder skipped the right
+      // answer outright: on a photo of a pill bottle held in a hand the guess
+      // was 31 and the correct setting was 26, but the trials ran 31, 22, 14
+      // and the best of those took the hand and the label with it. One step up
+      // is included because the thumbnail only USUALLY over-estimates.
+      const tried = new Set();
+      let best = null;
+      for (const step of [-1, 0, 1, 2]) {
+        const t = ED_AUTO_CANDIDATES[Math.min(ED_AUTO_CANDIDATES.length - 1, Math.max(0, idx - step))];
+        if (tried.has(t)) continue;
+        tried.add(t);
+        const hard = autoHardMask(ED.src, t);
+        const stats = edScoreHard(hard, avgGradient);
+        if (!best || stats.score > best.stats.score) best = { amount: t, hard: hard, stats: stats };
+      }
+      return best;
+    }
+
+    /* -------------------------- editor state -------------------------- */
+
+    function edPushUndo() {
+      // `subject` rides along because the crop resizes it: without it, undoing
+      // a crop restores the full-size photo while leaving the cropped matte in
+      // place, and the next touch of the slider reads off the end of it.
+      ED.undo.push({ w: ED.w, h: ED.h, src: ED.src, hard: Uint8Array.from(ED.hard), subject: ED.subject });
+      if (ED.undo.length > ED_UNDO_LIMIT) ED.undo.shift();
+      edUpdateControls();
+    }
+
+    function edUndo() {
+      const prev = ED.undo.pop();
+      if (!prev) { showToast('Nothing to undo', 'error'); return; }
+      ED.w = prev.w; ED.h = prev.h; ED.src = prev.src; ED.hard = prev.hard;
+      ED.subject = prev.subject;
+      capturedImageData = ED.src;
+      captureWidth = ED.w; captureHeight = ED.h;
+      edRebuildMask();
+      edRender();
+      edUpdateControls();
+    }
+
+    /** Re-runs the automatic pass at the current amount, dropping hand edits. */
+    function edReset() {
+      if (!ED.src) return;
+      edPushUndo();
+      edRunAuto(ED.amount);
+    }
+
+    function edRunAuto(amount) {
+      if (!ED.src) return;
+      ED.amount = amount;
+      if (ED.engine === 'ai' && ED.subject && ED.subject.length === ED.w * ED.h) {
+        // Re-cutting the model's matte at a new threshold is a pass over one
+        // array, so the slider stays live under the finger. Re-running the
+        // colour fill here instead would silently throw the model's answer
+        // away the first time the user touched the slider.
+        ED.hard = segThresholdToHard(ED.subject, ED.w, ED.h, amount);
+        pruneKeptFragments(ED.hard, ED.w, ED.h);
+      } else {
+        ED.hard = autoHardMask(ED.src, amount);
+      }
+      // Once the user has driven the slider themselves, the editor's own
+      // opinion of the automatic pass is no longer what is on screen.
+      ED.autoConfident = true;
+      edRebuildMask();
+      edRender();
+    }
+
+    function edRebuildMask() {
+      ED.mask = softenMask(ED.hard, ED.w, ED.h);
+    }
+
+    /* --------------------------- rendering ---------------------------- */
+
+    function edComposite() {
+      const total = ED.w * ED.h;
+      const src = ED.src.data;
+      if (!ED.out || ED.out.length !== total * 4) ED.out = new Uint8ClampedArray(total * 4);
+      const out = ED.out;
+      const fc = BG_FILLS[ED.fill];
+
+      if (!fc) {
+        out.set(src);
+        return new ImageData(out, ED.w, ED.h);
+      }
+      const fr = fc[0], fg = fc[1], fb = fc[2];
+      const mask = ED.mask;
+      for (let i = 0; i < total; i++) {
+        const a = mask[i] / 255, ia = 1 - a, j = i << 2;
+        out[j]     = src[j]     * ia + fr * a;
+        out[j + 1] = src[j + 1] * ia + fg * a;
+        out[j + 2] = src[j + 2] * ia + fb * a;
+        out[j + 3] = 255;
+      }
+      return new ImageData(out, ED.w, ED.h);
+    }
+
+    function edRender() {
+      if (!ED.src) return;
+      const canvas = document.getElementById('camera-fs-canvas');
+      if (!canvas) return;
+      if (canvas.width !== ED.w || canvas.height !== ED.h) {
+        canvas.width = ED.w;
+        canvas.height = ED.h;
+      }
+      canvas.getContext('2d').putImageData(edComposite(), 0, 0);
+      edApplyTransform();
+    }
+
+    function edApplyTransform() {
+      const canvas = document.getElementById('camera-fs-canvas');
+      if (!canvas) return;
+      canvas.style.transform =
+        'translate(' + ED.panX + 'px,' + ED.panY + 'px) scale(' + ED.zoom + ')';
+    }
+
+    /* ------------------------ coordinate mapping ---------------------- */
+
+    /**
+     * Screen point -> source pixel. Read off the canvas's own bounding box,
+     * which already includes the zoom/pan transform, then undo the letterbox
+     * that `object-fit: contain` adds inside it. Doing it this way means the
+     * transform can change without the hit-testing knowing anything about it.
+     */
+    function edToSource(clientX, clientY) {
+      const canvas = document.getElementById('camera-fs-canvas');
+      const rect = canvas.getBoundingClientRect();
+      const scale = Math.min(rect.width / ED.w, rect.height / ED.h);
+      if (!(scale > 0)) return null;
+      const dw = ED.w * scale, dh = ED.h * scale;
+      const ox = rect.left + (rect.width - dw) / 2;
+      const oy = rect.top + (rect.height - dh) / 2;
+      return {
+        x: (clientX - ox) / scale,
+        y: (clientY - oy) / scale,
+        scale: scale
+      };
+    }
+
+    function edInBounds(p) {
+      return p && p.x >= 0 && p.y >= 0 && p.x < ED.w && p.y < ED.h;
+    }
+
+    /* ---------------------------- editing ----------------------------- */
+
+    /**
+     * Tap a patch. Erase floods the colour region under the finger and removes
+     * it; restore floods the region and puts it back. Each is limited to
+     * pixels that are currently on the other side, so a tap can never undo
+     * itself and repeated taps converge. This is the tool that fixes both of
+     * the automatic pass's failure modes -- a background patch it missed, and
+     * a subject it ate because the subject touches the frame.
+     */
+    function edTapAt(sx, sy) {
+      if (!ED.src) return;
+      const x = Math.round(sx), y = Math.round(sy);
+      if (x < 0 || y < 0 || x >= ED.w || y >= ED.h) return;
+      const seed = y * ED.w + x;
+      const erase = ED.tool === 'erase';
+      const hard = ED.hard;
+      const allow = erase ? (k => hard[k] === 0) : (k => hard[k] !== 0);
+
+      if (!allow(seed)) {
+        showToast(erase ? 'Already removed there' : 'That part is already kept', 'error');
+        return;
+      }
+
+      const tol = edTapTolerance();
+      const hit = floodFrom(ED.src, [seed], tol, tol * TAP_DRIFT_MULTIPLIER, allow);
+      let n = 0;
+      for (let i = 0; i < hit.length; i++) if (hit[i]) n++;
+      if (!n) return;
+
+      edPushUndo();
+      const value = erase ? 255 : 0;
+      for (let i = 0; i < hit.length; i++) if (hit[i]) hard[i] = value;
+      edRebuildMask();
+      edRender();
+      showToast((erase ? 'Removed ' : 'Restored ') + Math.round(100 * n / (ED.w * ED.h)) + '% of the photo', 'success');
+    }
+
+    /*
+     * A tap has to be far more cautious than the whole-frame pass, and the
+     * reason is the leash rather than the tolerance. The frame pass can afford
+     * a 3x drift because it starts from the frame edge and is walking real
+     * background; a tap starts wherever the finger landed, and the ramp of
+     * blended pixels along an object's outline is a chain of small steps that
+     * a loose leash will happily follow straight through the object. One tap
+     * on the hole in a mug handle took the entire mug with it before this was
+     * tightened. Undo covers a tap that overreaches, but a tap that eats the
+     * picture is not a tool anyone trusts twice.
+     */
+    const TAP_DRIFT_MULTIPLIER = 1.6;
+
+    function edTapTolerance() {
+      return Math.min(40, Math.max(14, Math.round(ED.amount * 0.6)));
+    }
+
+    /** Paints a disc into the hard mask. */
+    function edPaintDisc(cx, cy, r, value) {
+      const w = ED.w, h = ED.h, hard = ED.hard;
+      const x0 = Math.max(0, Math.floor(cx - r)), x1 = Math.min(w - 1, Math.ceil(cx + r));
+      const y0 = Math.max(0, Math.floor(cy - r)), y1 = Math.min(h - 1, Math.ceil(cy + r));
+      const r2 = r * r;
+      for (let y = y0; y <= y1; y++) {
+        const dy = y - cy, dy2 = dy * dy, row = y * w;
+        for (let x = x0; x <= x1; x++) {
+          const dx = x - cx;
+          if (dx * dx + dy2 <= r2) hard[row + x] = value;
+        }
+      }
+    }
+
+    /** Paints the segment between two points so a fast drag has no gaps. */
+    function edPaintSegment(ax, ay, bx, by, r, value) {
+      const dx = bx - ax, dy = by - ay;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const steps = Math.max(1, Math.ceil(dist / Math.max(1, r * 0.4)));
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        edPaintDisc(ax + dx * t, ay + dy * t, r, value);
+      }
+    }
+
+    /* --------------------------- crop --------------------------------- */
+
+    /**
+     * Crops to what survived, with a margin. A tile is a small square on a
+     * board -- an object photographed from across a table reads as a dot
+     * until it is cropped, and doing it after the cut-out means the crop can
+     * use the mask instead of guessing.
+     */
+    function edCropToSubject() {
+      if (!ED.src) return;
+      const w = ED.w, h = ED.h, hard = ED.hard;
+      let minX = w, minY = h, maxX = -1, maxY = -1;
+      for (let y = 0; y < h; y++) {
+        const row = y * w;
+        for (let x = 0; x < w; x++) {
+          if (hard[row + x] === 0) {
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+      if (maxX < minX || maxY < minY) { showToast('Nothing left to crop to', 'error'); return; }
+
+      const bw = maxX - minX + 1, bh = maxY - minY + 1;
+      if (bw > w * 0.94 && bh > h * 0.94) { showToast('Already filling the frame', 'success'); return; }
+
+      const pad = Math.round(Math.max(bw, bh) * 0.06) + 2;
+      const x0 = Math.max(0, minX - pad), y0 = Math.max(0, minY - pad);
+      const x1 = Math.min(w - 1, maxX + pad), y1 = Math.min(h - 1, maxY + pad);
+      const nw = x1 - x0 + 1, nh = y1 - y0 + 1;
+
+      edPushUndo();
+
+      const a = document.createElement('canvas');
+      a.width = w; a.height = h;
+      a.getContext('2d').putImageData(ED.src, 0, 0);
+      const b = document.createElement('canvas');
+      b.width = nw; b.height = nh;
+      const bx = b.getContext('2d');
+      bx.drawImage(a, x0, y0, nw, nh, 0, 0, nw, nh);
+
+      const nextHard = new Uint8Array(nw * nh);
+      for (let y = 0; y < nh; y++) {
+        for (let x = 0; x < nw; x++) nextHard[y * nw + x] = hard[(y + y0) * w + (x + x0)];
+      }
+
+      // The model's matte is indexed by the old dimensions, so it has to be
+      // cropped to match or the slider re-cuts against the wrong geometry.
+      let nextSubject = null;
+      if (ED.subject && ED.subject.length === w * h) {
+        nextSubject = new Float32Array(nw * nh);
+        for (let y = 0; y < nh; y++) {
+          for (let x = 0; x < nw; x++) nextSubject[y * nw + x] = ED.subject[(y + y0) * w + (x + x0)];
+        }
+      }
+
+      ED.src = bx.getImageData(0, 0, nw, nh);
+      ED.hard = nextHard;
+      ED.subject = nextSubject;
+      ED.w = nw; ED.h = nh;
+      capturedImageData = ED.src;
+      captureWidth = nw; captureHeight = nh;
+      ED.zoom = 1; ED.panX = 0; ED.panY = 0;
+      ED.out = null;
+      edRebuildMask();
+      edRender();
+      edUpdateControls();
+      showToast('Cropped to the subject', 'success');
+    }
+
+    /* --------------------------- controls ----------------------------- */
+
+    function edSetFill(mode) {
+      ED.fill = (mode === 'white' || mode === 'black') ? mode : 'none';
+      bgFillMode = (ED.fill === 'none') ? null : ED.fill;
+      edRender();
+      edUpdateControls();
+    }
+
+    function edSetTool(tool) {
+      ED.tool = (tool === 'restore') ? 'restore' : 'erase';
+      edUpdateControls();
+    }
+
+    function edOnBrushInput() {
+      const slider = document.getElementById('bgx-brush');
+      const value = slider ? parseInt(slider.value, 10) : 40;
+      ED.brush = Number.isFinite(value) ? value : 40;
+      const label = document.getElementById('bgx-brush-value');
+      if (label) label.textContent = String(ED.brush);
+      edFlashBrushRing();
+    }
+
+    /** Shows the brush footprint for a moment when the size changes. */
+    function edFlashBrushRing() {
+      const ring = document.getElementById('bgx-brush-ring');
+      const stage = document.getElementById('bgx-stage');
+      const canvas = document.getElementById('camera-fs-canvas');
+      if (!ring || !stage || !canvas || !ED.src) return;
+      const rect = canvas.getBoundingClientRect();
+      const stageRect = stage.getBoundingClientRect();
+      const scale = Math.min(rect.width / ED.w, rect.height / ED.h);
+      const d = Math.max(6, ED.brush * 2 * scale);
+      ring.style.width = d + 'px';
+      ring.style.height = d + 'px';
+      ring.style.left = (stageRect.width / 2) + 'px';
+      ring.style.top = (stageRect.height / 2) + 'px';
+      ring.style.display = 'block';
+      clearTimeout(edFlashBrushRing._t);
+      edFlashBrushRing._t = setTimeout(() => { ring.style.display = 'none'; }, 900);
+    }
+
+    function edUpdateControls() {
+      const mark = (id, on) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('active-fill', !!on);
+      };
+      mark('btn-bg-white', ED.fill === 'white');
+      mark('btn-bg-black', ED.fill === 'black');
+      mark('btn-bg-none', ED.fill === 'none');
+      mark('bgx-tool-erase', ED.tool === 'erase');
+      mark('bgx-tool-restore', ED.tool === 'restore');
+
+      const undoBtn = document.getElementById('bgx-btn-undo');
+      if (undoBtn) undoBtn.disabled = ED.undo.length === 0;
+
+      // Until an engine has produced a mask there is nothing for the amount
+      // slider or Reset to act on, and letting them run in that window meant
+      // a stray touch could take over the photo and cancel the model that was
+      // about to answer.
+      const amountSlider = document.getElementById('wb-tolerance');
+      if (amountSlider) amountSlider.disabled = !!ED.thinking;
+      const resetBtn = document.getElementById('bgx-btn-reset');
+      if (resetBtn) resetBtn.disabled = !!ED.thinking;
+
+      const brushRow = document.getElementById('bgx-brush-row');
+      if (brushRow) brushRow.style.display = '';
+
+      // The slider means two different things depending on which engine
+      // produced the mask, so it says which.
+      const amountLabel = document.getElementById('bgx-amount-label');
+      if (amountLabel) {
+        amountLabel.textContent = (ED.engine === 'ai')
+          ? 'Trim around the subject'
+          : 'How much background to remove';
+      }
+
+      const hint = document.getElementById('bgx-hint');
+      if (hint) {
+        hint.textContent = ED.thinking
+          ? 'Finding the subject in your photo…'
+          : (ED.autoConfident === false && ED.fill === 'none')
+            ? 'No clear subject found — tap White or Black to apply anyway'
+            : (ED.tool === 'erase')
+              ? 'Tap a patch to remove it · drag to paint it out · pinch to zoom'
+              : 'Tap a removed patch to bring it back · drag to paint it back';
+      }
+    }
+
+    /* ---------------------- pointer interaction ----------------------- */
+
+    const edPointers = new Map();
+    let edStroke = null;
+    let edPinch = null;
+    let edRenderQueued = false;
+
+    function edQueueRender() {
+      if (edRenderQueued) return;
+      edRenderQueued = true;
+      requestAnimationFrame(() => {
+        edRenderQueued = false;
+        edRebuildMask();
+        edRender();
+      });
+    }
+
+    function edWireStage() {
+      if (ED.wired) return;
+      const stage = document.getElementById('bgx-stage');
+      if (!stage) return;
+      ED.wired = true;
+
+      stage.addEventListener('pointerdown', (e) => {
+        if (!ED.src) return;
+        /*
+         * Capture keeps a stroke alive when the finger slides off the stage,
+         * which is a convenience -- but this WebView throws NotFoundError for
+         * a pointer it does not consider active, and an exception here aborts
+         * the rest of the handler. That means no stroke is started and the
+         * pointer is never registered, so erase, restore, tap and pinch all
+         * go silently dead. A nicety must not be able to kill every tool.
+         */
+        try { stage.setPointerCapture(e.pointerId); } catch (err) { /* optional */ }
+        edPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (edPointers.size === 2) {
+          // A second finger turns the gesture into zoom/pan. Any stroke the
+          // first finger had begun is rolled back, so pinching never leaves
+          // a stray smear behind.
+          if (edStroke && edStroke.painted) edUndo();
+          edStroke = null;
+          const pts = [...edPointers.values()];
+          edPinch = {
+            dist: Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y),
+            zoom: ED.zoom,
+            mid: { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 },
+            panX: ED.panX, panY: ED.panY
+          };
+          return;
+        }
+        if (edPointers.size > 2) return;
+
+        const p = edToSource(e.clientX, e.clientY);
+        edStroke = { start: { x: e.clientX, y: e.clientY }, src: p, moved: false, painted: false };
+      });
+
+      stage.addEventListener('pointermove', (e) => {
+        if (!ED.src || !edPointers.has(e.pointerId)) return;
+        edPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (edPinch && edPointers.size >= 2) {
+          const pts = [...edPointers.values()];
+          const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+          const mid = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 };
+          ED.zoom = Math.min(8, Math.max(1, edPinch.zoom * (dist / (edPinch.dist || 1))));
+          ED.panX = edPinch.panX + (mid.x - edPinch.mid.x);
+          ED.panY = edPinch.panY + (mid.y - edPinch.mid.y);
+          if (ED.zoom <= 1.01) { ED.zoom = 1; ED.panX = 0; ED.panY = 0; }
+          edApplyTransform();
+          return;
+        }
+
+        if (!edStroke) return;
+        const dx = e.clientX - edStroke.start.x, dy = e.clientY - edStroke.start.y;
+        if (!edStroke.moved && Math.hypot(dx, dy) < 7) return;   // still a tap
+
+        const p = edToSource(e.clientX, e.clientY);
+        if (!p) return;
+        if (!edStroke.moved) {
+          edStroke.moved = true;
+          edPushUndo();
+          edStroke.painted = true;
+        }
+        const value = ED.tool === 'erase' ? 255 : 0;
+        const from = edStroke.src && edInBounds(edStroke.src) ? edStroke.src : p;
+        edPaintSegment(from.x, from.y, p.x, p.y, ED.brush, value);
+        edStroke.src = p;
+        edQueueRender();
+      });
+
+      const finish = (e) => {
+        if (!edPointers.has(e.pointerId)) return;
+        edPointers.delete(e.pointerId);
+        if (edPointers.size < 2) edPinch = null;
+        if (edPointers.size > 0) return;
+
+        if (edStroke && !edStroke.moved && edStroke.src && edInBounds(edStroke.src)) {
+          edTapAt(edStroke.src.x, edStroke.src.y);
+        } else if (edStroke && edStroke.moved) {
+          edRebuildMask();
+          edRender();
+        }
+        edStroke = null;
+        edUpdateControls();
+      };
+      stage.addEventListener('pointerup', finish);
+      stage.addEventListener('pointercancel', finish);
+    }
+
+    /* ---------------- entry points used by the rest of the app -------- */
+
+    /*
+     * Loads any source -- a live video frame or an image already on the tile --
+     * into the editor, capped on the long edge so every pass stays instant on
+     * a phone, then runs the automatic cut immediately. Opening the editor and
+     * seeing the finished cut-out, rather than the raw photo and a slider to
+     * go hunting with, is the whole point.
+     */
+    function loadSourceIntoEditor(source, srcW, srcH) {
+      const vw = srcW || 640;
+      const vh = srcH || 480;
+      const scale = Math.min(1, ED_MAX_EDGE / Math.max(vw, vh));
+      captureWidth = Math.max(1, Math.round(vw * scale));
+      captureHeight = Math.max(1, Math.round(vh * scale));
+
+      const canvas = document.getElementById('camera-fs-canvas');
+      canvas.width = captureWidth;
+      canvas.height = captureHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(source, 0, 0, captureWidth, captureHeight);
+
+      ED.src = ctx.getImageData(0, 0, captureWidth, captureHeight);
+      ED.w = captureWidth;
+      ED.h = captureHeight;
+      ED.undo = [];
+      ED.out = null;
+      ED.zoom = 1; ED.panX = 0; ED.panY = 0;
+      ED.tool = 'erase';
+      ED.engine = 'colour';
+      ED.subject = null;
+      ED.loadToken++;
+      ED.brush = Math.max(12, Math.round(Math.min(ED.w, ED.h) * 0.06));
+
+      capturedImageData = ED.src;   // kept for callers that predate the mask
+
+      const brushSlider = document.getElementById('bgx-brush');
+      if (brushSlider) {
+        brushSlider.max = String(Math.max(40, Math.round(Math.min(ED.w, ED.h) * 0.35)));
+        brushSlider.value = String(ED.brush);
+      }
+      const brushLabel = document.getElementById('bgx-brush-value');
+      if (brushLabel) brushLabel.textContent = String(ED.brush);
+
+      edWireStage();
+
+      /*
+       * Find the SUBJECT first; the background is whatever is left over.
+       *
+       * This used to run the other way round -- hunt for the background by
+       * flooding inward from the frame edge and call whatever survived the
+       * subject -- and that is precisely why it could take a person's dark
+       * shirt: it never knew there was a person there. The model is asked
+       * first now, and the colour pass is what happens when there is no model,
+       * not what happens first by default.
+       *
+       * Nothing half-cut is shown while the model thinks. The photo stays as
+       * it was shot, with a note saying what is happening, because an answer
+       * that appears instantly and then changes under you reads as a glitch
+       * even when the second answer is the better one.
+       */
+      if (window.TT_AI.enabled && SEG.status !== 'unavailable') {
+        ED.thinking = true;
+        ED.hard = new Uint8Array(ED.w * ED.h);   // nothing removed yet
+        ED.fill = 'none';
+        bgFillMode = null;
+        ED.autoConfident = null;
+        ED.amount = 50;
+        edSyncAmountSlider();
+        edRebuildMask();
+        edRender();
+        edUpdateControls();
+        segRefineEditor(ED.loadToken);
+      } else {
+        ED.thinking = false;
+        edRunColourAuto();
+      }
+    }
+
+    function edSyncAmountSlider() {
+      const slider = document.getElementById('wb-tolerance');
+      if (slider) slider.value = String(ED.amount);
+      const label = document.getElementById('wb-tolerance-value');
+      if (label) label.textContent = String(ED.amount);
+    }
+
+    /**
+     * The colour pass, as a fallback. Used when there is no model -- and only
+     * then. It cannot know what an object is, so it is the answer of last
+     * resort rather than the first thing tried.
+     */
+    function edRunColourAuto() {
+      if (!ED.src) return;
+      ED.thinking = false;
+      const pick = edAutoBestMask();
+      ED.engine = 'colour';
+      ED.subject = null;
+      ED.amount = pick.amount;
+      ED.fill = pick.stats.confident ? 'white' : 'none';
+      bgFillMode = pick.stats.confident ? 'white' : null;
+      ED.autoConfident = pick.stats.confident;
+      ED.hard = pick.hard;
+      edSyncAmountSlider();
+      edRebuildMask();
+      edRender();
+      edUpdateControls();
+      if (!pick.stats.confident) {
+        showToast('No clear subject found — tap White, or erase by hand', 'error');
+      }
+      console.log('[TT] colour cut ' + ED.w + 'x' + ED.h + ' amount=' + ED.amount +
+        ' confident=' + pick.stats.confident);
+    }
+
+    function capturePhoto() {
+      const videoEl = document.getElementById('camera-fs-video');
+      if (!videoEl || !cameraStream) {
+        showToast('Camera is not running', 'error');
+        return;
+      }
+      loadSourceIntoEditor(videoEl, videoEl.videoWidth, videoEl.videoHeight);
+      console.log('[TT] captured ' + captureWidth + 'x' + captureHeight);
+      stopCamera();
+      showCameraEditorLayer();
+    }
+
+    /*
+     * Opens the editor on the photo the tile already has -- uploaded from the
+     * gallery, or shot earlier and saved. Background removal is a property of
+     * the tile picture, not of the camera.
+     */
+    function editPendingPhoto() {
+      if (!pendingPhotoBlob) {
+        showToast('No photo to edit yet', 'error');
+        return;
+      }
+      // Drop the previous photo before the layer goes up. Decoding is async,
+      // so without this the editor opens showing the LAST picture it edited
+      // until the new one arrives -- and any tap in that window would be
+      // acting on a mask that belongs to a different photo.
+      ED.src = null; ED.hard = null; ED.mask = null; ED.undo = [];
+      capturedImageData = null;
+
+      const url = URL.createObjectURL(pendingPhotoBlob);
+      const img = new Image();
+      img.onload = () => {
+        photoEditorSource = 'existing';
+        openCameraFullscreen();
+        showCameraEditorLayer();
+        loadSourceIntoEditor(img, img.naturalWidth, img.naturalHeight);
+        URL.revokeObjectURL(url);
+        console.log('[TT] editing existing photo ' + captureWidth + 'x' + captureHeight);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        showToast('Could not open that image', 'error');
+      };
+      img.src = url;
+    }
+
+    function retakePhoto() {
+      ED.src = null; ED.hard = null; ED.mask = null; ED.undo = [];
+      capturedImageData = null;
+      bgFillMode = null;
+      photoEditorSource = 'camera';
+      showCameraLiveLayer();
+      startCameraStream();
+    }
+
+    /* ------------- compatibility shims (older call sites) ------------- */
+
+    /**
+     * Pure one-shot version of the whole pipeline: border flood, despeckle,
+     * soften, composite. Returns a new ImageData and never mutates the input.
+     */
+    function fillBackground(srcData, tolerance, fillRgb, driftLimit) {
+      const fill = fillRgb || [255, 255, 255];
+      const w = srcData.width, h = srcData.height, total = w * h;
+      const hit = floodFrom(srcData, backgroundSeeds(srcData, tolerance), tolerance, driftLimit, null);
+      const hard = new Uint8Array(total);
+      for (let i = 0; i < total; i++) hard[i] = hit[i] ? 255 : 0;
+      despeckleMask(hard, w, h, Math.max(12, Math.round(total * 0.0012)));
+      const soft = softenMask(hard, w, h);
+
+      const src = srcData.data;
+      const out = new Uint8ClampedArray(src);
+      for (let i = 0; i < total; i++) {
+        const a = soft[i] / 255, ia = 1 - a, j = i << 2;
+        out[j]     = src[j]     * ia + fill[0] * a;
+        out[j + 1] = src[j + 1] * ia + fill[1] * a;
+        out[j + 2] = src[j + 2] * ia + fill[2] * a;
+        out[j + 3] = 255;
+      }
+      return new ImageData(out, w, h);
+    }
+
+    function whitenBackground(srcData, tolerance, driftLimit) {
+      return fillBackground(srcData, tolerance, [255, 255, 255], driftLimit);
+    }
+
+    function currentTolerance() {
+      const slider = document.getElementById('wb-tolerance');
+      const value = slider ? parseInt(slider.value, 10) : 28;
+      return Number.isFinite(value) ? value : 28;
+    }
+
+    function applyBackgroundFill(mode) {
+      if (!ED.src) return;
+      if (!BG_FILLS[mode]) return;
+      edSetFill(mode);
+    }
+
+    function applyWhiteBackground() { applyBackgroundFill('white'); }
+
+    function undoBackgroundFill() { edSetFill('none'); }
+
+    function undoWhiteBackground() { undoBackgroundFill(); }
+
+    function updateBgFillButtons() { edUpdateControls(); }
+
+    /**
+     * The amount slider re-runs the automatic pass. Hand edits are rebuilt
+     * from scratch by that pass, so the previous state goes on the undo stack
+     * first -- dragging the slider is never a way to silently lose brushwork.
+     */
+    function onToleranceInput() {
+      const value = currentTolerance();
+      const label = document.getElementById('wb-tolerance-value');
+      if (label) label.textContent = String(value);
+      if (!ED.src) { ED.amount = value; return; }
+      if (!onToleranceInput._undoPushed) {
+        edPushUndo();
+        onToleranceInput._undoPushed = true;
+        clearTimeout(onToleranceInput._t);
+      }
+      clearTimeout(onToleranceInput._t);
+      onToleranceInput._t = setTimeout(() => { onToleranceInput._undoPushed = false; }, 900);
+      edRunAuto(value);
+      edUpdateControls();
+    }
+
+    function saveCapturedToTile() {
+      const canvas = document.getElementById('camera-fs-canvas');
+      if (!ED.src) {
+        showToast('Nothing to save', 'error');
+        return;
+      }
+      // Published before the conversion finishes so the tile editor's own
+      // Save can wait for it rather than racing it.
+      pendingPhotoWrite = new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            showToast('Could not save photo', 'error');
+            resolve();
+            return;
+          }
+          // Same hand-off as every other photo source: the editor's Save
+          // button writes pendingPhotoBlob to IndexedDB.
+          pendingPhotoBlob = blob;
+          closeCameraFullscreen();
+          updateModalPhotoPreview();
+          showToast('Photo added — tap Save to store it', 'success');
+          resolve();
+        }, 'image/jpeg', 0.92);
+      });
+      return pendingPhotoWrite;
+    }
+
+    function triggerFileInput() {
+      const fileInput = document.getElementById('photo-file-input');
+      fileInput.value = '';
+      fileInput.click();
+    }
+
+    function handleFileSelected(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      pendingPhotoBlob = file;
+      updateModalPhotoPreview();
+      showToast('Image loaded', 'success');
+    }
+
+    function removePhoto() {
+      pendingPhotoBlob = null;
+      updateModalPhotoPreview();
+    }
+
+    /* --- Audio Recording & Voice Management --- */
+    function updateModalAudioPreview() {
+      const statusText = document.getElementById('audio-status-text');
+      const recordingActive = document.getElementById('audio-recording-active');
+      const recordBtn = document.getElementById('btn-record-voice');
+      const recordBtnText = document.getElementById('btn-record-text');
+      const stopBtn = document.getElementById('btn-stop-record');
+      const playBtn = document.getElementById('btn-play-preview');
+      const removeBtn = document.getElementById('btn-remove-audio');
+
+      recordingActive.style.display = 'none';
+      stopBtn.style.display = 'none';
+      recordBtn.style.display = 'inline-flex';
+
+      if (pendingAudioBlob) {
+        statusText.textContent = 'Voice recording ready (tap Play to test)';
+        recordBtnText.textContent = 'Re-record Voice';
+        playBtn.style.display = 'inline-flex';
+        removeBtn.style.display = 'inline-flex';
+      } else {
+        statusText.textContent = 'No voice recording';
+        recordBtnText.textContent = 'Record Voice';
+        playBtn.style.display = 'none';
+        removeBtn.style.display = 'none';
+      }
+    }
+
+    async function startRecording() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        showToast('Microphone not supported in this browser.', 'error');
+        return;
+      }
+
+      stopAudioPreview();
+
+      try {
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        let chosenMime = '';
+        if (typeof MediaRecorder !== 'undefined') {
+          const types = [
+            'audio/webm;codecs=opus',
+            'audio/webm',
+            'audio/mp4',
+            'audio/ogg;codecs=opus',
+            'audio/aac'
+          ];
+          for (const t of types) {
+            if (MediaRecorder.isTypeSupported(t)) {
+              chosenMime = t;
+              break;
+            }
+          }
+        }
+
+        mediaRecorder = new MediaRecorder(audioStream, chosenMime ? { mimeType: chosenMime } : undefined);
+        recordedAudioChunks = [];
+        recordMimeType = chosenMime;
+        recordingFinalized = false;
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            recordedAudioChunks.push(e.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => finalizeRecording();
+        mediaRecorder.onerror = (e) => {
+          console.log('[TT] MediaRecorder error: ' + (e && e.error));
+          finalizeRecording();
+        };
+
+        mediaRecorder.start(100);
+
+        // UI state for recording
+        document.getElementById('audio-status-text').style.display = 'none';
+        document.getElementById('audio-recording-active').style.display = 'flex';
+        document.getElementById('btn-record-voice').style.display = 'none';
+        document.getElementById('btn-play-preview').style.display = 'none';
+        document.getElementById('btn-remove-audio').style.display = 'none';
+        document.getElementById('btn-stop-record').style.display = 'inline-flex';
+
+        recordSecondsElapsed = 0;
+        updateRecordingTimerUI();
+
+        recordIntervalTimer = setInterval(() => {
+          recordSecondsElapsed++;
+          updateRecordingTimerUI();
+        }, 1000);
+
+        // Auto-stop at 15 seconds
+        recordAutoStopTimer = setTimeout(() => {
+          stopRecording();
+        }, 15000);
+
+      } catch (err) {
+        stopAudioStream();
+        updateModalAudioPreview();
+        showToast('Microphone blocked — allow in browser settings', 'error');
+      }
+    }
+
+    function updateRecordingTimerUI() {
+      const mins = Math.floor(recordSecondsElapsed / 60);
+      const secs = recordSecondsElapsed % 60;
+      const formatted = `${mins}:${secs.toString().padStart(2, '0')}`;
+      const timerEl = document.getElementById('recording-timer');
+      if (timerEl) {
+        timerEl.textContent = `Recording: ${formatted} / 0:15`;
+      }
+    }
+
+    /*
+     * MediaRecorder.stop() is asynchronous: it flushes a final 'dataavailable'
+     * and only then fires 'onstop'. Tearing the source stream down in the same
+     * tick kills the recorder before it dispatches 'onstop', so the blob never
+     * gets assembled and the whole recording is silently discarded. Stop the
+     * recorder here and let finalizeRecording() (from 'onstop') do the teardown.
+     */
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        // Safety net in case 'onstop' never arrives: the chunks are already ours.
+        clearTimeout(recordSafetyTimer);
+        recordSafetyTimer = setTimeout(finalizeRecording, 1500);
+      } else {
+        finalizeRecording();
+      }
+    }
+
+    /** Assembles the recorded chunks into pendingAudioBlob exactly once. */
+    function finalizeRecording() {
+      if (recordingFinalized) return;
+      recordingFinalized = true;
+      clearTimeout(recordSafetyTimer);
+      recordSafetyTimer = null;
+
+      const bytes = recordedAudioChunks.reduce((sum, c) => sum + c.size, 0);
+      pendingAudioBlob = bytes > 0
+        ? new Blob(recordedAudioChunks, { type: recordMimeType || 'audio/webm' })
+        : null;
+
+      stopRecordingTimer();
+      stopAudioStream();
+      updateModalAudioPreview();
+
+      if (pendingAudioBlob) {
+        console.log('[TT] recording finalized: ' + pendingAudioBlob.size + ' bytes, '
+          + (recordMimeType || 'audio/webm'));
+        showToast('Recording saved for tile!', 'success');
+      } else {
+        console.log('[TT] recording produced no audio data');
+        showToast('Nothing was recorded — try again', 'error');
+      }
+    }
+
+    function stopRecordingTimer() {
+      if (recordIntervalTimer) {
+        clearInterval(recordIntervalTimer);
+        recordIntervalTimer = null;
+      }
+      if (recordAutoStopTimer) {
+        clearTimeout(recordAutoStopTimer);
+        recordAutoStopTimer = null;
+      }
+      const statusText = document.getElementById('audio-status-text');
+      if (statusText) statusText.style.display = 'block';
+    }
+
+    function stopAudioStream() {
+      if (audioStream) {
+        audioStream.getTracks().forEach(track => track.stop());
+        audioStream = null;
+      }
+    }
+
+    function togglePlayAudioPreview() {
+      if (!pendingAudioBlob) return;
+
+      if (previewAudioPlayer) {
+        stopAudioPreview();
+        return;
+      }
+
+      const playIcon = document.getElementById('play-preview-icon');
+      const playText = document.getElementById('play-preview-text');
+      const audioUrl = URL.createObjectURL(pendingAudioBlob);
+      const audio = new Audio(audioUrl);
+      previewAudioPlayer = audio;
+
+      playIcon.innerHTML = '<path d="M6 6h12v12H6z"/>';
+      playText.textContent = 'Stop';
+
+      const cleanup = () => {
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        playText.textContent = 'Play Test';
+        URL.revokeObjectURL(audioUrl);
+        previewAudioPlayer = null;
+      };
+
+      audio.onended = cleanup;
+      audio.onerror = () => {
+        cleanup();
+        showToast('Playback error', 'error');
+      };
+
+      audio.play().catch(() => {
+        cleanup();
+        showToast('Could not play audio', 'error');
+      });
+    }
+
+    function stopAudioPreview() {
+      if (previewAudioPlayer) {
+        previewAudioPlayer.pause();
+        previewAudioPlayer.currentTime = 0;
+        const playIcon = document.getElementById('play-preview-icon');
+        const playText = document.getElementById('play-preview-text');
+        if (playIcon) playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        if (playText) playText.textContent = 'Play Test';
+        previewAudioPlayer = null;
+      }
+    }
+
+    function removeAudio() {
+      stopAudioPreview();
+      pendingAudioBlob = null;
+      updateModalAudioPreview();
+    }
+
+    /*
+     * A tile tap opens the editor from 'pointerup'. Chrome then synthesises the
+     * compatibility 'click' for that same touch ~10ms later and hit-tests it
+     * against the DOM as it is BY THEN -- i.e. against the freshly opened modal.
+     * That orphan click lands on whichever modal button happens to sit under the
+     * finger (Cancel, or worse, Save), so the editor flashes open and instantly
+     * dismisses itself. Swallow clicks inside the modal that never had a
+     * matching pointerdown inside the modal; a real press always does.
+     */
+    function installModalClickGuard() {
+      const modal = document.getElementById('editor-modal');
+
+      modal.addEventListener('pointerdown', () => {
+        modalPointerDownSeen = true;
+      }, true);
+
+      document.addEventListener('click', (e) => {
+        if (!modal.classList.contains('open')) return;
+        if (modalPointerDownSeen) return;
+        if (performance.now() - editorOpenedAt > 1000) return;
+        if (!modal.contains(e.target)) return;
+        console.log('[TT] swallowed orphan click on ' + (e.target.textContent || '').trim().slice(0, 20));
+        e.preventDefault();
+        e.stopPropagation();
+      }, true);
+    }
+
+    /* --- Application Initialization --- */
+    async function initApp() {
+      // Load stored preferences
+      const savedLayout = parseInt(localStorage.getItem('aac_layout'), 10);
+      if (savedLayout === 1 || savedLayout === 2 || savedLayout === 3) {
+        currentLayout = savedLayout;
+      }
+
+      // Pinning is live OS state, never restored from storage. Clear the flag
+      // older builds wrote so an upgrade can't come back up looking locked.
+      localStorage.removeItem('aac_locked');
+      isPinned = false;
+
+      updateThemeClasses();
+      applyLockState();
+      installModalClickGuard();
+
+      try {
+        await loadAllTilesFromDB();
+      } catch (err) {
+        console.error('Failed to load tiles from IndexedDB', err);
+      }
+
+      renderBoard();
+
+      /*
+       * Warm the subject model in the background, after the board is up.
+       *
+       * Loading the runtime and the model is over a second of the wait, and it
+       * only ever has to happen once per launch. Doing it now -- while the
+       * user is still looking at the board deciding which tile to edit --
+       * means that by the time a photo is taken the model is already sitting
+       * there, and the wait is inference alone. Failure here is silent by
+       * design: segLoad() records it and the editor falls back to the colour
+       * pass without anyone being told about a model they never asked for.
+       */
+      if (window.TT_AI.enabled) {
+        setTimeout(() => {
+          segLoad().then((session) => {
+            if (!session) return;
+            // One throwaway inference so the WASM is compiled and the tensor
+            // arenas are allocated before the first real photo needs them.
+            const warm = document.createElement('canvas');
+            warm.width = 8; warm.height = 8;
+            const wctx = warm.getContext('2d');
+            wctx.fillStyle = '#808080';
+            wctx.fillRect(0, 0, 8, 8);
+            segmentSubject(wctx.getImageData(0, 0, 8, 8))
+              .then(() => console.log('[TT] subject model warm'))
+              .catch(() => {});
+          });
+        }, 1200);
+      }
+    }
+
+    // A rotation or any viewport change resizes every tile, so the labels have
+    // to be measured again against their new boxes.
+    window.addEventListener('resize', fitAllLabels);
+    window.addEventListener('resize', () => { if (ED.src) edLayoutStage(); });
+    window.addEventListener('orientationchange', () => setTimeout(fitAllLabels, 150));
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>

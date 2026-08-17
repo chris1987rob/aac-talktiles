@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Self-contained AAC Picture Communication Board with voice recording and camera support.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>AAC Picture Board</title>
+  <style>
+    /* Reset & Base Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* Layout 1 — "Huge": 2x2 grid (4 tiles), warm palette (soft orange/cream), chunky rounded corners, thick borders */
+    body.layout-1 {
+      --bg-color: #faf4eb;
+      --topbar-bg: #f3e7d5;
+      --topbar-border: #e2d2bd;
+      --topbar-text: #452d14;
+      --btn-bg: #fffbf5;
+      --btn-border: #d4bda4;
+      --btn-text: #593e22;
+      --btn-active-bg: #d97724;
+      --btn-active-text: #ffffff;
+      --tile-bg: #fffaf2;
+      --tile-border: 4px solid #e8b982;
+      --tile-radius: 24px;
+      --tile-shadow: 0 8px 20px rgba(180, 110, 40, 0.14);
+      --tile-empty-bg: #fdf5e8;
+      --tile-empty-icon: #b37e4c;
+      --label-bg: rgba(255, 248, 238, 0.94);
+      --label-text: #3c2410;
+      --label-border: 1px solid rgba(232, 185, 130, 0.6);
+      --accent: #d97724;
+      --accent-rgb: 217, 119, 36;
+      --slot-badge-bg: rgba(69, 45, 20, 0.14);
+      --slot-badge-text: #452d14;
+      --grid-cols: 2;
+      --grid-rows: 2;
+      --grid-gap: 16px;
+      --tile-font-size: 1.5rem;
+      --badge-size: 38px;
+    }
+
+    /* Layout 2 — "Classic": 3x3 grid (9 tiles), medium size, cool palette (soft blue/slate), standard borders */
+    body.layout-2 {
+      --bg-color: #f1f5f9;
+      --topbar-bg: #e2e8f0;
+      --topbar-border: #cbd5e1;
+      --topbar-text: #1e293b;
+      --btn-bg: #ffffff;
+      --btn-border: #94a3b8;
+      --btn-text: #334155;
+      --btn-active-bg: #2563eb;
+      --btn-active-text: #ffffff;
+      --tile-bg: #ffffff;
+      --tile-border: 2px solid #94a3b8;
+      --tile-radius: 16px;
+      --tile-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+      --tile-empty-bg: #f8fafc;
+      --tile-empty-icon: #64748b;
+      --label-bg: rgba(255, 255, 255, 0.94);
+      --label-text: #0f172a;
+      --label-border: 1px solid rgba(148, 163, 184, 0.4);
+      --accent: #2563eb;
+      --accent-rgb: 37, 99, 235;
+      --slot-badge-bg: rgba(30, 41, 59, 0.12);
+      --slot-badge-text: #1e293b;
+      --grid-cols: 3;
+      --grid-rows: 3;
+      --grid-gap: 12px;
+      --tile-font-size: 1.15rem;
+      --badge-size: 32px;
+    }
+
+    /* Layout 3 — "Dense": 4x3 grid (12 tiles), smaller, high-contrast dark theme (near-black bg, white outline), bright accent */
+    body.layout-3 {
+      --bg-color: #0d1117;
+      --topbar-bg: #161b22;
+      --topbar-border: #30363d;
+      --topbar-text: #f0f6fc;
+      --btn-bg: #21262d;
+      --btn-border: #30363d;
+      --btn-text: #c9d1d9;
+      --btn-active-bg: #00ffcc;
+      --btn-active-text: #000000;
+      --tile-bg: #161b22;
+      --tile-border: 2px solid #ffffff;
+      --tile-radius: 8px;
+      --tile-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+      --tile-empty-bg: #0d1117;
+      --tile-empty-icon: #8b949e;
+      --label-bg: rgba(13, 17, 23, 0.92);
+      --label-text: #ffffff;
+      --label-border: 1px solid rgba(255, 255, 255, 0.4);
+      --accent: #00ffcc;
+      --accent-rgb: 0, 255, 204;
+      --slot-badge-bg: rgba(255, 255, 255, 0.2);
+      --slot-badge-text: #ffffff;
+      --grid-cols: 4;
+      --grid-rows: 3;
+      --grid-gap: 8px;
+      --tile-font-size: 0.9rem;
+      --badge-size: 26px;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      color: var(--topbar-text);
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+      width: 100vw;
+      position: relative;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background-color: var(--topbar-bg);
+      border-bottom: 1px solid var(--topbar-border);
+      gap: 12px;
+      z-index: 20;
+      flex-shrink: 0;
+      height: 56px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .top-bar-left, .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.06);
+      padding: 3px;
+      border-radius: 8px;
+    }
+
+    body.layout-3 .btn-group {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Standard Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 6px;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn-layout {
+      min-width: 36px;
+      height: 32px;
+      padding: 0 8px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: inherit;
+    }
+
+    .btn-layout.active {
+      background: var(--btn-active-bg);
+      color: var(--btn-active-text);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-edit {
+      height: 38px;
+      padding: 0 12px;
+    }
+
+    .btn-edit.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0369a1;
+    }
+
+    .btn-lock {
+      height: 38px;
+      padding: 0 14px;
+      font-weight: 700;
+    }
+
+    /* Pinned = the only visible effect of Lock. Board stays fully usable. */
+    .btn-lock.pinned {
+      background: #dc2626 !important;
+      color: #ffffff !important;
+      border-color: #b91c1c !important;
+      box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+    }
+
+    /* Main Grid Board */
+    .board-main {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--grid-gap);
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .tiles-grid {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: repeat(var(--grid-cols), 1fr);
+      grid-template-rows: repeat(var(--grid-rows), 1fr);
+      gap: var(--grid-gap);
+      box-sizing: border-box;
+    }
+
+    /* Tile Components */
+    .tile {
+      position: relative;
+      background-color: var(--tile-bg);
+      border: var(--tile-border);
+      border-radius: var(--tile-radius);
+      box-shadow: var(--tile-shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+      box-sizing: border-box;
+    }
+
+    .tile:active {
+      transform: scale(0.97);
+    }
+
+    /* Edit Mode Visual Cue */
+    body.edit-mode .tile {
+      outline: 3px dashed #0284c7;
+      outline-offset: -5px;
+    }
+
+    /* Playing Pulse Animation */
+    .tile.playing {
+      animation: tile-pulse 0.6s infinite alternate ease-in-out;
+      border-color: var(--accent) !important;
+      z-index: 5;
+    }
+
+    @keyframes tile-pulse {
+      0% {
+        transform: scale(0.98);
+        box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.7);
+      }
+      100% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 14px rgba(var(--accent-rgb), 0);
+      }
+    }
+
+    .tile-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .tile-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--tile-empty-icon);
+      background-color: var(--tile-empty-bg);
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      text-align: center;
+      padding: 8px;
+    }
+
+    .tile-empty-icon {
+      width: 48px;
+      height: 48px;
+      opacity: 0.85;
+    }
+
+    body.layout-1 .tile-empty-icon {
+      width: 72px;
+      height: 72px;
+    }
+
+    body.layout-3 .tile-empty-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .tile-empty-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+      opacity: 0.85;
+    }
+
+    body.layout-3 .tile-empty-text {
+      font-size: 0.75rem;
+    }
+
+    .tile-slot-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: var(--slot-badge-bg);
+      color: var(--slot-badge-text);
+      padding: 2px 7px;
+      border-radius: 6px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .tile-speaker-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: var(--badge-size);
+      height: var(--badge-size);
+      border-radius: 50%;
+      background: var(--accent);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    body.layout-3 .tile-speaker-badge {
+      color: #000000;
+    }
+
+    .tile-speaker-badge svg {
+      width: 60%;
+      height: 60%;
+    }
+
+    .tile.playing .tile-speaker-badge {
+      animation: speaker-bounce 0.4s infinite alternate;
+    }
+
+    @keyframes speaker-bounce {
+      0% { transform: scale(0.9); }
+      100% { transform: scale(1.15); }
+    }
+
+    .tile-label {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      background: var(--label-bg);
+      color: var(--label-text);
+      border: var(--label-border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: var(--tile-font-size);
+      text-align: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    body.layout-3 .tile-label {
+      bottom: 4px;
+      left: 4px;
+      right: 4px;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    /* Modal Styles */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      color: #1e293b;
+      width: 100%;
+      max-width: 500px;
+      max-height: 92vh;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modal-scale 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modal-scale {
+      from { transform: scale(0.94); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+      flex-shrink: 0;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    .modal-close-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .modal-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .editor-section {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Photo Area in Modal */
+    .photo-preview-box {
+      width: 100%;
+      height: 180px;
+      border-radius: 8px;
+      background: #e2e8f0;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #cbd5e1;
+    }
+
+    .photo-preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Audio Area in Modal */
+    .audio-status-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+
+    .audio-recording-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: #dc2626;
+      font-size: 0.95rem;
+    }
+
+    .rec-dot {
+      width: 12px;
+      height: 12px;
+      background: #dc2626;
+      border-radius: 50%;
+      animation: pulse-dot 0.8s infinite alternate;
+    }
+
+    @keyframes pulse-dot {
+      0% { opacity: 0.3; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.1); }
+    }
+
+    .text-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #0f172a;
+      outline: none;
+      background: #ffffff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .text-input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    /* Modal Footer */
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #1d4ed8;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+
+    /* Toast Notification */
+    /* ---- Full-screen Camera + Photo Editor ---- */
+    .camera-fs {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: #000;
+      display: none;
+      overflow: hidden;
+    }
+
+    .camera-fs.open {
+      display: block;
+    }
+
+    .camera-fs-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    .camera-fs-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+    }
+
+    /* The editor shows the whole frame, so it is contained, not cropped. */
+    .camera-fs-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .camera-fs-message {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+      color: #f1f5f9;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .camera-fs-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(15, 23, 42, 0.65);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: manipulation;
+      z-index: 3;
+    }
+
+    .camera-fs-close svg {
+      width: 30px;
+      height: 30px;
+      fill: currentColor;
+    }
+
+    .camera-fs-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 20px 24px calc(28px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0));
+      z-index: 3;
+    }
+
+    .camera-fs-shutter {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 6px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      touch-action: manipulation;
+      flex: 0 0 auto;
+    }
+
+    .camera-fs-shutter:active {
+      transform: scale(0.94);
+    }
+
+    .camera-fs-side {
+      width: 56px;
+      height: 56px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      border: none;
+      background: rgba(15, 23, 42, 0.65);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .camera-fs-side svg {
+      width: 28px;
+      height: 28px;
+      fill: currentColor;
+    }
+
+    .camera-fs-side.ghost {
+      visibility: hidden;
+    }
+
+    .camera-fs-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 16px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.88);
+      z-index: 3;
+    }
+
+    .camera-fs-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .camera-fs-row .btn {
+      flex: 1;
+      height: 52px;
+      font-size: 1rem;
+    }
+
+    .camera-fs-slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .camera-fs-slider-row input[type="range"] {
+      width: 100%;
+      height: 36px;
+      accent-color: #2563eb;
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 500;
+      pointer-events: none;
+      width: max-content;
+      max-width: 90vw;
+    }
+
+    .toast {
+      background: #1e293b;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      animation: toast-in 0.25s ease-out;
+      pointer-events: auto;
+      text-align: center;
+    }
+
+    .toast.error {
+      background: #b91c1c;
+    }
+
+    .toast.success {
+      background: #15803d;
+    }
+
+    @keyframes toast-in {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* SVG utility classes */
+    .icon {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="layout-2">
+  <div id="app-container">
+    <!-- Top Bar (Always Visible) -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <span class="brand-title">
+          <svg class="icon" viewBox="0 0 24 24" style="width: 22px; height: 22px;">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+            <circle cx="8" cy="10" r="1.5"/>
+            <circle cx="12" cy="10" r="1.5"/>
+            <circle cx="16" cy="10" r="1.5"/>
+          </svg>
+          Talk Tiles
+        </span>
+        <div class="btn-group" role="group" aria-label="Layout Grid Templates">
+          <button id="btn-layout-1" class="btn btn-layout" title="Huge (2x2)" onclick="setLayout(1)">1</button>
+          <button id="btn-layout-2" class="btn btn-layout active" title="Classic (3x3)" onclick="setLayout(2)">2</button>
+          <button id="btn-layout-3" class="btn btn-layout" title="Dense (4x3)" onclick="setLayout(3)">3</button>
+        </div>
+      </div>
+
+      <div class="top-bar-right">
+        <button id="btn-edit-mode" class="btn btn-edit" title="Toggle Edit Mode" onclick="toggleEditMode()">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          <span>Edit</span>
+        </button>
+
+        <button id="btn-lock" class="btn btn-lock" title="Pin this app on screen (App Pinning)" onclick="toggleLock()">
+          <svg id="lock-icon" class="icon" viewBox="0 0 24 24">
+            <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>
+          </svg>
+          <span id="lock-btn-label">Lock</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Board Grid -->
+    <main class="board-main">
+      <div id="tiles-grid" class="tiles-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Tile Editor Modal -->
+  <div id="editor-modal" class="modal-backdrop">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+      <div class="modal-header">
+        <h2 id="modal-title-text" class="modal-title">
+          <svg class="icon" viewBox="0 0 24 24" style="color: #2563eb;">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          <span id="modal-slot-title">Edit Tile #1</span>
+        </h2>
+        <button class="modal-close-btn" onclick="closeEditor()" title="Close editor">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Photo Section -->
+        <div class="editor-section">
+          <div class="section-title">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+            </svg>
+            <span>Photo / Image</span>
+          </div>
+
+          <div class="photo-preview-box" id="photo-preview-container">
+            <img id="modal-photo-img" class="photo-preview-img" alt="Tile Preview" style="display: none;">
+            <div id="modal-photo-placeholder" style="color: #64748b; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" style="width: 48px; height: 48px; fill: currentColor;">
+                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+              </svg>
+              <span style="font-size: 0.85rem; font-weight: 600;">No photo set</span>
+            </div>
+          </div>
+
+          <!-- Normal Photo Controls -->
+          <div id="photo-controls-default" class="btn-row">
+            <button class="btn" type="button" onclick="startCamera()">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span>Take Photo</span>
+            </button>
+            <button class="btn" type="button" onclick="triggerFileInput()">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+              </svg>
+              <span>Upload Image</span>
+            </button>
+            <button id="btn-remove-photo" class="btn btn-danger" type="button" onclick="removePhoto()" style="display: none;">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+              </svg>
+              <span>Remove</span>
+            </button>
+            <input type="file" id="photo-file-input" accept="image/*" style="display: none;" onchange="handleFileSelected(event)">
+          </div>
+        </div>
+
+        <!-- Audio Recording Section -->
+        <div class="editor-section">
+          <div class="section-title">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+            <span>Voice Recording</span>
+          </div>
+
+          <!-- Audio State Display -->
+          <div class="audio-status-box">
+            <div id="audio-status-text" style="font-size: 0.9rem; font-weight: 600; color: #475569;">
+              No voice recording
+            </div>
+            <div id="audio-recording-active" class="audio-recording-bar" style="display: none;">
+              <div class="rec-dot"></div>
+              <span id="recording-timer">Recording: 0:00 / 0:15</span>
+            </div>
+          </div>
+
+          <!-- Audio Buttons -->
+          <div class="btn-row">
+            <!-- Normal Record button -->
+            <button id="btn-record-voice" class="btn" type="button" onclick="startRecording()">
+              <svg class="icon" viewBox="0 0 24 24" style="color: #dc2626;">
+                <circle cx="12" cy="12" r="7"/>
+              </svg>
+              <span id="btn-record-text">Record Voice</span>
+            </button>
+
+            <!-- Stop Recording button -->
+            <button id="btn-stop-record" class="btn btn-danger" type="button" onclick="stopRecording()" style="display: none;">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M6 6h12v12H6z"/>
+              </svg>
+              <span>Stop</span>
+            </button>
+
+            <!-- Play Test Audio button -->
+            <button id="btn-play-preview" class="btn" type="button" onclick="togglePlayAudioPreview()" style="display: none;">
+              <svg id="play-preview-icon" class="icon" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+              <span id="play-preview-text">Play Test</span>
+            </button>
+
+            <!-- Remove Audio button -->
+            <button id="btn-remove-audio" class="btn btn-danger" type="button" onclick="removeAudio()" style="display: none;">
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+              </svg>
+              <span>Remove Voice</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Text Label Section -->
+        <div class="editor-section">
+          <div class="section-title">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/>
+            </svg>
+            <span>Label Caption (Optional)</span>
+          </div>
+          <input type="text" id="modal-label-input" class="text-input" placeholder="e.g., Water, Eat, Yes, Help..." maxlength="30">
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-danger" type="button" onclick="clearTileWithConfirm()">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+          </svg>
+          <span>Clear Tile</span>
+        </button>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn" type="button" onclick="closeEditor()">Cancel</button>
+          <button class="btn btn-primary" type="button" onclick="saveEditorTile()">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+            </svg>
+            <span>Save</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-screen Camera Capture + Photo Editor -->
+  <div id="camera-fs" class="camera-fs" aria-hidden="true">
+
+    <!-- Live preview -->
+    <div id="camera-fs-live" class="camera-fs-layer">
+      <video id="camera-fs-video" class="camera-fs-video" playsinline autoplay muted></video>
+      <div id="camera-fs-message" class="camera-fs-message" style="display: none;"></div>
+
+      <button class="camera-fs-close" type="button" onclick="closeCameraFullscreen()" aria-label="Close camera">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+
+      <div class="camera-fs-bottom">
+        <button class="camera-fs-side" type="button" onclick="flipCamera()" aria-label="Switch camera">
+          <svg viewBox="0 0 24 24"><path d="M9.01 14H2v2h7.01v3L13 15l-3.99-4v3zm5.98-1v-3H22V8h-7.01V5L11 9l3.99 4z"/></svg>
+        </button>
+        <button id="camera-fs-shutter" class="camera-fs-shutter" type="button" onclick="capturePhoto()" aria-label="Capture photo"></button>
+        <span class="camera-fs-side ghost" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <!-- Captured photo editor -->
+    <div id="camera-fs-editor" class="camera-fs-layer" style="display: none;">
+      <canvas id="camera-fs-canvas" class="camera-fs-canvas"></canvas>
+
+      <button class="camera-fs-close" type="button" onclick="closeCameraFullscreen()" aria-label="Discard photo">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+
+      <div class="camera-fs-panel">
+        <div class="camera-fs-row">
+          <button class="btn btn-primary" type="button" onclick="applyWhiteBackground()">Make background white</button>
+          <button class="btn" type="button" onclick="undoWhiteBackground()">Undo</button>
+        </div>
+        <label class="camera-fs-slider-row">
+          <span>Background tolerance: <b id="wb-tolerance-value">28</b></span>
+          <input id="wb-tolerance" type="range" min="8" max="80" step="1" value="28" oninput="onToleranceInput()">
+        </label>
+        <div class="camera-fs-row">
+          <button class="btn" type="button" onclick="retakePhoto()">Retake</button>
+          <button class="btn btn-primary" type="button" onclick="saveCapturedToTile()">Save to tile</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script>
+    /* AAC Picture Board - Main Application Logic */
+
+    // IndexedDB Setup
+    const DB_NAME = 'aac-board';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'tiles';
+
+    let dbInstance = null;
+    let cachedTiles = new Map(); // id -> { id, photo, audio, label, updatedAt }
+    let activeObjectURLs = new Map(); // id -> blobUrl
+
+    // Application State
+    let currentLayout = 2; // 1, 2, or 3
+    // Live OS app-pinning state only. Never persisted: pinning belongs to
+    // Android, not to the board, and the board is fully usable while pinned.
+    let isPinned = false;
+    let isEditMode = false;
+    let currentPlayingAudio = null;
+    let currentPlayingSlot = null;
+
+    // Editor State
+    let currentEditingSlot = null;
+    let editorOpenedAt = 0;
+    let modalPointerDownSeen = false;
+    let pendingPhotoBlob = null;
+    let pendingAudioBlob = null;
+    let cameraStream = null;
+    let cameraFacingMode = 'environment';
+    let capturedImageData = null;   // untouched capture; every filter pass reads this
+    let captureWidth = 0;
+    let captureHeight = 0;
+    let whiteBgApplied = false;
+    let mediaRecorder = null;
+    let audioStream = null;
+    let recordedAudioChunks = [];
+    let recordIntervalTimer = null;
+    let recordAutoStopTimer = null;
+    let recordSecondsElapsed = 0;
+    let recordMimeType = '';
+    let recordingFinalized = true;
+    let recordSafetyTimer = null;
+    let previewAudioPlayer = null;
+
+    // Layout configuration
+    const LAYOUT_COUNTS = {
+      1: 4,  // 2x2
+      2: 9,  // 3x3
+      3: 12  // 4x3
+    };
+
+    /* --- Database Helpers --- */
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function loadAllTilesFromDB() {
+      if (!dbInstance) dbInstance = await openDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.getAll();
+        req.onsuccess = () => {
+          cachedTiles.clear();
+          const items = req.result || [];
+          for (const item of items) {
+            cachedTiles.set(item.id, item);
+          }
+          resolve(cachedTiles);
+        };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function saveTileToDB(tile) {
+      if (!dbInstance) dbInstance = await openDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.put(tile);
+        req.onsuccess = () => {
+          cachedTiles.set(tile.id, tile);
+          resolve(tile);
+        };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function deleteTileFromDB(id) {
+      if (!dbInstance) dbInstance = await openDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = dbInstance.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.delete(id);
+        req.onsuccess = () => {
+          cachedTiles.delete(id);
+          resolve();
+        };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    /* --- Toast Notification --- */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    /* --- Board Rendering & Layout --- */
+    function setLayout(layoutNum) {
+      currentLayout = layoutNum;
+      localStorage.setItem('aac_layout', layoutNum);
+      updateThemeClasses();
+      renderBoard();
+    }
+
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const btn = document.getElementById('btn-edit-mode');
+      if (isEditMode) {
+        btn.classList.add('active');
+        document.body.classList.add('edit-mode');
+        showToast('Edit Mode ON: Tap any tile to edit');
+      } else {
+        btn.classList.remove('active');
+        document.body.classList.remove('edit-mode');
+      }
+    }
+
+    /*
+     * Lock = Android App Pinning, and nothing else. Tiles, layout buttons and
+     * the editor all keep working while pinned; the notification shade, home,
+     * recents and back keep behaving the way Android normally makes them
+     * behave. The ONLY in-app effect is the state shown on this button.
+     */
+    function toggleLock() {
+      isPinned = !isPinned;
+      if (window.TalkTiles) {
+        try {
+          if (isPinned) TalkTiles.lock(); else TalkTiles.unlock();
+        } catch (e) {
+          console.error('TalkTiles bridge call failed', e);
+        }
+      }
+      applyLockState();
+      console.log('[TT] lock button -> ' + (isPinned ? 'PINNED' : 'UNPINNED'));
+      showToast(isPinned ? 'App pinned — board still fully usable' : 'App unpinned', 'info');
+    }
+
+    function applyLockState() {
+      const lockBtn = document.getElementById('btn-lock');
+      const lockBtnLabel = document.getElementById('lock-btn-label');
+      const lockIcon = document.getElementById('lock-icon');
+
+      lockBtn.classList.toggle('pinned', isPinned);
+      lockBtn.setAttribute('aria-pressed', isPinned ? 'true' : 'false');
+
+      if (isPinned) {
+        lockBtnLabel.textContent = 'Pinned';
+        lockBtn.title = 'App is pinned — tap to unpin';
+        // Closed padlock icon SVG
+        lockIcon.innerHTML = '<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>';
+      } else {
+        lockBtnLabel.textContent = 'Lock';
+        lockBtn.title = 'Pin this app on screen (App Pinning)';
+        // Open padlock icon SVG
+        lockIcon.innerHTML = '<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>';
+      }
+    }
+
+    function updateThemeClasses() {
+      document.body.classList.remove('layout-1', 'layout-2', 'layout-3');
+      document.body.classList.add(`layout-${currentLayout}`);
+
+      document.getElementById('btn-layout-1').classList.toggle('active', currentLayout === 1);
+      document.getElementById('btn-layout-2').classList.toggle('active', currentLayout === 2);
+      document.getElementById('btn-layout-3').classList.toggle('active', currentLayout === 3);
+    }
+
+    function renderBoard() {
+      const grid = document.getElementById('tiles-grid');
+      const count = LAYOUT_COUNTS[currentLayout];
+
+      // Revoke old object URLs for tiles no longer in view or re-rendered
+      activeObjectURLs.forEach((url) => URL.revokeObjectURL(url));
+      activeObjectURLs.clear();
+
+      grid.innerHTML = '';
+
+      for (let slotId = 1; slotId <= count; slotId++) {
+        const tileData = cachedTiles.get(slotId) || null;
+        const tileEl = createTileElement(slotId, tileData);
+        grid.appendChild(tileEl);
+      }
+    }
+
+    function createTileElement(slotId, data) {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.id = `tile-slot-${slotId}`;
+      tile.setAttribute('data-slot', slotId);
+      tile.setAttribute('role', 'button');
+      tile.setAttribute('tabindex', '0');
+
+      // Slot badge (top-left)
+      const slotBadge = document.createElement('div');
+      slotBadge.className = 'tile-slot-badge';
+      slotBadge.textContent = slotId;
+      tile.appendChild(slotBadge);
+
+      // Has photo?
+      if (data && data.photo) {
+        const img = document.createElement('img');
+        img.className = 'tile-image';
+        img.alt = data.label || `Tile ${slotId}`;
+        const photoUrl = URL.createObjectURL(data.photo);
+        activeObjectURLs.set(slotId, photoUrl);
+        img.src = photoUrl;
+        tile.appendChild(img);
+      } else {
+        // Placeholder empty view
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'tile-empty';
+        emptyDiv.innerHTML = `
+          <svg class="tile-empty-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+          </svg>
+          <span class="tile-empty-text">${data && data.label ? escapeHtml(data.label) : 'Tap to edit'}</span>
+        `;
+        tile.appendChild(emptyDiv);
+      }
+
+      // Has audio? Speaker badge
+      if (data && data.audio) {
+        const speakerBadge = document.createElement('div');
+        speakerBadge.className = 'tile-speaker-badge';
+        speakerBadge.title = 'Has voice recording';
+        speakerBadge.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </svg>
+        `;
+        tile.appendChild(speakerBadge);
+      }
+
+      // Label (if exists and tile has photo)
+      if (data && data.label && data.photo) {
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'tile-label';
+        labelDiv.textContent = data.label;
+        tile.appendChild(labelDiv);
+      }
+
+      // Attach pointer / tap / hold listeners
+      setupTileInteractions(tile, slotId);
+
+      return tile;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    /* --- Tile Touch / Hold & Playback Interactions --- */
+    function setupTileInteractions(tileEl, slotId) {
+      let holdTimer = null;
+      let holdTriggered = false;
+      let startX = 0;
+      let startY = 0;
+
+      const startHold = (e) => {
+        holdTriggered = false;
+        startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        startY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+
+        holdTimer = setTimeout(() => {
+          holdTriggered = true;
+          openEditor(slotId);
+        }, 600);
+      };
+
+      const moveHold = (e) => {
+        if (!holdTimer) return;
+        const currentX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+        const currentY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+        if (Math.hypot(currentX - startX, currentY - startY) > 12) {
+          clearTimeout(holdTimer);
+          holdTimer = null;
+        }
+      };
+
+      const endHold = (e) => {
+        if (holdTimer) {
+          clearTimeout(holdTimer);
+          holdTimer = null;
+        }
+      };
+
+      tileEl.addEventListener('pointerdown', startHold);
+      tileEl.addEventListener('pointermove', moveHold);
+      tileEl.addEventListener('pointerup', (e) => {
+        endHold(e);
+        if (holdTriggered) return;
+        handleTileTap(slotId);
+      });
+      tileEl.addEventListener('pointercancel', endHold);
+
+      // Keyboard accessibility
+      tileEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleTileTap(slotId);
+        }
+      });
+    }
+
+    function handleTileTap(slotId) {
+      if (isEditMode) {
+        openEditor(slotId);
+        return;
+      }
+
+      const tileData = cachedTiles.get(slotId);
+      if (tileData && tileData.audio) {
+        playTileAudio(slotId, tileData.audio);
+      } else {
+        // Empty tile or no audio -> open editor
+        openEditor(slotId);
+      }
+    }
+
+    function playTileAudio(slotId, audioBlob) {
+      console.log('[TT] playing tile ' + slotId + ' (' + audioBlob.size + ' bytes)');
+      stopBoardAudio();
+
+      const tileEl = document.getElementById(`tile-slot-${slotId}`);
+      if (tileEl) tileEl.classList.add('playing');
+
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      currentPlayingAudio = audio;
+      currentPlayingSlot = slotId;
+
+      const cleanup = () => {
+        if (tileEl) tileEl.classList.remove('playing');
+        URL.revokeObjectURL(audioUrl);
+        if (currentPlayingAudio === audio) {
+          currentPlayingAudio = null;
+          currentPlayingSlot = null;
+        }
+      };
+
+      audio.onended = cleanup;
+      audio.onerror = () => {
+        cleanup();
+        showToast('Could not play audio', 'error');
+      };
+
+      audio.play().catch((err) => {
+        cleanup();
+        showToast('Playback failed', 'error');
+      });
+    }
+
+    function stopBoardAudio() {
+      if (currentPlayingAudio) {
+        currentPlayingAudio.pause();
+        currentPlayingAudio.currentTime = 0;
+        currentPlayingAudio = null;
+      }
+      if (currentPlayingSlot) {
+        const prevTile = document.getElementById(`tile-slot-${currentPlayingSlot}`);
+        if (prevTile) prevTile.classList.remove('playing');
+        currentPlayingSlot = null;
+      }
+    }
+
+    /* --- Tile Editor Modal Implementation --- */
+    function openEditor(slotId) {
+      stopBoardAudio();
+      currentEditingSlot = slotId;
+
+      const existingData = cachedTiles.get(slotId);
+      pendingPhotoBlob = (existingData && existingData.photo) || null;
+      pendingAudioBlob = (existingData && existingData.audio) || null;
+
+      document.getElementById('modal-slot-title').textContent = `Edit Tile #${slotId}`;
+      document.getElementById('modal-label-input').value = (existingData && existingData.label) || '';
+
+      updateModalPhotoPreview();
+      updateModalAudioPreview();
+
+      const modal = document.getElementById('editor-modal');
+      modal.classList.add('open');
+      editorOpenedAt = performance.now();
+      modalPointerDownSeen = false;
+      console.log('[TT] editor opened for tile ' + slotId);
+    }
+
+    function closeEditor() {
+      closeCameraFullscreen();
+      stopAudioStream();
+      stopRecordingTimer();
+      stopAudioPreview();
+
+      pendingPhotoBlob = null;
+      pendingAudioBlob = null;
+      currentEditingSlot = null;
+
+      const modal = document.getElementById('editor-modal');
+      modal.classList.remove('open');
+    }
+
+    async function saveEditorTile() {
+      if (!currentEditingSlot) return;
+
+      const labelText = document.getElementById('modal-label-input').value.trim();
+      const updatedTile = {
+        id: currentEditingSlot,
+        photo: pendingPhotoBlob,
+        audio: pendingAudioBlob,
+        label: labelText,
+        updatedAt: Date.now()
+      };
+
+      try {
+        await saveTileToDB(updatedTile);
+        console.log('[TT] saved tile ' + updatedTile.id
+          + ' photo=' + (updatedTile.photo ? updatedTile.photo.size + 'b' : 'none')
+          + ' audio=' + (updatedTile.audio ? updatedTile.audio.size + 'b' : 'none')
+          + ' label="' + updatedTile.label + '"');
+        closeEditor();
+        renderBoard();
+        showToast(`Tile #${updatedTile.id} saved!`, 'success');
+      } catch (err) {
+        showToast('Failed to save tile', 'error');
+      }
+    }
+
+    async function clearTileWithConfirm() {
+      if (!currentEditingSlot) return;
+      const slot = currentEditingSlot;
+      const existing = cachedTiles.get(slot);
+      if (!existing && !pendingPhotoBlob && !pendingAudioBlob) {
+        closeEditor();
+        return;
+      }
+
+      if (confirm(`Are you sure you want to clear Tile #${slot}?`)) {
+        try {
+          await deleteTileFromDB(slot);
+          closeEditor();
+          renderBoard();
+          showToast(`Tile #${slot} cleared`, 'success');
+        } catch (err) {
+          showToast('Failed to clear tile', 'error');
+        }
+      }
+    }
+
+    /* --- Photo Capture & Management --- */
+    function updateModalPhotoPreview() {
+      const imgEl = document.getElementById('modal-photo-img');
+      const placeholder = document.getElementById('modal-photo-placeholder');
+      const removeBtn = document.getElementById('btn-remove-photo');
+      const defaultControls = document.getElementById('photo-controls-default');
+
+      defaultControls.style.display = 'flex';
+
+      if (pendingPhotoBlob) {
+        imgEl.src = URL.createObjectURL(pendingPhotoBlob);
+        imgEl.style.display = 'block';
+        placeholder.style.display = 'none';
+        removeBtn.style.display = 'inline-flex';
+      } else {
+        imgEl.src = '';
+        imgEl.style.display = 'none';
+        placeholder.style.display = 'flex';
+        removeBtn.style.display = 'none';
+      }
+    }
+
+    /* --- Full-screen Camera --- */
+
+    /** Entry point from the editor's "Take Photo" button. */
+    function startCamera() {
+      openCameraFullscreen();
+      showCameraLiveLayer();
+      startCameraStream();
+    }
+
+    function openCameraFullscreen() {
+      const fs = document.getElementById('camera-fs');
+      fs.classList.add('open');
+      fs.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeCameraFullscreen() {
+      stopCamera();
+      const fs = document.getElementById('camera-fs');
+      fs.classList.remove('open');
+      fs.setAttribute('aria-hidden', 'true');
+      showCameraLiveLayer();
+      capturedImageData = null;
+      captureWidth = 0;
+      captureHeight = 0;
+      whiteBgApplied = false;
+    }
+
+    function showCameraLiveLayer() {
+      document.getElementById('camera-fs-live').style.display = 'block';
+      document.getElementById('camera-fs-editor').style.display = 'none';
+    }
+
+    function showCameraEditorLayer() {
+      document.getElementById('camera-fs-live').style.display = 'none';
+      document.getElementById('camera-fs-editor').style.display = 'block';
+    }
+
+    function setCameraMessage(text) {
+      const msg = document.getElementById('camera-fs-message');
+      if (!msg) return;
+      if (text) {
+        msg.textContent = text;
+        msg.style.display = 'flex';
+      } else {
+        msg.textContent = '';
+        msg.style.display = 'none';
+      }
+    }
+
+    async function startCameraStream() {
+      const videoEl = document.getElementById('camera-fs-video');
+      setCameraMessage('');
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setCameraMessage('Camera not available here.\nUse "Upload Image" instead.');
+        showToast('Camera not supported — use Upload Image', 'error');
+        return;
+      }
+
+      try {
+        stopCamera();
+        const constraints = {
+          video: {
+            facingMode: { ideal: cameraFacingMode },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          }
+        };
+
+        try {
+          cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (e) {
+          // Fallback to simple video: true
+          cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        }
+
+        videoEl.srcObject = cameraStream;
+        await videoEl.play();
+        console.log('[TT] camera live ' + videoEl.videoWidth + 'x' + videoEl.videoHeight
+          + ' facing=' + cameraFacingMode);
+      } catch (err) {
+        // Keep the full-screen view up so the user can read the reason and
+        // close it deliberately.
+        stopCamera();
+        setCameraMessage('Camera blocked.\nAllow camera access, then try again.');
+        showToast('Camera blocked — allow camera access', 'error');
+      }
+    }
+
+    /** Stops the live stream. Does NOT close the full-screen view. */
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+      const videoEl = document.getElementById('camera-fs-video');
+      if (videoEl) videoEl.srcObject = null;
+    }
+
+    function flipCamera() {
+      cameraFacingMode = (cameraFacingMode === 'environment') ? 'user' : 'environment';
+      startCameraStream();
+    }
+
+    function capturePhoto() {
+      const videoEl = document.getElementById('camera-fs-video');
+      if (!videoEl || !cameraStream) {
+        showToast('Camera is not running', 'error');
+        return;
+      }
+
+      const vw = videoEl.videoWidth || 640;
+      const vh = videoEl.videoHeight || 480;
+      // Cap the long edge so the flood fill stays instant on a phone.
+      const MAX_EDGE = 1280;
+      const scale = Math.min(1, MAX_EDGE / Math.max(vw, vh));
+      captureWidth = Math.max(1, Math.round(vw * scale));
+      captureHeight = Math.max(1, Math.round(vh * scale));
+
+      const canvas = document.getElementById('camera-fs-canvas');
+      canvas.width = captureWidth;
+      canvas.height = captureHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(videoEl, 0, 0, captureWidth, captureHeight);
+
+      // Original capture, kept untouched: every filter pass reads from here.
+      capturedImageData = ctx.getImageData(0, 0, captureWidth, captureHeight);
+      whiteBgApplied = false;
+
+      console.log('[TT] captured ' + captureWidth + 'x' + captureHeight);
+      stopCamera();
+      showCameraEditorLayer();
+    }
+
+    function retakePhoto() {
+      capturedImageData = null;
+      whiteBgApplied = false;
+      showCameraLiveLayer();
+      startCameraStream();
+    }
+
+    /* --- White-background filter (edge flood fill, pure canvas) --- */
+
+    /*
+     * How far a background region may drift in colour from the border pixel it
+     * grew out of, as a multiple of the local step tolerance. The local step
+     * alone walks grain and shadow beautifully -- and walks straight into the
+     * photographed item too, because a soft edge is a chain of small steps.
+     * The leash is what stops it.
+     */
+    const DRIFT_MULTIPLIER = 3;
+
+    /**
+     * Multi-source BFS from every border pixel, with a LOCAL comparison: a
+     * pixel joins the background when its RGB distance to its PARENT -- the
+     * already-accepted pixel that proposed it -- is within tolerance, and it
+     * then becomes the reference for its own neighbours. That lets the fill
+     * walk gradually-varying surfaces (wood grain, shadows, vignetting, sensor
+     * noise) that a fixed seed-relative threshold cannot cross, while a hard
+     * edge into the photographed item is still a jump too large to pass.
+     * Everything reached is painted pure white. Pure function: returns a new
+     * ImageData and never mutates the input.
+     */
+    function whitenBackground(srcData, tolerance, driftLimit) {
+      const w = srcData.width;
+      const h = srcData.height;
+      const src = srcData.data;
+      const out = new Uint8ClampedArray(src);
+      const total = w * h;
+
+      const visited = new Uint8Array(total);
+      const queue = new Int32Array(total);
+      const originOf = new Int32Array(total);   // which border seed owns each pixel
+      const tol2 = tolerance * tolerance;
+      const drift = (driftLimit === undefined ? tolerance * DRIFT_MULTIPLIER : driftLimit);
+      const drift2 = drift * drift;
+
+      // Compare against the ORIGINAL colours in src, never against `out` --
+      // parents are already painted white by the time children are examined.
+      const accepts = (n, parent) => {
+        const a = n << 2, b = parent << 2;
+        let dr = src[a] - src[b];
+        let dg = src[a + 1] - src[b + 1];
+        let db = src[a + 2] - src[b + 2];
+        if ((dr * dr + dg * dg + db * db) > tol2) return false;   // local step
+        const o = originOf[parent] << 2;                          // leash
+        dr = src[a] - src[o];
+        dg = src[a + 1] - src[o + 1];
+        db = src[a + 2] - src[o + 2];
+        return (dr * dr + dg * dg + db * db) <= drift2;
+      };
+
+      let head = 0, tail = 0;
+
+      // Multi-source: every border pixel seeds the fill.
+      for (let x = 0; x < w; x++) {
+        const top = x;
+        if (!visited[top]) { visited[top] = 1; originOf[top] = top; queue[tail++] = top; }
+        if (h > 1) {
+          const bottom = (h - 1) * w + x;
+          if (!visited[bottom]) { visited[bottom] = 1; originOf[bottom] = bottom; queue[tail++] = bottom; }
+        }
+      }
+      for (let y = 0; y < h; y++) {
+        const left = y * w;
+        if (!visited[left]) { visited[left] = 1; originOf[left] = left; queue[tail++] = left; }
+        if (w > 1) {
+          const right = y * w + w - 1;
+          if (!visited[right]) { visited[right] = 1; originOf[right] = right; queue[tail++] = right; }
+        }
+      }
+
+      while (head < tail) {
+        const p = queue[head++];
+        const p4 = p << 2;
+        out[p4] = 255;
+        out[p4 + 1] = 255;
+        out[p4 + 2] = 255;
+        out[p4 + 3] = 255;
+
+        const px = p % w;
+
+        if (px > 0) {
+          const n = p - 1;
+          if (!visited[n] && accepts(n, p)) { visited[n] = 1; originOf[n] = originOf[p]; queue[tail++] = n; }
+        }
+        if (px < w - 1) {
+          const n = p + 1;
+          if (!visited[n] && accepts(n, p)) { visited[n] = 1; originOf[n] = originOf[p]; queue[tail++] = n; }
+        }
+        if (p >= w) {
+          const n = p - w;
+          if (!visited[n] && accepts(n, p)) { visited[n] = 1; originOf[n] = originOf[p]; queue[tail++] = n; }
+        }
+        if (p < total - w) {
+          const n = p + w;
+          if (!visited[n] && accepts(n, p)) { visited[n] = 1; originOf[n] = originOf[p]; queue[tail++] = n; }
+        }
+      }
+
+      return new ImageData(out, w, h);
+    }
+
+    /*
+     * The slider is the LOCAL step tolerance: how different two touching pixels
+     * may be and still count as the same surface. It is not a distance from the
+     * background colour, so its useful range is much smaller than it looks --
+     * 28 clears wood grain and shadow on a typical table shot; past ~36 the
+     * fill starts eating soft-edged items.
+     */
+    function currentTolerance() {
+      const slider = document.getElementById('wb-tolerance');
+      const value = slider ? parseInt(slider.value, 10) : 28;
+      return Number.isFinite(value) ? value : 28;
+    }
+
+    function applyWhiteBackground() {
+      if (!capturedImageData) return;
+      const canvas = document.getElementById('camera-fs-canvas');
+      const ctx = canvas.getContext('2d');
+      // Always re-run against the ORIGINAL capture, never against a previous pass.
+      const result = whitenBackground(capturedImageData, currentTolerance());
+      ctx.putImageData(result, 0, 0);
+      whiteBgApplied = true;
+      console.log('[TT] white-bg filter applied at tolerance ' + currentTolerance());
+    }
+
+    function undoWhiteBackground() {
+      if (!capturedImageData) return;
+      const canvas = document.getElementById('camera-fs-canvas');
+      canvas.getContext('2d').putImageData(capturedImageData, 0, 0);
+      whiteBgApplied = false;
+    }
+
+    function onToleranceInput() {
+      const label = document.getElementById('wb-tolerance-value');
+      if (label) label.textContent = String(currentTolerance());
+      // Live feedback once the filter is on; still against the original.
+      if (whiteBgApplied) applyWhiteBackground();
+    }
+
+    function saveCapturedToTile() {
+      const canvas = document.getElementById('camera-fs-canvas');
+      if (!capturedImageData) {
+        showToast('Nothing to save', 'error');
+        return;
+      }
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          showToast('Could not save photo', 'error');
+          return;
+        }
+        // Same hand-off as every other photo source: the editor's Save button
+        // writes pendingPhotoBlob to IndexedDB.
+        pendingPhotoBlob = blob;
+        closeCameraFullscreen();
+        updateModalPhotoPreview();
+        showToast('Photo added — tap Save to store it', 'success');
+      }, 'image/jpeg', 0.9);
+    }
+
+    function triggerFileInput() {
+      const fileInput = document.getElementById('photo-file-input');
+      fileInput.value = '';
+      fileInput.click();
+    }
+
+    function handleFileSelected(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      pendingPhotoBlob = file;
+      updateModalPhotoPreview();
+      showToast('Image loaded', 'success');
+    }
+
+    function removePhoto() {
+      pendingPhotoBlob = null;
+      updateModalPhotoPreview();
+    }
+
+    /* --- Audio Recording & Voice Management --- */
+    function updateModalAudioPreview() {
+      const statusText = document.getElementById('audio-status-text');
+      const recordingActive = document.getElementById('audio-recording-active');
+      const recordBtn = document.getElementById('btn-record-voice');
+      const recordBtnText = document.getElementById('btn-record-text');
+      const stopBtn = document.getElementById('btn-stop-record');
+      const playBtn = document.getElementById('btn-play-preview');
+      const removeBtn = document.getElementById('btn-remove-audio');
+
+      recordingActive.style.display = 'none';
+      stopBtn.style.display = 'none';
+      recordBtn.style.display = 'inline-flex';
+
+      if (pendingAudioBlob) {
+        statusText.textContent = 'Voice recording ready (tap Play to test)';
+        recordBtnText.textContent = 'Re-record Voice';
+        playBtn.style.display = 'inline-flex';
+        removeBtn.style.display = 'inline-flex';
+      } else {
+        statusText.textContent = 'No voice recording';
+        recordBtnText.textContent = 'Record Voice';
+        playBtn.style.display = 'none';
+        removeBtn.style.display = 'none';
+      }
+    }
+
+    async function startRecording() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        showToast('Microphone not supported in this browser.', 'error');
+        return;
+      }
+
+      stopAudioPreview();
+
+      try {
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        let chosenMime = '';
+        if (typeof MediaRecorder !== 'undefined') {
+          const types = [
+            'audio/webm;codecs=opus',
+            'audio/webm',
+            'audio/mp4',
+            'audio/ogg;codecs=opus',
+            'audio/aac'
+          ];
+          for (const t of types) {
+            if (MediaRecorder.isTypeSupported(t)) {
+              chosenMime = t;
+              break;
+            }
+          }
+        }
+
+        mediaRecorder = new MediaRecorder(audioStream, chosenMime ? { mimeType: chosenMime } : undefined);
+        recordedAudioChunks = [];
+        recordMimeType = chosenMime;
+        recordingFinalized = false;
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            recordedAudioChunks.push(e.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => finalizeRecording();
+        mediaRecorder.onerror = (e) => {
+          console.log('[TT] MediaRecorder error: ' + (e && e.error));
+          finalizeRecording();
+        };
+
+        mediaRecorder.start(100);
+
+        // UI state for recording
+        document.getElementById('audio-status-text').style.display = 'none';
+        document.getElementById('audio-recording-active').style.display = 'flex';
+        document.getElementById('btn-record-voice').style.display = 'none';
+        document.getElementById('btn-play-preview').style.display = 'none';
+        document.getElementById('btn-remove-audio').style.display = 'none';
+        document.getElementById('btn-stop-record').style.display = 'inline-flex';
+
+        recordSecondsElapsed = 0;
+        updateRecordingTimerUI();
+
+        recordIntervalTimer = setInterval(() => {
+          recordSecondsElapsed++;
+          updateRecordingTimerUI();
+        }, 1000);
+
+        // Auto-stop at 15 seconds
+        recordAutoStopTimer = setTimeout(() => {
+          stopRecording();
+        }, 15000);
+
+      } catch (err) {
+        stopAudioStream();
+        updateModalAudioPreview();
+        showToast('Microphone blocked — allow in browser settings', 'error');
+      }
+    }
+
+    function updateRecordingTimerUI() {
+      const mins = Math.floor(recordSecondsElapsed / 60);
+      const secs = recordSecondsElapsed % 60;
+      const formatted = `${mins}:${secs.toString().padStart(2, '0')}`;
+      const timerEl = document.getElementById('recording-timer');
+      if (timerEl) {
+        timerEl.textContent = `Recording: ${formatted} / 0:15`;
+      }
+    }
+
+    /*
+     * MediaRecorder.stop() is asynchronous: it flushes a final 'dataavailable'
+     * and only then fires 'onstop'. Tearing the source stream down in the same
+     * tick kills the recorder before it dispatches 'onstop', so the blob never
+     * gets assembled and the whole recording is silently discarded. Stop the
+     * recorder here and let finalizeRecording() (from 'onstop') do the teardown.
+     */
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        // Safety net in case 'onstop' never arrives: the chunks are already ours.
+        clearTimeout(recordSafetyTimer);
+        recordSafetyTimer = setTimeout(finalizeRecording, 1500);
+      } else {
+        finalizeRecording();
+      }
+    }
+
+    /** Assembles the recorded chunks into pendingAudioBlob exactly once. */
+    function finalizeRecording() {
+      if (recordingFinalized) return;
+      recordingFinalized = true;
+      clearTimeout(recordSafetyTimer);
+      recordSafetyTimer = null;
+
+      const bytes = recordedAudioChunks.reduce((sum, c) => sum + c.size, 0);
+      pendingAudioBlob = bytes > 0
+        ? new Blob(recordedAudioChunks, { type: recordMimeType || 'audio/webm' })
+        : null;
+
+      stopRecordingTimer();
+      stopAudioStream();
+      updateModalAudioPreview();
+
+      if (pendingAudioBlob) {
+        console.log('[TT] recording finalized: ' + pendingAudioBlob.size + ' bytes, '
+          + (recordMimeType || 'audio/webm'));
+        showToast('Recording saved for tile!', 'success');
+      } else {
+        console.log('[TT] recording produced no audio data');
+        showToast('Nothing was recorded — try again', 'error');
+      }
+    }
+
+    function stopRecordingTimer() {
+      if (recordIntervalTimer) {
+        clearInterval(recordIntervalTimer);
+        recordIntervalTimer = null;
+      }
+      if (recordAutoStopTimer) {
+        clearTimeout(recordAutoStopTimer);
+        recordAutoStopTimer = null;
+      }
+      const statusText = document.getElementById('audio-status-text');
+      if (statusText) statusText.style.display = 'block';
+    }
+
+    function stopAudioStream() {
+      if (audioStream) {
+        audioStream.getTracks().forEach(track => track.stop());
+        audioStream = null;
+      }
+    }
+
+    function togglePlayAudioPreview() {
+      if (!pendingAudioBlob) return;
+
+      if (previewAudioPlayer) {
+        stopAudioPreview();
+        return;
+      }
+
+      const playIcon = document.getElementById('play-preview-icon');
+      const playText = document.getElementById('play-preview-text');
+      const audioUrl = URL.createObjectURL(pendingAudioBlob);
+      const audio = new Audio(audioUrl);
+      previewAudioPlayer = audio;
+
+      playIcon.innerHTML = '<path d="M6 6h12v12H6z"/>';
+      playText.textContent = 'Stop';
+
+      const cleanup = () => {
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        playText.textContent = 'Play Test';
+        URL.revokeObjectURL(audioUrl);
+        previewAudioPlayer = null;
+      };
+
+      audio.onended = cleanup;
+      audio.onerror = () => {
+        cleanup();
+        showToast('Playback error', 'error');
+      };
+
+      audio.play().catch(() => {
+        cleanup();
+        showToast('Could not play audio', 'error');
+      });
+    }
+
+    function stopAudioPreview() {
+      if (previewAudioPlayer) {
+        previewAudioPlayer.pause();
+        previewAudioPlayer.currentTime = 0;
+        const playIcon = document.getElementById('play-preview-icon');
+        const playText = document.getElementById('play-preview-text');
+        if (playIcon) playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        if (playText) playText.textContent = 'Play Test';
+        previewAudioPlayer = null;
+      }
+    }
+
+    function removeAudio() {
+      stopAudioPreview();
+      pendingAudioBlob = null;
+      updateModalAudioPreview();
+    }
+
+    /*
+     * A tile tap opens the editor from 'pointerup'. Chrome then synthesises the
+     * compatibility 'click' for that same touch ~10ms later and hit-tests it
+     * against the DOM as it is BY THEN -- i.e. against the freshly opened modal.
+     * That orphan click lands on whichever modal button happens to sit under the
+     * finger (Cancel, or worse, Save), so the editor flashes open and instantly
+     * dismisses itself. Swallow clicks inside the modal that never had a
+     * matching pointerdown inside the modal; a real press always does.
+     */
+    function installModalClickGuard() {
+      const modal = document.getElementById('editor-modal');
+
+      modal.addEventListener('pointerdown', () => {
+        modalPointerDownSeen = true;
+      }, true);
+
+      document.addEventListener('click', (e) => {
+        if (!modal.classList.contains('open')) return;
+        if (modalPointerDownSeen) return;
+        if (performance.now() - editorOpenedAt > 1000) return;
+        if (!modal.contains(e.target)) return;
+        console.log('[TT] swallowed orphan click on ' + (e.target.textContent || '').trim().slice(0, 20));
+        e.preventDefault();
+        e.stopPropagation();
+      }, true);
+    }
+
+    /* --- Application Initialization --- */
+    async function initApp() {
+      // Load stored preferences
+      const savedLayout = parseInt(localStorage.getItem('aac_layout'), 10);
+      if (savedLayout === 1 || savedLayout === 2 || savedLayout === 3) {
+        currentLayout = savedLayout;
+      }
+
+      // Pinning is live OS state, never restored from storage. Clear the flag
+      // older builds wrote so an upgrade can't come back up looking locked.
+      localStorage.removeItem('aac_locked');
+      isPinned = false;
+
+      updateThemeClasses();
+      applyLockState();
+      installModalClickGuard();
+
+      try {
+        await loadAllTilesFromDB();
+      } catch (err) {
+        console.error('Failed to load tiles from IndexedDB', err);
+      }
+
+      renderBoard();
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>

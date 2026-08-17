@@ -1,0 +1,23 @@
+# --- never commit these -------------------------------------------------
+# The app signing key. Android identifies an app by its signature, so this
+# file is the only thing that lets a new build install over an existing one
+# and keep its data. Losing it means the board on the phone can never be
+# updated again; publishing it means anyone can sign a build that Android
+# will happily install over Chris's. Back it up somewhere private, not here.
+aac.keystore
+
+# The keystore password, read by build.sh.
+.keystore-pass
+
+# --- build output -------------------------------------------------------
+build/
+*.idsig
+
+# Assembled by build.sh from index.html (and, in the v2.2 archive, from its
+# assets/ directory). Regenerated on every build.
+app/assets/
+versions/*/app/assets/
+
+# --- editor / OS noise --------------------------------------------------
+.DS_Store
+*~
