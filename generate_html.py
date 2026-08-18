@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+import os
+
+HTML_CONTENT = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -2354,7 +2356,7 @@
     function onLabelSizeInput() {
       const size = normalizeLabelSize(document.getElementById('modal-label-size').value);
       const readout = document.getElementById('label-size-value');
-      if (readout) readout.textContent = size.toFixed(1) + '×';
+      if (readout) readout.textContent = size.toFixed(1) + '\u00d7';
 
       const preview = document.getElementById('label-size-preview-text');
       if (!preview) return;
@@ -2635,4 +2637,12 @@
     window.addEventListener('DOMContentLoaded', initApp);
   </script>
 </body>
-</html>
+</html>"""
+
+with open('/home/mike/aac-board/index.html', 'w') as f:
+    f.write(HTML_CONTENT)
+
+with open('/home/mike/aac-board/app/assets/index.html', 'w') as f:
+    f.write(HTML_CONTENT)
+
+print("Generated pixel-faithful index.html and app/assets/index.html successfully!")
