@@ -49,6 +49,12 @@ mkdir -p "$OUT/gen" "$OUT/obj" "$OUT/dex" "$APP/assets"
 
 # --- assets: the board itself ---
 cp "$ROOT/index.html" "$APP/assets/index.html"
+if [ -f "$ROOT/symbols_data.js" ]; then
+  cp "$ROOT/symbols_data.js" "$APP/assets/symbols_data.js"
+fi
+if [ -d "$ROOT/symbols" ]; then
+  cp -r "$ROOT/symbols" "$APP/assets/symbols"
+fi
 # v2.2 also shipped an ONNX segmentation model here for automatic background
 # removal. That feature was dropped in v2.3; the runtime and model are archived
 # under versions/v2.2/assets. Clear any stragglers so an old build tree does

@@ -880,6 +880,280 @@
       animation: modal-pop 0.18s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    .modal-card.wide {
+      max-width: 680px;
+      max-height: 85vh;
+    }
+
+    .sym-cats-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 2px 2px 8px;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .sym-cat-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.12s ease;
+      flex-shrink: 0;
+    }
+
+    .sym-cat-chip.active {
+      background: #008369;
+      color: #ffffff;
+      border-color: #008369;
+      box-shadow: 0 2px 6px rgba(0, 131, 105, 0.25);
+    }
+
+    .sym-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+      gap: 10px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 4px;
+      scrollbar-width: thin;
+    }
+
+    .sym-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 4px 8px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      cursor: pointer;
+      gap: 6px;
+      transition: transform 0.1s ease, border-color 0.1s ease, box-shadow 0.1s ease;
+      user-select: none;
+    }
+
+    .sym-card:hover, .sym-card:active {
+      transform: scale(1.05);
+      border-color: #008369;
+      box-shadow: 0 4px 14px rgba(0, 131, 105, 0.18);
+    }
+
+    .sym-card .sym-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+    }
+
+    .sym-card .sym-name {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #1e293b;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      padding: 0 2px;
+    }
+
+    /* --- Keyboard Communication Page Styles --- */
+    .keyboard-view {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      background: #f1f5f9;
+      padding: 12px;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .kb-quick-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      flex-shrink: 0;
+    }
+
+    .kb-quick-chip {
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0f172a;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.1s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    }
+
+    .kb-quick-chip:active {
+      transform: scale(0.96);
+      background: #e2e8f0;
+      border-color: #008369;
+    }
+
+    .kb-display-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 3px solid #008369;
+      border-radius: 14px;
+      padding: 8px 14px;
+      min-height: 68px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+
+    .kb-display-text {
+      flex: 1;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #0f172a;
+      overflow-x: auto;
+      white-space: nowrap;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+    }
+
+    .kb-display-text:empty::before {
+      content: 'Type with keys below...';
+      color: #94a3b8;
+      font-weight: 500;
+      font-size: 1.25rem;
+    }
+
+    .kb-keys-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      justify-content: space-evenly;
+    }
+
+    .kb-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .kb-key {
+      flex: 1;
+      max-width: 80px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+      transition: transform 0.08s, background 0.08s;
+      user-select: none;
+    }
+
+    .kb-key:active {
+      transform: scale(0.94);
+      background: #e2e8f0;
+      border-color: #008369;
+    }
+
+    .kb-key.action {
+      background: #e2e8f0;
+      font-size: 1.1rem;
+      color: #334155;
+    }
+
+    .kb-key.speak-btn {
+      background: #00a86b;
+      color: #ffffff;
+      border-color: #008369;
+      flex: 1.5;
+      font-size: 1.25rem;
+    }
+
+    .kb-key.space-btn {
+      flex: 3;
+      font-size: 1.1rem;
+    }
+
+    /* --- Online Gallery & Templates Styles --- */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+
+    .gallery-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      background: #ffffff;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.12s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .gallery-card:hover {
+      border-color: #008369;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,131,105,0.15);
+    }
+
+    .gallery-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: #e6f4ea;
+      color: #008369;
+      font-size: 0.76rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .preset-card {
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #e2e8f0;
+      background: #ffffff;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.12s;
+    }
+
+    .preset-card.active, .preset-card:hover {
+      border-color: #008369;
+      background: #f0fdf4;
+    }
+
     @keyframes modal-pop {
       from { transform: scale(0.94); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
@@ -1134,6 +1408,7 @@
       flex-shrink: 0;
     }
   </style>
+  <script src="symbols_data.js"></script>
 </head>
 <body class="mode-user">
   <div id="app-container">
@@ -1242,6 +1517,78 @@
             <input type="file" id="scene-bg-file-input" accept="image/*" style="display:none;" onchange="handleSceneBgSelected(event)">
           </div>
           <div id="scene-hotspots-container"></div>
+        </div>
+
+        <!-- Keyboard Communication Page View -->
+        <div id="keyboard-view" class="keyboard-view">
+          <!-- Quick Prediction Words Bar -->
+          <div class="kb-quick-bar">
+            <button class="kb-quick-chip" onclick="kbInsertQuick('I want ')">I want</button>
+            <button class="kb-quick-chip" onclick="kbInsertQuick('Yes ')">Yes</button>
+            <button class="kb-quick-chip" onclick="kbInsertQuick('No ')">No</button>
+            <button class="kb-quick-chip" onclick="kbInsertQuick('Please ')">Please</button>
+            <button class="kb-quick-chip" onclick="kbInsertQuick('Help ')">Help</button>
+            <button class="kb-quick-chip" onclick="kbInsertQuick('Thank you ')">Thank you</button>
+            <button class="kb-quick-chip" onclick="kbInsertQuick('More ')">More</button>
+            <button class="kb-quick-chip" onclick="kbInsertQuick('Stop ')">Stop</button>
+            <button class="kb-quick-chip" onclick="kbInsertQuick('I like ')">I like</button>
+          </div>
+
+          <!-- Typing Display & Controls -->
+          <div class="kb-display-box">
+            <div id="kb-text-display" class="kb-display-text"></div>
+            <button class="btn btn-danger" onclick="kbClearText()" style="padding: 10px 14px; font-weight: 700;">✕ Clear</button>
+            <button class="btn" onclick="kbBackspace()" style="padding: 10px 14px; font-weight: 700; background: #e2e8f0;">⌫ Backspace</button>
+            <button class="btn btn-primary" onclick="kbSpeakText()" style="padding: 10px 20px; font-weight: 800; font-size: 1.1rem; background: #00a86b;">▶ Speak</button>
+          </div>
+
+          <!-- Interactive Responsive Keyboard -->
+          <div class="kb-keys-container" id="kb-keys-layout">
+            <!-- Row 1 -->
+            <div class="kb-row">
+              <button class="kb-key" onclick="kbTypeKey('Q')">Q</button>
+              <button class="kb-key" onclick="kbTypeKey('W')">W</button>
+              <button class="kb-key" onclick="kbTypeKey('E')">E</button>
+              <button class="kb-key" onclick="kbTypeKey('R')">R</button>
+              <button class="kb-key" onclick="kbTypeKey('T')">T</button>
+              <button class="kb-key" onclick="kbTypeKey('Y')">Y</button>
+              <button class="kb-key" onclick="kbTypeKey('U')">U</button>
+              <button class="kb-key" onclick="kbTypeKey('I')">I</button>
+              <button class="kb-key" onclick="kbTypeKey('O')">O</button>
+              <button class="kb-key" onclick="kbTypeKey('P')">P</button>
+            </div>
+            <!-- Row 2 -->
+            <div class="kb-row">
+              <button class="kb-key" onclick="kbTypeKey('A')">A</button>
+              <button class="kb-key" onclick="kbTypeKey('S')">S</button>
+              <button class="kb-key" onclick="kbTypeKey('D')">D</button>
+              <button class="kb-key" onclick="kbTypeKey('F')">F</button>
+              <button class="kb-key" onclick="kbTypeKey('G')">G</button>
+              <button class="kb-key" onclick="kbTypeKey('H')">H</button>
+              <button class="kb-key" onclick="kbTypeKey('J')">J</button>
+              <button class="kb-key" onclick="kbTypeKey('K')">K</button>
+              <button class="kb-key" onclick="kbTypeKey('L')">L</button>
+            </div>
+            <!-- Row 3 -->
+            <div class="kb-row">
+              <button class="kb-key" onclick="kbTypeKey('Z')">Z</button>
+              <button class="kb-key" onclick="kbTypeKey('X')">X</button>
+              <button class="kb-key" onclick="kbTypeKey('C')">C</button>
+              <button class="kb-key" onclick="kbTypeKey('V')">V</button>
+              <button class="kb-key" onclick="kbTypeKey('B')">B</button>
+              <button class="kb-key" onclick="kbTypeKey('N')">N</button>
+              <button class="kb-key" onclick="kbTypeKey('M')">M</button>
+              <button class="kb-key action" onclick="kbTypeKey(',')">,</button>
+              <button class="kb-key action" onclick="kbTypeKey('.')">.</button>
+              <button class="kb-key action" onclick="kbTypeKey('?')">?</button>
+            </div>
+            <!-- Row 4 -->
+            <div class="kb-row">
+              <button class="kb-key action" onclick="kbToggleNumbers()">123</button>
+              <button class="kb-key space-btn" onclick="kbTypeKey(' ')">Space</button>
+              <button class="kb-key speak-btn" onclick="kbSpeakText()">▶ Speak</button>
+            </div>
+          </div>
         </div>
       </main>
 
@@ -1454,35 +1801,35 @@
         <div class="popover-header">
           <span class="popover-title">New Page</span>
         </div>
-        <div class="popover-menu-item" onclick="openStubModal('Online Gallery')">
+        <div class="popover-menu-item" onclick="closeAllPopovers(); openOnlineGallery()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/></svg>
           <span>Online Gallery</span>
         </div>
-        <div class="popover-menu-item" onclick="openStubModal('My Templates')">
+        <div class="popover-menu-item" onclick="closeAllPopovers(); openMyTemplatesModal()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
           <span>My Templates</span>
         </div>
-        <div class="popover-menu-item" onclick="openStubModal('Import from Another Book')">
+        <div class="popover-menu-item" onclick="closeAllPopovers(); openImportModal()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
           <span>Import from Another Book</span>
         </div>
-        <div id="menu-item-duplicate-page" class="popover-menu-item" onclick="duplicateCurrentPage()">
+        <div id="menu-item-duplicate-page" class="popover-menu-item" onclick="closeAllPopovers(); duplicateCurrentPage()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
           <span>Duplicate Page</span>
         </div>
-        <div class="popover-menu-item" onclick="openStubModal('Page Wizard')">
+        <div class="popover-menu-item" onclick="closeAllPopovers(); openPageWizard()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M7.5 5.6L5 7l1.4-2.5L5 2l2.5 1.4L10 2 8.6 4.5 10 7 7.5 5.6zm12 9.8L22 14l-1.4 2.5L22 19l-2.5-1.4L17 19l1.4-2.5L17 14l2.5 1.4zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5L22 2zm-7.63 5.29c-.39-.39-1.02-.39-1.41 0L1.29 18.96c-.39.39-.39 1.02 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05c.39-.39.39-1.02 0-1.41l-2.33-2.35z"/></svg>
           <span>Page Wizard</span>
         </div>
-        <div class="popover-menu-item" onclick="openStubModal('Keyboard Page')">
+        <div class="popover-menu-item" onclick="closeAllPopovers(); addNewKeyboardPage()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/></svg>
           <span>Keyboard Page</span>
         </div>
-        <div id="menu-item-add-blank-scene" class="popover-menu-item" onclick="addNewScenePage()">
+        <div id="menu-item-add-blank-scene" class="popover-menu-item" onclick="closeAllPopovers(); addNewScenePage()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
           <span>Add Blank Scene Page</span>
         </div>
-        <div id="menu-item-add-blank-button" class="popover-menu-item" onclick="addNewButtonPage()">
+        <div id="menu-item-add-blank-button" class="popover-menu-item" onclick="closeAllPopovers(); addNewButtonPage()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg>
           <span>Add Blank Button Page</span>
         </div>
@@ -1628,27 +1975,14 @@
             </div>
 
             <div id="photo-controls-default" style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-primary" type="button" onclick="openSymbolLibrary()" style="background: #008369; color: #ffffff; font-weight: 700; border-color: #006853;">
+                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <span>Search Symbols & Photos</span>
+              </button>
               <button class="btn" type="button" onclick="startCamera()">Take Photo</button>
               <button class="btn" type="button" onclick="triggerFileInput()">Upload Image</button>
-              <button class="btn" type="button" onclick="toggleSymbolPicker()">Symbols</button>
               <button id="btn-remove-photo" class="btn btn-danger" type="button" onclick="removePhoto()" style="display: none;">Remove</button>
               <input type="file" id="photo-file-input" accept="image/*" style="display: none;" onchange="handleFileSelected(event)">
-            </div>
-
-            <!-- Built-in Symbols Picker -->
-            <div id="symbol-picker-grid" style="display: none; grid-template-columns: repeat(6, 1fr); gap: 6px; padding: 8px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px;">
-              <button class="btn" type="button" onclick="selectSymbol('smile')" style="padding: 4px; font-size: 1.3rem;">😊</button>
-              <button class="btn" type="button" onclick="selectSymbol('frown')" style="padding: 4px; font-size: 1.3rem;">☹️</button>
-              <button class="btn" type="button" onclick="selectSymbol('eat')" style="padding: 4px; font-size: 1.3rem;">🍎</button>
-              <button class="btn" type="button" onclick="selectSymbol('water')" style="padding: 4px; font-size: 1.3rem;">💧</button>
-              <button class="btn" type="button" onclick="selectSymbol('yes')" style="padding: 4px; font-size: 1.3rem;">✅</button>
-              <button class="btn" type="button" onclick="selectSymbol('no')" style="padding: 4px; font-size: 1.3rem;">❌</button>
-              <button class="btn" type="button" onclick="selectSymbol('help')" style="padding: 4px; font-size: 1.3rem;">🙋</button>
-              <button class="btn" type="button" onclick="selectSymbol('home')" style="padding: 4px; font-size: 1.3rem;">🏠</button>
-              <button class="btn" type="button" onclick="selectSymbol('bus')" style="padding: 4px; font-size: 1.3rem;">🚌</button>
-              <button class="btn" type="button" onclick="selectSymbol('book')" style="padding: 4px; font-size: 1.3rem;">📖</button>
-              <button class="btn" type="button" onclick="selectSymbol('heart')" style="padding: 4px; font-size: 1.3rem;">❤️</button>
-              <button class="btn" type="button" onclick="selectSymbol('star')" style="padding: 4px; font-size: 1.3rem;">⭐</button>
             </div>
           </div>
 
@@ -1695,6 +2029,259 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" onclick="closeStubModal()">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL: SEARCHABLE SYMBOL & PHOTO LIBRARY
+         ======================================================================== -->
+    <div id="modal-symbol-library" class="modal-backdrop" onclick="closeSymbolLibrary()">
+      <div class="modal-card wide" onclick="event.stopPropagation()">
+        <div class="modal-header" style="background: #008369; color: #ffffff;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: #ffffff;"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <span class="modal-title" style="color: #ffffff;">Symbol & Photo Library</span>
+          </div>
+          <button class="modal-close-btn" onclick="closeSymbolLibrary()" style="color: #ffffff;">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body" style="padding: 14px 18px; gap: 12px;">
+          <!-- Search Bar & Direct Photo Actions -->
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div style="flex: 1; position: relative; display: flex; align-items: center;">
+              <svg viewBox="0 0 24 24" style="position: absolute; left: 12px; width: 18px; height: 18px; fill: #64748b;"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              <input type="text" id="sym-search-input" class="text-input" placeholder="Search 3,400+ symbols (e.g. eat, water, happy, help, dog, bus)..." oninput="filterSymbolLibrary()" style="padding-left: 38px; padding-right: 36px;">
+              <button type="button" id="btn-sym-clear-search" onclick="clearSymbolSearch()" style="position: absolute; right: 8px; width: 24px; height: 24px; border: none; background: #e2e8f0; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; color: #475569;">✕</button>
+            </div>
+            <button class="btn" type="button" onclick="closeSymbolLibrary(); startCamera();" title="Take a photo with camera" style="flex-shrink: 0; background: #f8fafc;">📷 Camera</button>
+            <button class="btn" type="button" onclick="closeSymbolLibrary(); triggerFileInput();" title="Upload from photo library" style="flex-shrink: 0; background: #f8fafc;">🖼️ Upload</button>
+          </div>
+
+          <!-- Category Filter Chips -->
+          <div class="sym-cats-bar" id="sym-category-chips">
+            <button type="button" class="sym-cat-chip active" data-cat="all" onclick="selectSymbolCategory('all')">All (<span id="sym-total-count">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="core" onclick="selectSymbolCategory('core')">⭐ Core (<span id="sym-count-core">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="feelings" onclick="selectSymbolCategory('feelings')">😊 Feelings (<span id="sym-count-feelings">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="food" onclick="selectSymbolCategory('food')">🍎 Food (<span id="sym-count-food">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="drinks" onclick="selectSymbolCategory('drinks')">🥤 Drinks (<span id="sym-count-drinks">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="actions" onclick="selectSymbolCategory('actions')">🏃 Actions (<span id="sym-count-actions">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="people" onclick="selectSymbolCategory('people')">👪 People (<span id="sym-count-people">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="places" onclick="selectSymbolCategory('places')">🏠 Places (<span id="sym-count-places">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="play" onclick="selectSymbolCategory('play')">🧸 Play (<span id="sym-count-play">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="daily" onclick="selectSymbolCategory('daily')">👕 Daily (<span id="sym-count-daily">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="animals" onclick="selectSymbolCategory('animals')">🐶 Animals (<span id="sym-count-animals">0</span>)</button>
+            <button type="button" class="sym-cat-chip" data-cat="health" onclick="selectSymbolCategory('health')">🩺 Health (<span id="sym-count-health">0</span>)</button>
+          </div>
+
+          <!-- Symbols Grid View -->
+          <div class="sym-grid" id="symbol-library-grid"></div>
+          <div id="symbol-library-empty" style="display: none; padding: 36px 16px; text-align: center; color: #64748b;">
+            <div style="font-size: 2.2rem; margin-bottom: 6px;">🔍</div>
+            <div style="font-weight: 700; font-size: 1rem; color: #334155;">No matching symbols found</div>
+            <div style="font-size: 0.85rem; margin-top: 4px;">Try another keyword, or use <strong>Camera</strong> / <strong>Upload</strong> to add a custom photo!</div>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="justify-content: flex-end;">
+          <button class="btn" onclick="closeSymbolLibrary()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL: PAGE WIZARD
+         ======================================================================== -->
+    <div id="modal-page-wizard" class="modal-backdrop" onclick="closePageWizard()">
+      <div class="modal-card wide" onclick="event.stopPropagation()" style="max-width: 680px;">
+        <div class="modal-header" style="background: #008369; color: #ffffff;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M7.5 5.6L5 7l1.4-2.5L5 2l2.5 1.4L10 2 8.6 4.5 10 7 7.5 5.6zm12 9.8L22 14l-1.4 2.5L22 19l-2.5-1.4L17 19l1.4-2.5L17 14l2.5 1.4zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5L22 2zm-7.63 5.29c-.39-.39-1.02-.39-1.41 0L1.29 18.96c-.39.39-.39 1.02 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05c.39-.39.39-1.02 0-1.41l-2.33-2.35z"/></svg>
+            <span class="modal-title" style="color: #ffffff;">New Page Wizard</span>
+          </div>
+          <button class="modal-close-btn" onclick="closePageWizard()">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body" style="gap: 16px; max-height: 480px;">
+          <!-- Step 1: Name & Type -->
+          <div class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+              <span>1. Page Title & Format</span>
+            </div>
+            <input type="text" id="wiz-page-name" class="text-input" placeholder="e.g. Snack Time, Playground, Morning Routine..." value="New Page">
+            <div style="display: flex; gap: 10px; margin-top: 8px;">
+              <button id="wiz-type-grid" class="btn btn-primary" onclick="setWizardPageType('grid')" style="flex: 1;">Standard Button Grid</button>
+              <button id="wiz-type-scene" class="btn" onclick="setWizardPageType('scene')" style="flex: 1; background: #e2e8f0;">Visual Scene Page</button>
+            </div>
+          </div>
+
+          <!-- Step 2: Grid Size & Color (Grid Mode) -->
+          <div id="wiz-grid-options" class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg>
+              <span>2. Grid Size & Background Color</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <span style="font-size: 0.85rem; font-weight: 600; color: #475569;">Buttons per Page:</span>
+              <div class="segmented-control" style="width: 100%;">
+                <button class="segment-btn" data-wizgrid="1" onclick="setWizardGridSize(1)">1</button>
+                <button class="segment-btn" data-wizgrid="2" onclick="setWizardGridSize(2)">2</button>
+                <button class="segment-btn active" data-wizgrid="4" onclick="setWizardGridSize(4)">4</button>
+                <button class="segment-btn" data-wizgrid="9" onclick="setWizardGridSize(9)">9</button>
+                <button class="segment-btn" data-wizgrid="16" onclick="setWizardGridSize(16)">16</button>
+                <button class="segment-btn" data-wizgrid="25" onclick="setWizardGridSize(25)">25</button>
+                <button class="segment-btn" data-wizgrid="36" onclick="setWizardGridSize(36)">36</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Preset Starter Templates -->
+          <div class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span>3. Starter Content Preset</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 8px;">
+              <button class="preset-card active" data-preset="blank" onclick="selectWizardPreset('blank')">
+                <span style="font-weight: 700; font-size: 0.9rem;">Blank Grid</span>
+                <span style="font-size: 0.75rem; color: #64748b;">Empty slots</span>
+              </button>
+              <button class="preset-card" data-preset="core" onclick="selectWizardPreset('core')">
+                <span style="font-weight: 700; font-size: 0.9rem;">⭐ Core Words</span>
+                <span style="font-size: 0.75rem; color: #64748b;">I, want, more, help</span>
+              </button>
+              <button class="preset-card" data-preset="food" onclick="selectWizardPreset('food')">
+                <span style="font-weight: 700; font-size: 0.9rem;">🍎 Meals & Drinks</span>
+                <span style="font-size: 0.75rem; color: #64748b;">Eat, snack, water</span>
+              </button>
+              <button class="preset-card" data-preset="feelings" onclick="selectWizardPreset('feelings')">
+                <span style="font-weight: 700; font-size: 0.9rem;">😊 Feelings</span>
+                <span style="font-size: 0.75rem; color: #64748b;">Happy, tired, hurt</span>
+              </button>
+              <button class="preset-card" data-preset="social" onclick="selectWizardPreset('social')">
+                <span style="font-weight: 700; font-size: 0.9rem;">👋 Social</span>
+                <span style="font-size: 0.75rem; color: #64748b;">Hi, bye, please</span>
+              </button>
+              <button class="preset-card" data-preset="routine" onclick="selectWizardPreset('routine')">
+                <span style="font-weight: 700; font-size: 0.9rem;">🧼 Daily Care</span>
+                <span style="font-size: 0.75rem; color: #64748b;">Potty, wash, teeth</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn" onclick="closePageWizard()">Cancel</button>
+          <button class="btn btn-primary" onclick="createPageFromWizard()" style="padding: 10px 24px; font-weight: 700;">✨ Create Page</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL: ONLINE GALLERY (Community & Ready-to-Use AAC Templates)
+         ======================================================================== -->
+    <div id="modal-online-gallery" class="modal-backdrop" onclick="closeOnlineGallery()">
+      <div class="modal-card wide" onclick="event.stopPropagation()" style="max-width: 760px;">
+        <div class="modal-header" style="background: #008369; color: #ffffff;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/></svg>
+            <span class="modal-title" style="color: #ffffff;">Online AAC Template Gallery</span>
+          </div>
+          <button class="modal-close-btn" onclick="closeOnlineGallery()">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body" style="gap: 12px;">
+          <input type="text" id="gallery-search-input" class="text-input" placeholder="Search templates (e.g. core, medical, feelings, school...)" oninput="filterGalleryTemplates()">
+          <div id="gallery-cards-grid" class="gallery-grid"></div>
+        </div>
+
+        <div class="modal-footer" style="justify-content: space-between;">
+          <span style="font-size: 0.85rem; color: #64748b;">Tap any template to download and insert into your book</span>
+          <button class="btn" onclick="closeOnlineGallery()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL: MY TEMPLATES (Custom Reusable Page Layouts)
+         ======================================================================== -->
+    <div id="modal-my-templates" class="modal-backdrop" onclick="closeMyTemplatesModal()">
+      <div class="modal-card wide" onclick="event.stopPropagation()" style="max-width: 640px;">
+        <div class="modal-header" style="background: #008369; color: #ffffff;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span class="modal-title" style="color: #ffffff;">My Page Templates</span>
+          </div>
+          <button class="modal-close-btn" onclick="closeMyTemplatesModal()">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body" style="gap: 14px;">
+          <button class="btn btn-primary" onclick="saveCurrentPageAsTemplate()" style="padding: 12px; font-weight: 700; width: 100%;">
+            💾 Save Current Page as New Template
+          </button>
+          <div style="font-weight: 700; font-size: 0.95rem; color: #334155; margin-top: 6px;">Saved Custom Templates:</div>
+          <div id="my-templates-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto;"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn" onclick="closeMyTemplatesModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL: IMPORT FROM ANOTHER BOOK (File & JSON Import/Export)
+         ======================================================================== -->
+    <div id="modal-import-book" class="modal-backdrop" onclick="closeImportModal()">
+      <div class="modal-card wide" onclick="event.stopPropagation()" style="max-width: 580px;">
+        <div class="modal-header" style="background: #008369; color: #ffffff;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            <span class="modal-title" style="color: #ffffff;">Import & Export Communication Books</span>
+          </div>
+          <button class="modal-close-btn" onclick="closeImportModal()">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body" style="gap: 16px;">
+          <!-- File Import -->
+          <div class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+              <span>Import Pages from File</span>
+            </div>
+            <p style="font-size: 0.85rem; color: #64748b; margin: 4px 0 10px 0;">Import Talk Tiles JSON backups or Open Board Format (.obf / .obz) page sets.</p>
+            <input type="file" id="book-import-file-input" accept=".json,.obf" style="display:none;" onchange="handleBookFileImport(event)">
+            <button class="btn btn-primary" onclick="document.getElementById('book-import-file-input').click()" style="width: 100%; font-weight: 700; padding: 10px;">
+              📁 Select JSON / OBF Book File
+            </button>
+          </div>
+
+          <!-- Export Book -->
+          <div class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+              <span>Export & Backup</span>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 8px;">
+              <button class="btn" onclick="exportCurrentPageJSON()" style="flex: 1; background: #e2e8f0; font-weight: 600;">Export Current Page</button>
+              <button class="btn" onclick="exportEntireBookJSON()" style="flex: 1; background: #e2e8f0; font-weight: 600;">Export Entire Book</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn" onclick="closeImportModal()">Close</button>
         </div>
       </div>
     </div>
@@ -2353,18 +2940,717 @@
 
       const gridView = document.getElementById('tiles-grid');
       const sceneView = document.getElementById('scene-view');
+      const keyboardView = document.getElementById('keyboard-view');
 
       document.getElementById('board-content').style.backgroundColor = p.bg || '#ffffff';
 
       if (p.type === 'scene') {
         gridView.style.display = 'none';
+        if (keyboardView) keyboardView.style.display = 'none';
         sceneView.classList.add('active');
         renderScenePage(p);
+      } else if (p.type === 'keyboard') {
+        gridView.style.display = 'none';
+        sceneView.classList.remove('active');
+        if (keyboardView) {
+          keyboardView.style.display = 'flex';
+          renderKeyboardPage(p);
+        }
       } else {
         sceneView.classList.remove('active');
+        if (keyboardView) keyboardView.style.display = 'none';
         gridView.style.display = 'grid';
         renderGridPage(p);
       }
+    }
+
+    /* --- Feature 1: Keyboard Communication Page --- */
+    let kbCurrentText = '';
+    let kbIsNumbers = false;
+
+    function addNewKeyboardPage() {
+      const existingIdx = pages.findIndex(p => p.type === 'keyboard');
+      if (existingIdx >= 0) {
+        currentPageIndex = existingIdx;
+        renderCurrentPage();
+        showToast('Switched to Keyboard Page');
+        return;
+      }
+      const newPageId = pages.length + 1;
+      const newPage = {
+        id: newPageId,
+        title: 'Keyboard',
+        type: 'keyboard',
+        bg: '#f1f5f9',
+        enabled: true,
+        express: false
+      };
+      pages.push(newPage);
+      savePagesToStorage();
+      currentPageIndex = pages.length - 1;
+      renderCurrentPage();
+      showToast('Created Keyboard Communication Page');
+      showCompleteHUD();
+    }
+
+    function renderKeyboardPage(page) {
+      updateKeyboardDisplay();
+    }
+
+    function kbTypeKey(key) {
+      kbCurrentText += key;
+      updateKeyboardDisplay();
+    }
+
+    function kbInsertQuick(phrase) {
+      kbCurrentText += (kbCurrentText && !kbCurrentText.endsWith(' ') ? ' ' : '') + phrase;
+      updateKeyboardDisplay();
+    }
+
+    function kbBackspace() {
+      kbCurrentText = kbCurrentText.slice(0, -1);
+      updateKeyboardDisplay();
+    }
+
+    function kbClearText() {
+      kbCurrentText = '';
+      updateKeyboardDisplay();
+    }
+
+    function kbSpeakText() {
+      const txt = kbCurrentText.trim();
+      if (!txt) {
+        showToast('Nothing typed yet');
+        return;
+      }
+      speakText(txt);
+      showToast(`Spoke "${txt}"`);
+    }
+
+    function updateKeyboardDisplay() {
+      const el = document.getElementById('kb-text-display');
+      if (el) el.textContent = kbCurrentText;
+    }
+
+    function kbToggleNumbers() {
+      kbIsNumbers = !kbIsNumbers;
+      const container = document.getElementById('kb-keys-layout');
+      if (!container) return;
+      if (kbIsNumbers) {
+        container.innerHTML = `
+          <div class="kb-row">
+            <button class="kb-key" onclick="kbTypeKey('1')">1</button>
+            <button class="kb-key" onclick="kbTypeKey('2')">2</button>
+            <button class="kb-key" onclick="kbTypeKey('3')">3</button>
+            <button class="kb-key" onclick="kbTypeKey('4')">4</button>
+            <button class="kb-key" onclick="kbTypeKey('5')">5</button>
+            <button class="kb-key" onclick="kbTypeKey('6')">6</button>
+            <button class="kb-key" onclick="kbTypeKey('7')">7</button>
+            <button class="kb-key" onclick="kbTypeKey('8')">8</button>
+            <button class="kb-key" onclick="kbTypeKey('9')">9</button>
+            <button class="kb-key" onclick="kbTypeKey('0')">0</button>
+          </div>
+          <div class="kb-row">
+            <button class="kb-key" onclick="kbTypeKey('@')">@</button>
+            <button class="kb-key" onclick="kbTypeKey('#')">#</button>
+            <button class="kb-key" onclick="kbTypeKey('$')">$</button>
+            <button class="kb-key" onclick="kbTypeKey('%')">%</button>
+            <button class="kb-key" onclick="kbTypeKey('&')">&</button>
+            <button class="kb-key" onclick="kbTypeKey('-')">-</button>
+            <button class="kb-key" onclick="kbTypeKey('+')">+</button>
+            <button class="kb-key" onclick="kbTypeKey('(')">(</button>
+            <button class="kb-key" onclick="kbTypeKey(')')">)</button>
+          </div>
+          <div class="kb-row">
+            <button class="kb-key" onclick="kbTypeKey('*')">*</button>
+            <button class="kb-key" onclick="kbTypeKey('\"')">\"</button>
+            <button class="kb-key" onclick="kbTypeKey('\'')">\'</button>
+            <button class="kb-key" onclick="kbTypeKey(':')">:</button>
+            <button class="kb-key" onclick="kbTypeKey(';')">;</button>
+            <button class="kb-key" onclick="kbTypeKey('!')">!</button>
+            <button class="kb-key" onclick="kbTypeKey('?')">?</button>
+            <button class="kb-key action" onclick="kbTypeKey(',')">,</button>
+            <button class="kb-key action" onclick="kbTypeKey('.')">.</button>
+          </div>
+          <div class="kb-row">
+            <button class="kb-key action" onclick="kbToggleNumbers()">ABC</button>
+            <button class="kb-key space-btn" onclick="kbTypeKey(' ')">Space</button>
+            <button class="kb-key speak-btn" onclick="kbSpeakText()">▶ Speak</button>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="kb-row">
+            <button class="kb-key" onclick="kbTypeKey('Q')">Q</button>
+            <button class="kb-key" onclick="kbTypeKey('W')">W</button>
+            <button class="kb-key" onclick="kbTypeKey('E')">E</button>
+            <button class="kb-key" onclick="kbTypeKey('R')">R</button>
+            <button class="kb-key" onclick="kbTypeKey('T')">T</button>
+            <button class="kb-key" onclick="kbTypeKey('Y')">Y</button>
+            <button class="kb-key" onclick="kbTypeKey('U')">U</button>
+            <button class="kb-key" onclick="kbTypeKey('I')">I</button>
+            <button class="kb-key" onclick="kbTypeKey('O')">O</button>
+            <button class="kb-key" onclick="kbTypeKey('P')">P</button>
+          </div>
+          <div class="kb-row">
+            <button class="kb-key" onclick="kbTypeKey('A')">A</button>
+            <button class="kb-key" onclick="kbTypeKey('S')">S</button>
+            <button class="kb-key" onclick="kbTypeKey('D')">D</button>
+            <button class="kb-key" onclick="kbTypeKey('F')">F</button>
+            <button class="kb-key" onclick="kbTypeKey('G')">G</button>
+            <button class="kb-key" onclick="kbTypeKey('H')">H</button>
+            <button class="kb-key" onclick="kbTypeKey('J')">J</button>
+            <button class="kb-key" onclick="kbTypeKey('K')">K</button>
+            <button class="kb-key" onclick="kbTypeKey('L')">L</button>
+          </div>
+          <div class="kb-row">
+            <button class="kb-key" onclick="kbTypeKey('Z')">Z</button>
+            <button class="kb-key" onclick="kbTypeKey('X')">X</button>
+            <button class="kb-key" onclick="kbTypeKey('C')">C</button>
+            <button class="kb-key" onclick="kbTypeKey('V')">V</button>
+            <button class="kb-key" onclick="kbTypeKey('B')">B</button>
+            <button class="kb-key" onclick="kbTypeKey('N')">N</button>
+            <button class="kb-key" onclick="kbTypeKey('M')">M</button>
+            <button class="kb-key action" onclick="kbTypeKey(',')">,</button>
+            <button class="kb-key action" onclick="kbTypeKey('.')">.</button>
+            <button class="kb-key action" onclick="kbTypeKey('?')">?</button>
+          </div>
+          <div class="kb-row">
+            <button class="kb-key action" onclick="kbToggleNumbers()">123</button>
+            <button class="kb-key space-btn" onclick="kbTypeKey(' ')">Space</button>
+            <button class="kb-key speak-btn" onclick="kbSpeakText()">▶ Speak</button>
+          </div>
+        `;
+      }
+    }
+
+    /* --- Feature 2: Page Wizard --- */
+    let wizardPageType = 'grid';
+    let wizardGridSize = 4;
+    let wizardPreset = 'blank';
+
+    function openPageWizard() {
+      wizardPageType = 'grid';
+      wizardGridSize = 4;
+      wizardPreset = 'blank';
+      document.getElementById('wiz-page-name').value = `Page ${pages.length + 1}`;
+      setWizardPageType('grid');
+      setWizardGridSize(4);
+      selectWizardPreset('blank');
+      document.getElementById('modal-page-wizard').classList.add('open');
+    }
+
+    function closePageWizard() {
+      document.getElementById('modal-page-wizard').classList.remove('open');
+    }
+
+    function setWizardPageType(type) {
+      wizardPageType = type;
+      const btnGrid = document.getElementById('wiz-type-grid');
+      const btnScene = document.getElementById('wiz-type-scene');
+      const gridOpts = document.getElementById('wiz-grid-options');
+
+      if (type === 'grid') {
+        btnGrid.className = 'btn btn-primary';
+        btnGrid.style.background = '#008369';
+        btnScene.className = 'btn';
+        btnScene.style.background = '#e2e8f0';
+        gridOpts.style.display = 'flex';
+      } else {
+        btnScene.className = 'btn btn-primary';
+        btnScene.style.background = '#008369';
+        btnGrid.className = 'btn';
+        btnGrid.style.background = '#e2e8f0';
+        gridOpts.style.display = 'none';
+      }
+    }
+
+    function setWizardGridSize(size) {
+      wizardGridSize = size;
+      document.querySelectorAll('#wiz-grid-options .segment-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.getAttribute('data-wizgrid')) === size);
+      });
+    }
+
+    function selectWizardPreset(preset) {
+      wizardPreset = preset;
+      document.querySelectorAll('.preset-card').forEach(c => {
+        c.classList.toggle('active', c.getAttribute('data-preset') === preset);
+      });
+    }
+
+    const AAC_PRESETS = {
+      core: [
+        { label: 'I', tts: 'I', color: '#ffeb3b', symbol: 'me' },
+        { label: 'Want', tts: 'I want', color: '#81c784', symbol: 'take' },
+        { label: 'More', tts: 'More please', color: '#81c784', symbol: 'more' },
+        { label: 'Help', tts: 'Help me please', color: '#ffb74d', symbol: 'help' },
+        { label: 'Yes', tts: 'Yes', color: '#a5d6a7', symbol: 'yes' },
+        { label: 'No', tts: 'No', color: '#ef9a9a', symbol: 'no' },
+        { label: 'Stop', tts: 'Stop', color: '#e57373', symbol: 'stop' },
+        { label: 'All Done', tts: 'All done', color: '#b0bec5', symbol: 'close' },
+        { label: 'Like', tts: 'I like it', color: '#81c784', symbol: 'heart' }
+      ],
+      food: [
+        { label: 'Eat', tts: 'I want to eat', color: '#81c784', symbol: 'eat' },
+        { label: 'Water', tts: 'Water please', color: '#90caf9', symbol: 'water' },
+        { label: 'Snack', tts: 'I want a snack', color: '#ffcc80', symbol: 'snack' },
+        { label: 'Juice', tts: 'Juice please', color: '#ffb74d', symbol: 'juice' },
+        { label: 'Apple', tts: 'Apple', color: '#ef9a9a', symbol: 'apple' },
+        { label: 'Cookie', tts: 'Cookie please', color: '#d7ccc8', symbol: 'cookie' },
+        { label: 'Pizza', tts: 'Pizza', color: '#ffab91', symbol: 'pizza' },
+        { label: 'Milk', tts: 'Milk', color: '#ffffff', symbol: 'milk' },
+        { label: 'More', tts: 'More food please', color: '#81c784', symbol: 'more' }
+      ],
+      feelings: [
+        { label: 'Happy', tts: 'I feel happy', color: '#fff59d', symbol: 'happy' },
+        { label: 'Sad', tts: 'I feel sad', color: '#90caf9', symbol: 'sad' },
+        { label: 'Mad', tts: 'I am angry', color: '#ef9a9a', symbol: 'angry' },
+        { label: 'Tired', tts: 'I am tired', color: '#ce93d8', symbol: 'tired' },
+        { label: 'Scared', tts: 'I am scared', color: '#b39ddb', symbol: 'scared' },
+        { label: 'Sick', tts: 'I feel sick', color: '#a5d6a7', symbol: 'sick' },
+        { label: 'Excited', tts: 'I am excited!', color: '#ffcc80', symbol: 'excited' },
+        { label: 'Hurt', tts: 'I got hurt', color: '#ff8a80', symbol: 'hurt' },
+        { label: 'Need Break', tts: 'I need a break', color: '#b0bec5', symbol: 'sleep' }
+      ],
+      social: [
+        { label: 'Hello', tts: 'Hello, how are you?', color: '#ffeb3b', symbol: 'wave' },
+        { label: 'Goodbye', tts: 'Goodbye, see you later', color: '#ffcc80', symbol: 'wave' },
+        { label: 'Please', tts: 'Please', color: '#81c784', symbol: 'please' },
+        { label: 'Thank you', tts: 'Thank you very much', color: '#81c784', symbol: 'give' },
+        { label: 'My Turn', tts: 'It is my turn', color: '#90caf9', symbol: 'me' },
+        { label: 'Your Turn', tts: 'It is your turn', color: '#ffab91', symbol: 'you' },
+        { label: 'Good job', tts: 'Good job!', color: '#a5d6a7', symbol: 'star' },
+        { label: 'I like it', tts: 'I really like that', color: '#f48fb1', symbol: 'heart' }
+      ],
+      routine: [
+        { label: 'Bathroom', tts: 'I need to use the bathroom', color: '#90caf9', symbol: 'toilet' },
+        { label: 'Wash Hands', tts: 'Wash hands', color: '#80deea', symbol: 'wash' },
+        { label: 'Brush Teeth', tts: 'Brush my teeth', color: '#a5d6a7', symbol: 'brush_teeth' },
+        { label: 'Get Dressed', tts: 'Get dressed', color: '#ffcc80', symbol: 'shirt' },
+        { label: 'Shoes', tts: 'Put on shoes', color: '#b0bec5', symbol: 'shoes' },
+        { label: 'Backpack', tts: 'Pack my backpack', color: '#ce93d8', symbol: 'backpack' },
+        { label: 'Bedtime', tts: 'Time for bed', color: '#9fa8da', symbol: 'sleep' }
+      ]
+    };
+
+    function createPageFromWizard() {
+      const title = document.getElementById('wiz-page-name').value.trim() || `Page ${pages.length + 1}`;
+      const newPageId = pages.length + 1;
+
+      if (wizardPageType === 'scene') {
+        const newPage = {
+          id: newPageId,
+          title: title,
+          type: 'scene',
+          bg: '#ffffff',
+          sceneImage: null,
+          hotspots: [],
+          enabled: true,
+          express: false
+        };
+        pages.push(newPage);
+      } else {
+        const newPage = {
+          id: newPageId,
+          title: title,
+          type: 'grid',
+          gridSize: wizardGridSize,
+          bg: '#ffffff',
+          enabled: true,
+          express: true,
+          tiles: {}
+        };
+
+        const presetItems = AAC_PRESETS[wizardPreset] || [];
+        for (let i = 0; i < wizardGridSize; i++) {
+          const slot = i + 1;
+          if (presetItems[i]) {
+            const item = presetItems[i];
+            newPage.tiles[slot] = {
+              id: slot,
+              label: item.label,
+              tts: item.tts,
+              color: item.color,
+              symbol: item.symbol,
+              wordSize: 1.0,
+              labelPosition: 'bottom'
+            };
+          }
+        }
+        pages.push(newPage);
+      }
+
+      savePagesToStorage();
+      currentPageIndex = pages.length - 1;
+      closePageWizard();
+      renderCurrentPage();
+      showToast(`Created "${title}"`);
+      showCompleteHUD();
+    }
+
+    /* --- Feature 3: Online Gallery --- */
+    const ONLINE_GALLERY_TEMPLATES = [
+      {
+        id: 'gal-core-16',
+        title: 'Core Vocabulary Starter (16 Buttons)',
+        category: 'core',
+        badge: '16 Buttons • Core',
+        desc: 'Essential high-frequency communicative core vocabulary arranged in standard Fitzgerald Key format.',
+        gridSize: 16,
+        tiles: {
+          1: { label: 'I', tts: 'I', color: '#fff9c4', symbol: 'me' },
+          2: { label: 'Want', tts: 'I want', color: '#c8e6c9', symbol: 'take' },
+          3: { label: 'Go', tts: 'Go', color: '#c8e6c9', symbol: 'walk' },
+          4: { label: 'Stop', tts: 'Stop', color: '#ffcdd2', symbol: 'stop' },
+          5: { label: 'You', tts: 'You', color: '#fff9c4', symbol: 'you' },
+          6: { label: 'Like', tts: 'I like', color: '#c8e6c9', symbol: 'heart' },
+          7: { label: 'More', tts: 'More', color: '#c8e6c9', symbol: 'more' },
+          8: { label: 'Help', tts: 'Help', color: '#ffe0b2', symbol: 'help' },
+          9: { label: 'Eat', tts: 'Eat', color: '#c8e6c9', symbol: 'eat' },
+          10: { label: 'Drink', tts: 'Drink', color: '#c8e6c9', symbol: 'water' },
+          11: { label: 'Play', tts: 'Play', color: '#c8e6c9', symbol: 'play_act' },
+          12: { label: 'Look', tts: 'Look at that', color: '#c8e6c9', symbol: 'glasses' },
+          13: { label: 'Yes', tts: 'Yes', color: '#a5d6a7', symbol: 'yes' },
+          14: { label: 'No', tts: 'No', color: '#ef9a9a', symbol: 'no' },
+          15: { label: 'Good', tts: 'Good', color: '#b3e5fc', symbol: 'star' },
+          16: { label: 'All Done', tts: 'All done', color: '#cfd8dc', symbol: 'close' }
+        }
+      },
+      {
+        id: 'gal-medical-9',
+        title: 'Medical & Healthcare Needs (9 Buttons)',
+        category: 'medical',
+        badge: '9 Buttons • Medical',
+        desc: 'Emergency health requests, pain symptoms, medicine, and assistance buttons.',
+        gridSize: 9,
+        tiles: {
+          1: { label: 'Hurt', tts: 'It hurts here', color: '#ef9a9a', symbol: 'hurt' },
+          2: { label: 'Sick', tts: 'I feel sick', color: '#ffcdd2', symbol: 'sick' },
+          3: { label: 'Doctor', tts: 'I need the doctor', color: '#b3e5fc', symbol: 'symbols/en/doctor.svg' },
+          4: { label: 'Medicine', tts: 'I need my medicine', color: '#fff9c4', symbol: 'medicine' },
+          5: { label: 'Headache', tts: 'My head hurts', color: '#ffcc80', symbol: 'symbols/en/headache.svg' },
+          6: { label: 'Tummy Ache', tts: 'My stomach hurts', color: '#ffcc80', symbol: 'symbols/en/stomach_ache.svg' },
+          7: { label: 'Too Loud', tts: 'It is too loud', color: '#e1bee7', symbol: 'symbols/en/ear_protectors.svg' },
+          8: { label: 'Rest', tts: 'I need to lie down and rest', color: '#c8e6c9', symbol: 'sleep' },
+          9: { label: 'Emergency', tts: 'Emergency! Please help me right now', color: '#e57373', symbol: 'symbols/en/ambulance.svg' }
+        }
+      },
+      {
+        id: 'gal-feelings-9',
+        title: 'Feelings & Emotions Check-In (9 Buttons)',
+        category: 'feelings',
+        badge: '9 Buttons • Emotions',
+        desc: 'Identify feelings, energy levels, and self-regulation needs with visual icons.',
+        gridSize: 9,
+        tiles: {
+          1: { label: 'Happy', tts: 'I feel happy today', color: '#fff59d', symbol: 'happy' },
+          2: { label: 'Sad', tts: 'I am feeling sad', color: '#90caf9', symbol: 'sad' },
+          3: { label: 'Angry', tts: 'I am angry', color: '#ef9a9a', symbol: 'angry' },
+          4: { label: 'Tired', tts: 'I am very tired', color: '#d1c4e9', symbol: 'tired' },
+          5: { label: 'Scared', tts: 'I feel scared', color: '#b39ddb', symbol: 'scared' },
+          6: { label: 'Silly', tts: 'I feel silly', color: '#ffcc80', symbol: 'silly' },
+          7: { label: 'Excited', tts: 'I am so excited!', color: '#ffe082', symbol: 'excited' },
+          8: { label: 'Calm', tts: 'I feel calm and ready', color: '#c8e6c9', symbol: 'symbols/en/calm.svg' },
+          9: { label: 'Need a Break', tts: 'I need a sensory break please', color: '#cfd8dc', symbol: 'sleep' }
+        }
+      },
+      {
+        id: 'gal-restaurant-9',
+        title: 'Restaurant & Ordering Out (9 Buttons)',
+        category: 'food',
+        badge: '9 Buttons • Dining',
+        desc: 'Food requests, ordering favorite meals, napkins, water, and paying.',
+        gridSize: 9,
+        tiles: {
+          1: { label: 'Burger', tts: 'I want a hamburger please', color: '#ffe0b2', symbol: 'symbols/en/hamburger.svg' },
+          2: { label: 'Pizza', tts: 'I would like pizza', color: '#ffcc80', symbol: 'pizza' },
+          3: { label: 'Fries', tts: 'French fries please', color: '#fff9c4', symbol: 'symbols/en/chips.svg' },
+          4: { label: 'Water', tts: 'Water with ice please', color: '#b3e5fc', symbol: 'water' },
+          5: { label: 'Juice', tts: 'Apple juice please', color: '#ffcc80', symbol: 'juice' },
+          6: { label: 'Napkin', tts: 'I need a napkin', color: '#ffffff', symbol: 'symbols/en/napkin.svg' },
+          7: { label: 'More', tts: 'Can I have more please?', color: '#c8e6c9', symbol: 'more' },
+          8: { label: 'Delicious', tts: 'This food is delicious', color: '#f8bbd0', symbol: 'smile' },
+          9: { label: 'Check Please', tts: 'Can we have the bill please?', color: '#cfd8dc', symbol: 'symbols/en/receipt.svg' }
+        }
+      },
+      {
+        id: 'gal-school-9',
+        title: 'School & Classroom Routine (9 Buttons)',
+        category: 'school',
+        badge: '9 Buttons • School',
+        desc: 'School activities, supplies, asking questions, raising hand, and recess.',
+        gridSize: 9,
+        tiles: {
+          1: { label: 'Raise Hand', tts: 'I have a question', color: '#fff9c4', symbol: 'help' },
+          2: { label: 'Bathroom', tts: 'May I go to the bathroom please?', color: '#b3e5fc', symbol: 'toilet' },
+          3: { label: 'Pencil', tts: 'I need a pencil', color: '#ffecb3', symbol: 'draw' },
+          4: { label: 'Book', tts: 'Time to read books', color: '#c8e6c9', symbol: 'book' },
+          5: { label: 'Recess', tts: 'Time for recess and playground', color: '#a5d6a7', symbol: 'play_act' },
+          6: { label: 'Lunch', tts: 'Time for lunch', color: '#ffe082', symbol: 'eat' },
+          7: { label: 'Quiet', tts: 'Quiet listening time', color: '#e1bee7', symbol: 'listen' },
+          8: { label: 'Teacher', tts: 'Teacher, can you help me?', color: '#ffcc80', symbol: 'symbols/en/teacher.svg' },
+          9: { label: 'Finished', tts: 'I am finished with my school work', color: '#cfd8dc', symbol: 'close' }
+        }
+      }
+    ];
+
+    function openOnlineGallery() {
+      document.getElementById('gallery-search-input').value = '';
+      renderGalleryTemplates(ONLINE_GALLERY_TEMPLATES);
+      document.getElementById('modal-online-gallery').classList.add('open');
+    }
+
+    function closeOnlineGallery() {
+      document.getElementById('modal-online-gallery').classList.remove('open');
+    }
+
+    function renderGalleryTemplates(templates) {
+      const grid = document.getElementById('gallery-cards-grid');
+      grid.innerHTML = '';
+
+      templates.forEach(tpl => {
+        const card = document.createElement('div');
+        card.className = 'gallery-card';
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">${tpl.title}</div>
+            <span class="gallery-badge">${tpl.badge}</span>
+          </div>
+          <p style="font-size: 0.84rem; color: #475569; margin: 0; line-height: 1.4;">${tpl.desc}</p>
+          <button class="btn btn-primary" onclick="installGalleryTemplate('${tpl.id}')" style="margin-top: auto; font-weight: 700; width: 100%; justify-content: center;">
+            📥 Add to Communication Book
+          </button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterGalleryTemplates() {
+      const q = document.getElementById('gallery-search-input').value.trim().toLowerCase();
+      const filtered = ONLINE_GALLERY_TEMPLATES.filter(t => 
+        t.title.toLowerCase().includes(q) || 
+        t.desc.toLowerCase().includes(q) || 
+        t.category.toLowerCase().includes(q)
+      );
+      renderGalleryTemplates(filtered);
+    }
+
+    function installGalleryTemplate(templateId) {
+      const tpl = ONLINE_GALLERY_TEMPLATES.find(t => t.id === templateId);
+      if (!tpl) return;
+
+      const newPageId = pages.length + 1;
+      const newPage = {
+        id: newPageId,
+        title: tpl.title.replace(/\s*\([^)]*\)/, ''),
+        type: 'grid',
+        gridSize: tpl.gridSize,
+        bg: '#ffffff',
+        enabled: true,
+        express: true,
+        tiles: JSON.parse(JSON.stringify(tpl.tiles))
+      };
+
+      pages.push(newPage);
+      savePagesToStorage();
+      currentPageIndex = pages.length - 1;
+      closeOnlineGallery();
+      renderCurrentPage();
+      showToast(`Added "${newPage.title}" to book`);
+      showCompleteHUD();
+    }
+
+    /* --- Feature 4: My Templates --- */
+    const STORAGE_TEMPLATES_KEY = 'talk_tiles_custom_templates';
+
+    function getCustomTemplates() {
+      try {
+        const stored = localStorage.getItem(STORAGE_TEMPLATES_KEY);
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveCustomTemplates(tpls) {
+      localStorage.setItem(STORAGE_TEMPLATES_KEY, JSON.stringify(tpls));
+    }
+
+    function openMyTemplatesModal() {
+      renderMyTemplatesList();
+      document.getElementById('modal-my-templates').classList.add('open');
+    }
+
+    function closeMyTemplatesModal() {
+      document.getElementById('modal-my-templates').classList.remove('open');
+    }
+
+    function renderMyTemplatesList() {
+      const listEl = document.getElementById('my-templates-list');
+      const templates = getCustomTemplates();
+      listEl.innerHTML = '';
+
+      if (templates.length === 0) {
+        listEl.innerHTML = `
+          <div style="padding: 20px; text-align: center; color: #64748b; font-size: 0.9rem; background: #f8fafc; border-radius: 8px;">
+            No saved templates yet. Click above to save the current page as your first template!
+          </div>
+        `;
+        return;
+      }
+
+      templates.forEach((tpl, idx) => {
+        const row = document.createElement('div');
+        row.className = 'editor-section';
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.alignItems = 'center';
+        row.innerHTML = `
+          <div>
+            <div style="font-weight: 700; font-size: 1rem; color: #0f172a;">${tpl.title}</div>
+            <div style="font-size: 0.8rem; color: #64748b;">${tpl.type === 'scene' ? 'Visual Scene' : tpl.gridSize + ' Buttons'} • Saved on ${tpl.date || 'Recent'}</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" onclick="useCustomTemplate(${idx})" style="padding: 6px 12px; font-size: 0.85rem; font-weight: 700;">+ Use</button>
+            <button class="btn btn-danger" onclick="deleteCustomTemplate(${idx})" style="padding: 6px 10px; font-size: 0.85rem;">🗑</button>
+          </div>
+        `;
+        listEl.appendChild(row);
+      });
+    }
+
+    function saveCurrentPageAsTemplate() {
+      const curPage = pages[currentPageIndex] || pages[0];
+      const templates = getCustomTemplates();
+      const newTemplate = {
+        title: curPage.title + ' Template',
+        type: curPage.type || 'grid',
+        gridSize: curPage.gridSize || 4,
+        bg: curPage.bg || '#ffffff',
+        tiles: JSON.parse(JSON.stringify(curPage.tiles || {})),
+        hotspots: JSON.parse(JSON.stringify(curPage.hotspots || [])),
+        date: new Date().toLocaleDateString()
+      };
+      templates.push(newTemplate);
+      saveCustomTemplates(templates);
+      renderMyTemplatesList();
+      showToast(`Saved "${newTemplate.title}"`);
+    }
+
+    function useCustomTemplate(idx) {
+      const templates = getCustomTemplates();
+      const tpl = templates[idx];
+      if (!tpl) return;
+
+      const newPageId = pages.length + 1;
+      const newPage = {
+        id: newPageId,
+        title: tpl.title.replace(/\s*Template$/, ''),
+        type: tpl.type || 'grid',
+        gridSize: tpl.gridSize || 4,
+        bg: tpl.bg || '#ffffff',
+        enabled: true,
+        express: true,
+        tiles: JSON.parse(JSON.stringify(tpl.tiles || {})),
+        hotspots: JSON.parse(JSON.stringify(tpl.hotspots || []))
+      };
+
+      pages.push(newPage);
+      savePagesToStorage();
+      currentPageIndex = pages.length - 1;
+      closeMyTemplatesModal();
+      renderCurrentPage();
+      showToast(`Created page from "${tpl.title}"`);
+      showCompleteHUD();
+    }
+
+    function deleteCustomTemplate(idx) {
+      const templates = getCustomTemplates();
+      templates.splice(idx, 1);
+      saveCustomTemplates(templates);
+      renderMyTemplatesList();
+      showToast('Template removed');
+    }
+
+    /* --- Feature 5: Import & Export --- */
+    function openImportModal() {
+      document.getElementById('modal-import-book').classList.add('open');
+    }
+
+    function closeImportModal() {
+      document.getElementById('modal-import-book').classList.remove('open');
+    }
+
+    function handleBookFileImport(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (Array.isArray(data.pages)) {
+            // Full Book import
+            data.pages.forEach(p => {
+              p.id = pages.length + 1;
+              pages.push(p);
+            });
+            savePagesToStorage();
+            currentPageIndex = pages.length - 1;
+            showToast(`Imported ${data.pages.length} pages from book`);
+          } else if (data.tiles || data.type) {
+            // Single page import
+            data.id = pages.length + 1;
+            pages.push(data);
+            savePagesToStorage();
+            currentPageIndex = pages.length - 1;
+            showToast(`Imported page "${data.title || 'Imported'}"`);
+          } else {
+            showToast('Invalid book file format', 'danger');
+            return;
+          }
+          closeImportModal();
+          renderCurrentPage();
+          showCompleteHUD();
+        } catch (err) {
+          console.error('Import error', err);
+          showToast('Failed to parse JSON file', 'danger');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function exportCurrentPageJSON() {
+      const p = pages[currentPageIndex] || pages[0];
+      const json = JSON.stringify(p, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `talk_tiles_page_${p.id}_${(p.title || 'page').toLowerCase().replace(/\s+/g, '_')}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Exported page JSON');
+    }
+
+    function exportEntireBookJSON() {
+      const bookData = {
+        title: 'Talk Tiles Communication Book',
+        version: '2.3',
+        exportDate: new Date().toISOString(),
+        pages: pages
+      };
+      const json = JSON.stringify(bookData, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `talk_tiles_full_book_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Exported entire communication book JSON');
     }
 
     function renderGridPage(page) {
@@ -2460,20 +3746,25 @@
     }
 
     function getSymbolSvg(symbol) {
+      if (!symbol) return '';
+      if (typeof symbol === 'string' && (symbol.endsWith('.svg') || symbol.includes('/'))) {
+        return `<img src="${symbol}" class="tile-symbol-img" style="max-height: 82%; max-width: 82%; object-fit: contain; pointer-events: none;" alt="symbol" />`;
+      }
       switch (symbol) {
         case 'smile': return `<svg viewBox="0 0 24 24" style="width: 80px; height: 80px; fill: #2ecc71;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>`;
         case 'frown': return `<svg viewBox="0 0 24 24" style="width: 80px; height: 80px; fill: #e74c3c;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 3.5c-2.33 0-4.31 1.46-5.11 3.5h10.22c-.8-2.04-2.78-3.5-5.11-3.5z"/></svg>`;
-        case 'eat': return `<span style="font-size: 72px;">🍎</span>`;
-        case 'water': return `<span style="font-size: 72px;">💧</span>`;
-        case 'yes': return `<span style="font-size: 72px;">✅</span>`;
-        case 'no': return `<span style="font-size: 72px;">❌</span>`;
-        case 'help': return `<span style="font-size: 72px;">🙋</span>`;
-        case 'home': return `<span style="font-size: 72px;">🏠</span>`;
-        case 'bus': return `<span style="font-size: 72px;">🚌</span>`;
-        case 'book': return `<span style="font-size: 72px;">📖</span>`;
-        case 'heart': return `<span style="font-size: 72px;">❤️</span>`;
-        case 'star': return `<span style="font-size: 72px;">⭐</span>`;
-        default: return `<span style="font-size: 72px;">⭐</span>`;
+        case 'eat': return `<span style="font-size: clamp(32px, 8vmin, 72px);">🍎</span>`;
+        case 'water': return `<span style="font-size: clamp(32px, 8vmin, 72px);">💧</span>`;
+        case 'yes': return `<span style="font-size: clamp(32px, 8vmin, 72px);">✅</span>`;
+        case 'no': return `<span style="font-size: clamp(32px, 8vmin, 72px);">❌</span>`;
+        case 'help': return `<span style="font-size: clamp(32px, 8vmin, 72px);">🙋</span>`;
+        case 'home': return `<span style="font-size: clamp(32px, 8vmin, 72px);">🏠</span>`;
+        case 'bus': return `<span style="font-size: clamp(32px, 8vmin, 72px);">🚌</span>`;
+        case 'book': return `<span style="font-size: clamp(32px, 8vmin, 72px);">📖</span>`;
+        case 'heart': return `<span style="font-size: clamp(32px, 8vmin, 72px);">❤️</span>`;
+        case 'star': return `<span style="font-size: clamp(32px, 8vmin, 72px);">⭐</span>`;
+        default:
+          return `<span class="symbol-glyph" style="font-size: clamp(32px, 8vmin, 72px); line-height: 1; display: inline-flex; align-items: center; justify-content: center;">${symbol}</span>`;
       }
     }
 
@@ -2797,15 +4088,390 @@
       document.getElementById('pos-btn-bottom').classList.toggle('active', pos === 'bottom');
     }
 
+    /* --- Searchable Symbol & Photo Library --- */
+    const AAC_STARTER_EMOJIS = [
+      // Core & Social
+      { id: 'yes', label: 'Yes', emoji: '✅', category: 'core', keywords: ['yes', 'yeah', 'ok', 'agree', 'affirmative', 'correct', 'check'] },
+      { id: 'no', label: 'No', emoji: '❌', category: 'core', keywords: ['no', 'nope', 'stop', 'dont', 'refuse', 'negative', 'cross'] },
+      { id: 'more', label: 'More', emoji: '➕', category: 'core', keywords: ['more', 'again', 'extra', 'add', 'another', 'plus'] },
+      { id: 'help', label: 'Help', emoji: '🆘', category: 'core', keywords: ['help', 'assist', 'need', 'support', 'aid', 'sos'] },
+      { id: 'stop', label: 'Stop', emoji: '🛑', category: 'core', keywords: ['stop', 'halt', 'quit', 'end', 'dont', 'sign'] },
+      { id: 'please', label: 'Please', emoji: '🙏', category: 'core', keywords: ['please', 'polite', 'ask', 'request', 'pray'] },
+      { id: 'thank_you', label: 'Thank You', emoji: '💖', category: 'core', keywords: ['thank you', 'thanks', 'grateful', 'appreciate'] },
+      { id: 'hello', label: 'Hello', emoji: '👋', category: 'core', keywords: ['hello', 'hi', 'hey', 'greet', 'welcome', 'wave'] },
+      { id: 'goodbye', label: 'Goodbye', emoji: '👋', category: 'core', keywords: ['goodbye', 'bye', 'see you', 'leave', 'farewell'] },
+      { id: 'want', label: 'I Want', emoji: '🤲', category: 'core', keywords: ['want', 'need', 'wish', 'desire', 'give me'] },
+      { id: 'like', label: 'I Like', emoji: '👍', category: 'core', keywords: ['like', 'love', 'good', 'thumbs up', 'enjoy'] },
+      { id: 'dont_like', label: "Don't Like", emoji: '👎', category: 'core', keywords: ['dont like', 'dislike', 'hate', 'bad', 'thumbs down'] },
+      { id: 'my_turn', label: 'My Turn', emoji: '🙋', category: 'core', keywords: ['my turn', 'me', 'mine', 'turn', 'hand'] },
+      { id: 'your_turn', label: 'Your Turn', emoji: '👉', category: 'core', keywords: ['your turn', 'you', 'next', 'point'] },
+      { id: 'all_done', label: 'All Done', emoji: '🏁', category: 'core', keywords: ['all done', 'finished', 'complete', 'end', 'done', 'flag'] },
+      { id: 'again', label: 'Again', emoji: '🔁', category: 'core', keywords: ['again', 'repeat', 'one more time'] },
+      { id: 'wait', label: 'Wait', emoji: '⏳', category: 'core', keywords: ['wait', 'hold on', 'pause', 'minute', 'hourglass'] },
+      { id: 'look', label: 'Look', emoji: '👀', category: 'core', keywords: ['look', 'see', 'watch', 'eyes'] },
+      { id: 'good', label: 'Good', emoji: '⭐', category: 'core', keywords: ['good', 'great', 'awesome', 'nice', 'star'] },
+      { id: 'bad', label: 'Bad', emoji: '👎', category: 'core', keywords: ['bad', 'poor', 'wrong', 'awful'] },
+      { id: 'break', label: 'Break', emoji: '⏸️', category: 'core', keywords: ['break', 'pause', 'rest', 'calm down', 'space'] },
+      { id: 'go', label: 'Go', emoji: '🏃', category: 'core', keywords: ['go', 'move', 'start', 'leave', 'run'] },
+
+      // Feelings & Health
+      { id: 'happy', label: 'Happy', emoji: '😊', category: 'feelings', keywords: ['happy', 'glad', 'joy', 'smile', 'cheerful'] },
+      { id: 'sad', label: 'Sad', emoji: '😢', category: 'feelings', keywords: ['sad', 'cry', 'unhappy', 'tear', 'upset'] },
+      { id: 'mad', label: 'Mad', emoji: '😠', category: 'feelings', keywords: ['mad', 'angry', 'grumpy', 'furious', 'annoyed'] },
+      { id: 'tired', label: 'Tired', emoji: '😴', category: 'feelings', keywords: ['tired', 'sleepy', 'exhausted', 'yawn', 'nap'] },
+      { id: 'scared', label: 'Scared', emoji: '😨', category: 'feelings', keywords: ['scared', 'afraid', 'fear', 'frightened', 'nervous'] },
+      { id: 'sick', label: 'Sick', emoji: '🤒', category: 'feelings', keywords: ['sick', 'ill', 'fever', 'unwell', 'flu', 'thermometer'] },
+      { id: 'hurt', label: 'Hurt', emoji: '🩹', category: 'feelings', keywords: ['hurt', 'pain', 'ouch', 'bandage', 'boo boo', 'injury'] },
+      { id: 'excited', label: 'Excited', emoji: '🤩', category: 'feelings', keywords: ['excited', 'yay', 'thrilled', 'pumped', 'star eyes'] },
+      { id: 'silly', label: 'Silly', emoji: '🤪', category: 'feelings', keywords: ['silly', 'goofy', 'funny', 'crazy', 'playful'] },
+      { id: 'surprised', label: 'Surprised', emoji: '😲', category: 'feelings', keywords: ['surprised', 'shocked', 'whoa', 'gasp'] },
+      { id: 'confused', label: 'Confused', emoji: '🤔', category: 'feelings', keywords: ['confused', 'wonder', 'unsure', 'thinking', 'puzzle'] },
+      { id: 'hungry', label: 'Hungry', emoji: '😋', category: 'feelings', keywords: ['hungry', 'food', 'eat', 'starving', 'appetite'] },
+      { id: 'thirsty', label: 'Thirsty', emoji: '🥵', category: 'feelings', keywords: ['thirsty', 'drink', 'water', 'parched'] },
+      { id: 'hot', label: 'Hot', emoji: '🔥', category: 'feelings', keywords: ['hot', 'warm', 'sweaty', 'fire', 'summer'] },
+      { id: 'cold', label: 'Cold', emoji: '🥶', category: 'feelings', keywords: ['cold', 'freezing', 'chilly', 'ice', 'winter'] },
+      { id: 'love', label: 'Love', emoji: '❤️', category: 'feelings', keywords: ['love', 'heart', 'hug', 'care', 'affection'] },
+
+      // Food & Snacks
+      { id: 'apple', label: 'Apple', emoji: '🍎', category: 'food', keywords: ['apple', 'fruit', 'red', 'snack'] },
+      { id: 'banana', label: 'Banana', emoji: '🍌', category: 'food', keywords: ['banana', 'fruit', 'yellow', 'peel'] },
+      { id: 'bread', label: 'Bread', emoji: '🍞', category: 'food', keywords: ['bread', 'toast', 'loaf', 'grain'] },
+      { id: 'cereal', label: 'Cereal', emoji: '🥣', category: 'food', keywords: ['cereal', 'breakfast', 'bowl', 'oats', 'milk'] },
+      { id: 'cheese', label: 'Cheese', emoji: '🧀', category: 'food', keywords: ['cheese', 'dairy', 'snack', 'yellow'] },
+      { id: 'chicken', label: 'Chicken', emoji: '🍗', category: 'food', keywords: ['chicken', 'meat', 'nuggets', 'dinner'] },
+      { id: 'cookie', label: 'Cookie', emoji: '🍪', category: 'food', keywords: ['cookie', 'snack', 'treat', 'dessert', 'chocolate chip'] },
+      { id: 'crackers', label: 'Crackers', emoji: '🍘', category: 'food', keywords: ['crackers', 'snack', 'goldfish', 'crunch'] },
+      { id: 'grapes', label: 'Grapes', emoji: '🍇', category: 'food', keywords: ['grapes', 'fruit', 'purple', 'green'] },
+      { id: 'hamburger', label: 'Burger', emoji: '🍔', category: 'food', keywords: ['burger', 'hamburger', 'cheeseburger', 'lunch', 'dinner'] },
+      { id: 'hotdog', label: 'Hot Dog', emoji: '🌭', category: 'food', keywords: ['hot dog', 'hotdog', 'lunch', 'meat', 'bun'] },
+      { id: 'ice_cream', label: 'Ice Cream', emoji: '🍦', category: 'food', keywords: ['ice cream', 'icecream', 'cone', 'dessert', 'sweet', 'treat'] },
+      { id: 'pasta', label: 'Pasta', emoji: '🍝', category: 'food', keywords: ['pasta', 'spaghetti', 'noodles', 'dinner', 'sauce'] },
+      { id: 'pizza', label: 'Pizza', emoji: '🍕', category: 'food', keywords: ['pizza', 'slice', 'dinner', 'cheese', 'pepperoni'] },
+      { id: 'rice', label: 'Rice', emoji: '🍚', category: 'food', keywords: ['rice', 'bowl', 'dinner', 'grain'] },
+      { id: 'sandwich', label: 'Sandwich', emoji: '🥪', category: 'food', keywords: ['sandwich', 'lunch', 'bread', 'pb&j', 'sub'] },
+      { id: 'soup', label: 'Soup', emoji: '🍲', category: 'food', keywords: ['soup', 'warm', 'bowl', 'hot', 'lunch'] },
+      { id: 'strawberry', label: 'Strawberries', emoji: '🍓', category: 'food', keywords: ['strawberries', 'strawberry', 'fruit', 'berry', 'red'] },
+      { id: 'yogurt', label: 'Yogurt', emoji: '🍧', category: 'food', keywords: ['yogurt', 'snack', 'spoon', 'dairy'] },
+      { id: 'french_fries', label: 'Fries', emoji: '🍟', category: 'food', keywords: ['fries', 'french fries', 'potato', 'fast food'] },
+      { id: 'carrots', label: 'Carrots', emoji: '🥕', category: 'food', keywords: ['carrots', 'vegetable', 'orange', 'healthy', 'crunchy'] },
+      { id: 'watermelon', label: 'Watermelon', emoji: '🍉', category: 'food', keywords: ['watermelon', 'melon', 'fruit', 'summer', 'sweet'] },
+      { id: 'pancakes', label: 'Pancakes', emoji: '🥞', category: 'food', keywords: ['pancakes', 'waffles', 'breakfast', 'syrup'] },
+      { id: 'egg', label: 'Eggs', emoji: '🍳', category: 'food', keywords: ['eggs', 'egg', 'breakfast', 'fried egg'] },
+      { id: 'popcorn', label: 'Popcorn', emoji: '🍿', category: 'food', keywords: ['popcorn', 'snack', 'movie', 'corn'] },
+      { id: 'chocolate', label: 'Chocolate', emoji: '🍫', category: 'food', keywords: ['chocolate', 'candy', 'bar', 'sweet'] },
+      { id: 'snack', label: 'Snack', emoji: '🥨', category: 'food', keywords: ['snack', 'pretzel', 'bite', 'treat'] },
+
+      // Drinks
+      { id: 'water', label: 'Water', emoji: '💧', category: 'drinks', keywords: ['water', 'drink', 'bottle', 'glass', 'h2o'] },
+      { id: 'milk', label: 'Milk', emoji: '🥛', category: 'drinks', keywords: ['milk', 'dairy', 'glass', 'white'] },
+      { id: 'chocolate_milk', label: 'Choc Milk', emoji: '🍫', category: 'drinks', keywords: ['chocolate milk', 'choc milk', 'drink', 'sweet'] },
+      { id: 'juice', label: 'Juice', emoji: '🧃', category: 'drinks', keywords: ['juice', 'box', 'drink', 'fruit juice', 'straw'] },
+      { id: 'apple_juice', label: 'Apple Juice', emoji: '🧃', category: 'drinks', keywords: ['apple juice', 'juice', 'drink'] },
+      { id: 'orange_juice', label: 'Orange Juice', emoji: '🍊', category: 'drinks', keywords: ['orange juice', 'oj', 'juice', 'citrus'] },
+      { id: 'smoothie', label: 'Smoothie', emoji: '🥤', category: 'drinks', keywords: ['smoothie', 'shake', 'blender', 'fruit drink'] },
+      { id: 'ice', label: 'Ice', emoji: '🧊', category: 'drinks', keywords: ['ice', 'cold', 'cube', 'frozen'] },
+      { id: 'hot_chocolate', label: 'Hot Chocolate', emoji: '☕', category: 'drinks', keywords: ['hot chocolate', 'cocoa', 'warm', 'mug'] },
+      { id: 'tea', label: 'Tea', emoji: '🫖', category: 'drinks', keywords: ['tea', 'teapot', 'warm', 'cup'] },
+      { id: 'soda', label: 'Soda', emoji: '🥤', category: 'drinks', keywords: ['soda', 'pop', 'can', 'fizzy'] },
+
+      // Actions / Verbs
+      { id: 'eat', label: 'Eat', emoji: '🍽️', category: 'actions', keywords: ['eat', 'food', 'meal', 'dinner', 'bite', 'feed'] },
+      { id: 'drink_act', label: 'Drink', emoji: '🥤', category: 'actions', keywords: ['drink', 'sip', 'thirsty', 'gulp'] },
+      { id: 'play_act', label: 'Play', emoji: '🧸', category: 'actions', keywords: ['play', 'fun', 'game', 'toy'] },
+      { id: 'sleep', label: 'Sleep', emoji: '😴', category: 'actions', keywords: ['sleep', 'bed', 'nap', 'rest', 'night'] },
+      { id: 'wash', label: 'Wash', emoji: '🧼', category: 'actions', keywords: ['wash', 'clean', 'soap', 'hands'] },
+      { id: 'brush_teeth', label: 'Brush Teeth', emoji: '🪥', category: 'actions', keywords: ['brush teeth', 'toothbrush', 'teeth', 'dentist'] },
+      { id: 'read', label: 'Read', emoji: '📖', category: 'actions', keywords: ['read', 'book', 'story', 'learn'] },
+      { id: 'draw', label: 'Draw', emoji: '🖍️', category: 'actions', keywords: ['draw', 'color', 'crayon', 'paint', 'art'] },
+      { id: 'listen', label: 'Listen', emoji: '🎵', category: 'actions', keywords: ['listen', 'music', 'hear', 'song', 'headphones'] },
+      { id: 'watch', label: 'Watch TV', emoji: '📺', category: 'actions', keywords: ['watch', 'tv', 'show', 'movie', 'screen'] },
+      { id: 'open', label: 'Open', emoji: '📂', category: 'actions', keywords: ['open', 'door', 'box', 'unlock'] },
+      { id: 'close', label: 'Close', emoji: '📁', category: 'actions', keywords: ['close', 'shut', 'door', 'box'] },
+      { id: 'walk', label: 'Walk', emoji: '🚶', category: 'actions', keywords: ['walk', 'step', 'outside', 'feet'] },
+      { id: 'run', label: 'Run', emoji: '🏃', category: 'actions', keywords: ['run', 'fast', 'sprint', 'chase'] },
+      { id: 'jump', label: 'Jump', emoji: '🦘', category: 'actions', keywords: ['jump', 'bounce', 'hop', 'trampoline'] },
+      { id: 'sit', label: 'Sit', emoji: '🪑', category: 'actions', keywords: ['sit', 'chair', 'seat', 'down'] },
+      { id: 'stand', label: 'Stand', emoji: '🧍', category: 'actions', keywords: ['stand', 'up', 'feet'] },
+      { id: 'give', label: 'Give', emoji: '🎁', category: 'actions', keywords: ['give', 'pass', 'hand', 'present', 'share'] },
+      { id: 'take', label: 'Take', emoji: '🖐️', category: 'actions', keywords: ['take', 'get', 'grab'] },
+      { id: 'hug', label: 'Hug', emoji: '🫂', category: 'actions', keywords: ['hug', 'embrace', 'comfort', 'love'] },
+      { id: 'sing', label: 'Sing', emoji: '🎤', category: 'actions', keywords: ['sing', 'song', 'music', 'voice'] },
+      { id: 'dance', label: 'Dance', emoji: '💃', category: 'actions', keywords: ['dance', 'groove', 'music', 'move'] },
+      { id: 'swim', label: 'Swim', emoji: '🏊', category: 'actions', keywords: ['swim', 'pool', 'water', 'beach'] },
+
+      // People & Family
+      { id: 'me', label: 'Me', emoji: '🙂', category: 'people', keywords: ['me', 'i', 'myself', 'person'] },
+      { id: 'you', label: 'You', emoji: '👉', category: 'people', keywords: ['you', 'friend', 'person'] },
+      { id: 'mom', label: 'Mom', emoji: '👩', category: 'people', keywords: ['mom', 'mother', 'mama', 'mommy', 'family'] },
+      { id: 'dad', label: 'Dad', emoji: '👨', category: 'people', keywords: ['dad', 'father', 'daddy', 'papa', 'family'] },
+      { id: 'grandma', label: 'Grandma', emoji: '👵', category: 'people', keywords: ['grandma', 'grandmother', 'granny', 'nana'] },
+      { id: 'grandpa', label: 'Grandpa', emoji: '👴', category: 'people', keywords: ['grandpa', 'grandfather', 'gramps', 'papa'] },
+      { id: 'brother', label: 'Brother', emoji: '👦', category: 'people', keywords: ['brother', 'boy', 'sibling', 'family'] },
+      { id: 'sister', label: 'Sister', emoji: '👧', category: 'people', keywords: ['sister', 'girl', 'sibling', 'family'] },
+      { id: 'baby', label: 'Baby', emoji: '👶', category: 'people', keywords: ['baby', 'infant', 'toddler', 'little'] },
+      { id: 'friend', label: 'Friend', emoji: '🧒', category: 'people', keywords: ['friend', 'buddy', 'peer', 'classmate'] },
+      { id: 'teacher', label: 'Teacher', emoji: '🧑‍🏫', category: 'people', keywords: ['teacher', 'school', 'instructor', 'class'] },
+      { id: 'doctor', label: 'Doctor', emoji: '🧑‍⚕️', category: 'people', keywords: ['doctor', 'dr', 'nurse', 'hospital', 'medicine'] },
+      { id: 'family', label: 'Family', emoji: '👪', category: 'people', keywords: ['family', 'parents', 'relatives', 'home'] },
+
+      // Places
+      { id: 'home_place', label: 'Home', emoji: '🏠', category: 'places', keywords: ['home', 'house', 'room', 'inside'] },
+      { id: 'school_place', label: 'School', emoji: '🏫', category: 'places', keywords: ['school', 'class', 'building', 'learn'] },
+      { id: 'park', label: 'Park', emoji: '🌳', category: 'places', keywords: ['park', 'outside', 'nature', 'trees', 'grass'] },
+      { id: 'playground', label: 'Playground', emoji: '🛝', category: 'places', keywords: ['playground', 'slide', 'swings', 'recess', 'park'] },
+      { id: 'bathroom', label: 'Bathroom', emoji: '🚽', category: 'places', keywords: ['bathroom', 'toilet', 'potty', 'washroom', 'restroom'] },
+      { id: 'bedroom', label: 'Bedroom', emoji: '🛏️', category: 'places', keywords: ['bedroom', 'bed', 'sleep', 'room'] },
+      { id: 'kitchen', label: 'Kitchen', emoji: '🍳', category: 'places', keywords: ['kitchen', 'cooking', 'fridge', 'food'] },
+      { id: 'store', label: 'Store', emoji: '🛒', category: 'places', keywords: ['store', 'shop', 'market', 'grocery', 'buy'] },
+      { id: 'car', label: 'Car', emoji: '🚗', category: 'places', keywords: ['car', 'ride', 'drive', 'van', 'vehicle'] },
+      { id: 'bus', label: 'Bus', emoji: '🚌', category: 'places', keywords: ['bus', 'school bus', 'ride', 'transport'] },
+      { id: 'hospital', label: 'Hospital', emoji: '🏥', category: 'places', keywords: ['hospital', 'clinic', 'doctor', 'emergency'] },
+      { id: 'library', label: 'Library', emoji: '📚', category: 'places', keywords: ['library', 'books', 'quiet', 'read'] },
+      { id: 'pool', label: 'Pool', emoji: '🏊', category: 'places', keywords: ['pool', 'swimming', 'water'] },
+      { id: 'zoo', label: 'Zoo', emoji: '🦁', category: 'places', keywords: ['zoo', 'animals', 'visit'] },
+      { id: 'beach', label: 'Beach', emoji: '🏖️', category: 'places', keywords: ['beach', 'sand', 'ocean', 'sea', 'summer'] },
+
+      // Play & Toys
+      { id: 'ball', label: 'Ball', emoji: '⚽', category: 'play', keywords: ['ball', 'soccer', 'throw', 'catch', 'kick'] },
+      { id: 'blocks', label: 'Blocks', emoji: '🧱', category: 'play', keywords: ['blocks', 'lego', 'build', 'stack', 'tower'] },
+      { id: 'toy_cars', label: 'Toy Cars', emoji: '🚗', category: 'play', keywords: ['cars', 'trucks', 'vehicles', 'wheels'] },
+      { id: 'dolls', label: 'Dolls', emoji: '🧸', category: 'play', keywords: ['dolls', 'teddy bear', 'stuffed animal', 'toy'] },
+      { id: 'puzzle', label: 'Puzzle', emoji: '🧩', category: 'play', keywords: ['puzzle', 'pieces', 'game', 'solve'] },
+      { id: 'book_toy', label: 'Book', emoji: '📚', category: 'play', keywords: ['book', 'story', 'pictures'] },
+      { id: 'music_toy', label: 'Music', emoji: '🎵', category: 'play', keywords: ['music', 'song', 'listen', 'sound'] },
+      { id: 'tablet', label: 'Tablet / iPad', emoji: '📱', category: 'play', keywords: ['tablet', 'ipad', 'screen', 'device', 'phone'] },
+      { id: 'tv_toy', label: 'TV / Movie', emoji: '📺', category: 'play', keywords: ['tv', 'television', 'movie', 'cartoon', 'show'] },
+      { id: 'bubbles', label: 'Bubbles', emoji: '🫧', category: 'play', keywords: ['bubbles', 'soap', 'blow', 'pop'] },
+      { id: 'crayons', label: 'Crayons', emoji: '🖍️', category: 'play', keywords: ['crayons', 'markers', 'color', 'draw'] },
+      { id: 'swing', label: 'Swing', emoji: '🎠', category: 'play', keywords: ['swing', 'park', 'playground', 'ride'] },
+      { id: 'slide', label: 'Slide', emoji: '🛝', category: 'play', keywords: ['slide', 'playground', 'park', 'down'] },
+      { id: 'game', label: 'Games', emoji: '🎲', category: 'play', keywords: ['game', 'board game', 'dice', 'cards'] },
+      { id: 'bike', label: 'Bike', emoji: '🚲', category: 'play', keywords: ['bike', 'bicycle', 'ride', 'wheels', 'helmet'] },
+      { id: 'train', label: 'Train', emoji: '🚂', category: 'play', keywords: ['train', 'choo choo', 'tracks', 'engine'] },
+
+      // Daily & Clothes
+      { id: 'potty', label: 'Potty', emoji: '🚽', category: 'daily', keywords: ['potty', 'toilet', 'pee', 'poop', 'bathroom'] },
+      { id: 'soap', label: 'Soap', emoji: '🧼', category: 'daily', keywords: ['soap', 'clean', 'wash hands', 'bubbles'] },
+      { id: 'bath', label: 'Bath / Shower', emoji: '🛁', category: 'daily', keywords: ['bath', 'shower', 'tub', 'clean', 'water'] },
+      { id: 'shirt', label: 'Shirt', emoji: '👕', category: 'daily', keywords: ['shirt', 'clothes', 'top', 't-shirt', 'wear'] },
+      { id: 'pants', label: 'Pants', emoji: '👖', category: 'daily', keywords: ['pants', 'jeans', 'trousers', 'shorts', 'clothes'] },
+      { id: 'shoes', label: 'Shoes', emoji: '👟', category: 'daily', keywords: ['shoes', 'sneakers', 'boots', 'feet', 'tie'] },
+      { id: 'socks', label: 'Socks', emoji: '🧦', category: 'daily', keywords: ['socks', 'feet', 'warm'] },
+      { id: 'coat', label: 'Jacket / Coat', emoji: '🧥', category: 'daily', keywords: ['jacket', 'coat', 'winter', 'cold', 'zip'] },
+      { id: 'hat', label: 'Hat', emoji: '🧢', category: 'daily', keywords: ['hat', 'cap', 'head', 'sun'] },
+      { id: 'pajamas', label: 'Pajamas', emoji: '💤', category: 'daily', keywords: ['pajamas', 'sleepwear', 'bedtime', 'night'] },
+      { id: 'backpack', label: 'Backpack', emoji: '🎒', category: 'daily', keywords: ['backpack', 'bag', 'school bag', 'pack'] },
+      { id: 'glasses', label: 'Glasses', emoji: '👓', category: 'daily', keywords: ['glasses', 'spectacles', 'eyes', 'see'] },
+      { id: 'medicine', label: 'Medicine', emoji: '💊', category: 'daily', keywords: ['medicine', 'pill', 'doctor', 'sick', 'syrup'] },
+
+      // Animals
+      { id: 'dog', label: 'Dog', emoji: '🐶', category: 'animals', keywords: ['dog', 'puppy', 'pet', 'bark', 'woof'] },
+      { id: 'cat', label: 'Cat', emoji: '🐱', category: 'animals', keywords: ['cat', 'kitty', 'kitten', 'pet', 'meow'] },
+      { id: 'bird', label: 'Bird', emoji: '🐦', category: 'animals', keywords: ['bird', 'fly', 'feather', 'tweet'] },
+      { id: 'fish', label: 'Fish', emoji: '🐟', category: 'animals', keywords: ['fish', 'swim', 'water', 'aquarium'] },
+      { id: 'bear', label: 'Bear', emoji: '🐻', category: 'animals', keywords: ['bear', 'teddy', 'wild', 'fur'] },
+      { id: 'rabbit', label: 'Rabbit', emoji: '🐰', category: 'animals', keywords: ['rabbit', 'bunny', 'hop', 'ears'] },
+      { id: 'horse', label: 'Horse', emoji: '🐴', category: 'animals', keywords: ['horse', 'pony', 'ride', 'neigh'] },
+      { id: 'cow', label: 'Cow', emoji: '🐮', category: 'animals', keywords: ['cow', 'farm', 'moo', 'milk'] },
+      { id: 'pig', label: 'Pig', emoji: '🐷', category: 'animals', keywords: ['pig', 'farm', 'oink', 'pink'] },
+      { id: 'duck', label: 'Duck', emoji: '🦆', category: 'animals', keywords: ['duck', 'quack', 'pond', 'yellow'] },
+      { id: 'lion', label: 'Lion', emoji: '🦁', category: 'animals', keywords: ['lion', 'wild', 'roar', 'king', 'zoo'] },
+      { id: 'elephant', label: 'Elephant', emoji: '🐘', category: 'animals', keywords: ['elephant', 'big', 'trunk', 'zoo'] },
+      { id: 'monkey', label: 'Monkey', emoji: '🐵', category: 'animals', keywords: ['monkey', 'banana', 'zoo', 'climb'] },
+      { id: 'turtle', label: 'Turtle', emoji: '🐢', category: 'animals', keywords: ['turtle', 'slow', 'shell', 'green'] }
+    ];
+
+    // Build unified AAC Symbol Catalog (3,600+ symbols)
+    let AAC_SYMBOL_LIBRARY = [];
+
+    function initSymbolLibrary() {
+      const list = [...AAC_STARTER_EMOJIS];
+      if (typeof AAC_OFFICIAL_SYMBOLS !== 'undefined' && Array.isArray(AAC_OFFICIAL_SYMBOLS)) {
+        AAC_OFFICIAL_SYMBOLS.forEach(s => {
+          let cat = s.category || 'core';
+          if (s.rawCat && s.rawCat.toLowerCase().includes('drink')) {
+            cat = 'drinks';
+          }
+          list.push({
+            id: s.id,
+            label: s.label,
+            category: cat,
+            rawCat: s.rawCat,
+            svgPath: 'symbols/en/' + s.id + '.svg',
+            keywords: [s.id.replace(/_/g, ' '), ...(s.tags || [])]
+          });
+        });
+      }
+      AAC_SYMBOL_LIBRARY = list;
+    }
+    initSymbolLibrary();
+
+    let currentSymbolCategory = 'all';
+    let currentRenderedSymbols = [];
+    let currentRenderLimit = 120;
+
+    function openSymbolLibrary() {
+      initSymbolLibrary();
+      const modal = document.getElementById('modal-symbol-library');
+      document.getElementById('sym-total-count').textContent = AAC_SYMBOL_LIBRARY.length;
+      document.getElementById('sym-search-input').value = '';
+      document.getElementById('btn-sym-clear-search').style.display = 'none';
+      currentSymbolCategory = 'all';
+      updateCategoryChipsUI();
+      filterSymbolLibrary();
+      modal.classList.add('open');
+      setTimeout(() => document.getElementById('sym-search-input').focus(), 120);
+
+      // Bind infinite scroll loader
+      const grid = document.getElementById('symbol-library-grid');
+      grid.onscroll = () => {
+        if (grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 160) {
+          loadMoreSymbols();
+        }
+      };
+    }
+
+    function closeSymbolLibrary() {
+      document.getElementById('modal-symbol-library').classList.remove('open');
+    }
+
+    function renderSymbolLibrary(symbols, reset = true) {
+      const grid = document.getElementById('symbol-library-grid');
+      const empty = document.getElementById('symbol-library-empty');
+
+      if (reset) {
+        grid.innerHTML = '';
+        currentRenderLimit = 120;
+        currentRenderedSymbols = symbols || [];
+      }
+
+      if (!currentRenderedSymbols || currentRenderedSymbols.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+
+      grid.style.display = 'grid';
+      empty.style.display = 'none';
+
+      const slice = currentRenderedSymbols.slice(reset ? 0 : grid.children.length, currentRenderLimit);
+      const frag = document.createDocumentFragment();
+
+      slice.forEach(s => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'sym-card';
+        card.setAttribute('aria-label', s.label);
+        if (s.svgPath) {
+          card.innerHTML = `
+            <div class="sym-icon"><img src="${s.svgPath}" loading="lazy" class="sym-svg-icon" alt="${s.label}" style="width: 44px; height: 44px; object-fit: contain; pointer-events: none;" /></div>
+            <div class="sym-name" title="${s.label}">${s.label}</div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="sym-icon">${s.emoji}</div>
+            <div class="sym-name" title="${s.label}">${s.label}</div>
+          `;
+        }
+        card.onclick = () => selectLibrarySymbol(s);
+        frag.appendChild(card);
+      });
+
+      grid.appendChild(frag);
+    }
+
+    function loadMoreSymbols() {
+      if (currentRenderLimit >= currentRenderedSymbols.length) return;
+      currentRenderLimit += 80;
+      renderSymbolLibrary(currentRenderedSymbols, false);
+    }
+
+    function selectLibrarySymbol(symbolObj) {
+      if (symbolObj.svgPath) {
+        pendingSymbol = symbolObj.svgPath;
+      } else {
+        pendingSymbol = symbolObj.emoji || symbolObj.id;
+      }
+      pendingPhotoBlob = null;
+
+      const labelInp = document.getElementById('modal-label-input');
+      const ttsInp = document.getElementById('modal-tts-input');
+
+      // Auto-fill label and TTS if empty
+      if (!labelInp.value.trim()) {
+        labelInp.value = symbolObj.label;
+        onLabelSizeInput();
+      }
+      if (!ttsInp.value.trim()) {
+        ttsInp.value = symbolObj.label;
+      }
+
+      updateModalPhotoPreview();
+      closeSymbolLibrary();
+      showToast(`Selected "${symbolObj.label}"`);
+    }
+
+    function filterSymbolLibrary() {
+      const q = document.getElementById('sym-search-input').value.trim().toLowerCase();
+      document.getElementById('btn-sym-clear-search').style.display = q ? 'flex' : 'none';
+
+      let filtered = AAC_SYMBOL_LIBRARY;
+      if (currentSymbolCategory !== 'all') {
+        filtered = filtered.filter(s => s.category === currentSymbolCategory);
+      }
+
+      if (q) {
+        filtered = filtered.filter(s => {
+          if (s.label.toLowerCase().includes(q)) return true;
+          if (s.id && s.id.toLowerCase().includes(q)) return true;
+          if (s.category && s.category.toLowerCase().includes(q)) return true;
+          if (s.rawCat && s.rawCat.toLowerCase().includes(q)) return true;
+          return (s.keywords || []).some(k => k.toLowerCase().includes(q));
+        });
+      }
+
+      renderSymbolLibrary(filtered, true);
+    }
+
+    function clearSymbolSearch() {
+      const inp = document.getElementById('sym-search-input');
+      inp.value = '';
+      inp.focus();
+      filterSymbolLibrary();
+    }
+
+    function selectSymbolCategory(cat) {
+      currentSymbolCategory = cat;
+      updateCategoryChipsUI();
+      filterSymbolLibrary();
+    }
+
+    function updateCategoryChipsUI() {
+      const chips = document.querySelectorAll('#sym-category-chips .sym-cat-chip');
+      chips.forEach(chip => {
+        const cat = chip.getAttribute('data-cat');
+        chip.classList.toggle('active', cat === currentSymbolCategory);
+      });
+
+      // Update count badges
+      const totalEl = document.getElementById('sym-total-count');
+      if (totalEl) totalEl.textContent = AAC_SYMBOL_LIBRARY.length.toLocaleString();
+      ['core', 'feelings', 'food', 'drinks', 'actions', 'people', 'places', 'play', 'daily', 'animals', 'health'].forEach(cat => {
+        const countEl = document.getElementById('sym-count-' + cat);
+        if (countEl) {
+          const count = AAC_SYMBOL_LIBRARY.filter(s => s.category === cat).length;
+          countEl.textContent = count.toLocaleString();
+        }
+      });
+    }
+
     function toggleSymbolPicker() {
-      const picker = document.getElementById('symbol-picker-grid');
-      picker.style.display = picker.style.display === 'none' ? 'grid' : 'none';
+      openSymbolLibrary();
     }
 
     function selectSymbol(sym) {
       pendingSymbol = sym;
       pendingPhotoBlob = null;
-      document.getElementById('symbol-picker-grid').style.display = 'none';
       updateModalPhotoPreview();
     }
 
