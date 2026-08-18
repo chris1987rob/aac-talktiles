@@ -280,6 +280,13 @@ HTML_CONTENT = """<!DOCTYPE html>
       animation: chip-pop 0.15s ease-out;
     }
 
+    .express-chip-thumb {
+      width: 32px;
+      height: 32px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
     .btn-express-clear {
       width: 48px;
       height: 48px;
@@ -433,6 +440,19 @@ HTML_CONTENT = """<!DOCTYPE html>
       display: block;
     }
 
+    .scene-toolbar {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 25;
+    }
+
+    .mode-user .scene-toolbar {
+      display: none;
+    }
+
     .scene-hotspot {
       position: absolute;
       cursor: pointer;
@@ -453,9 +473,10 @@ HTML_CONTENT = """<!DOCTYPE html>
       border: 1px dashed rgba(255, 255, 255, 0.2);
     }
 
-    .mode-user .scene-hotspot.active {
-      border: 3px solid #00e676;
-      background: rgba(0, 230, 118, 0.25);
+    .scene-hotspot.tap-active {
+      border: 3px solid #00e676 !important;
+      background: rgba(0, 230, 118, 0.35) !important;
+      box-shadow: 0 0 16px rgba(0, 230, 118, 0.6) !important;
     }
 
     .hotspot-handle {
@@ -466,6 +487,7 @@ HTML_CONTENT = """<!DOCTYPE html>
       border: 2px solid #2b4cd9;
       border-radius: 50%;
       display: none;
+      z-index: 5;
     }
 
     .mode-editor .hotspot-handle {
@@ -473,9 +495,13 @@ HTML_CONTENT = """<!DOCTYPE html>
     }
 
     .handle-nw { top: -6px; left: -6px; cursor: nwse-resize; }
+    .handle-n  { top: -6px; left: calc(50% - 6px); cursor: ns-resize; }
     .handle-ne { top: -6px; right: -6px; cursor: nesw-resize; }
-    .handle-sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+    .handle-e  { right: -6px; top: calc(50% - 6px); cursor: ew-resize; }
     .handle-se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+    .handle-s  { bottom: -6px; left: calc(50% - 6px); cursor: ns-resize; }
+    .handle-sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+    .handle-w  { left: -6px; top: calc(50% - 6px); cursor: ew-resize; }
 
     /* ==========================================================================
        3. SIGNATURE BOTTOM BAR (GoTalk Now Teal Bar)
@@ -536,7 +562,7 @@ HTML_CONTENT = """<!DOCTYPE html>
       cursor: not-allowed;
     }
 
-    /* Orange Home Button (Distinctive Rounded Square) */
+    /* Orange Home Button */
     .btn-bar-home {
       width: 44px;
       height: 44px;
@@ -611,7 +637,6 @@ HTML_CONTENT = """<!DOCTYPE html>
       animation: popover-slide 0.15s ease-out;
     }
 
-    /* Arrow pointers */
     .popover-arrow-down {
       position: absolute;
       bottom: -8px;
@@ -632,7 +657,6 @@ HTML_CONTENT = """<!DOCTYPE html>
       transform: rotate(45deg);
     }
 
-    /* Anchor positions */
     #popover-page-options .popover-card, #popover-color-picker .popover-card {
       left: 76px;
       bottom: 66px;
@@ -826,7 +850,7 @@ HTML_CONTENT = """<!DOCTYPE html>
       to { transform: translate(-50%, -50%) scale(1); }
     }
 
-    /* Standard Modals (Tile Editor & Auditory Cue) */
+    /* Standard Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -990,6 +1014,32 @@ HTML_CONTENT = """<!DOCTYPE html>
       border-color: #fca5a5;
     }
 
+    /* Pages Navigator List */
+    .pages-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    .page-nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .page-nav-item:hover, .page-nav-item.active {
+      background: #e6f4ea;
+      border-color: #008369;
+    }
+
     /* Full-screen Camera */
     .camera-fs {
       position: fixed;
@@ -1117,7 +1167,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 
       <div class="home-body">
         <!-- Main Player Launch Button -->
-        <button class="btn-home-player" onclick="switchToBoardView(false)">
+        <button id="btn-home-player" class="btn-home-player" onclick="switchToBoardView(false)">
           <span>Player</span>
           <svg class="icon" viewBox="0 0 24 24" style="width: 36px; height: 36px;">
             <path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/>
@@ -1126,25 +1176,25 @@ HTML_CONTENT = """<!DOCTYPE html>
 
         <!-- 4 Secondary Buttons in 2x2 Grid -->
         <div class="home-grid-2x2">
-          <button class="btn-home-action" onclick="switchToBoardView(true)">
+          <button id="btn-home-editor" class="btn-home-action" onclick="switchToBoardView(true)">
             <span>Page Editor</span>
             <svg class="icon" viewBox="0 0 24 24" style="width: 26px; height: 26px;">
               <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
             </svg>
           </button>
-          <button class="btn-home-action" onclick="showToast('Settings')">
+          <button id="btn-home-settings" class="btn-home-action" onclick="openStubModal('Settings')">
             <span>Settings</span>
             <svg class="icon" viewBox="0 0 24 24" style="width: 26px; height: 26px;">
               <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
             </svg>
           </button>
-          <button class="btn-home-action" onclick="showToast('Downloads')">
+          <button id="btn-home-downloads" class="btn-home-action" onclick="openStubModal('Downloads')">
             <span>Downloads</span>
             <svg class="icon" viewBox="0 0 24 24" style="width: 26px; height: 26px;">
               <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
             </svg>
           </button>
-          <button class="btn-home-action" onclick="showToast('Help & Guide')">
+          <button id="btn-home-help" class="btn-home-action" onclick="openStubModal('Help')">
             <span>Help</span>
             <svg class="icon" viewBox="0 0 24 24" style="width: 26px; height: 26px;">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
@@ -1154,12 +1204,12 @@ HTML_CONTENT = """<!DOCTYPE html>
       </div>
 
       <footer class="home-footer">
-        <button class="btn-feedback" onclick="showToast('Feedback')" title="Feedback">
+        <button id="btn-home-feedback" class="btn-feedback" onclick="openStubModal('Feedback')" title="Feedback">
           <svg class="icon" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
             <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
           </svg>
         </button>
-        <span class="home-book-label" onclick="openPagesDrawer()">Default Book (Tap for More)</span>
+        <span id="home-book-label" class="home-book-label" onclick="openPagesDrawer()">Default Book (Tap for More)</span>
         <div style="width: 44px;"></div>
       </footer>
     </div>
@@ -1170,9 +1220,9 @@ HTML_CONTENT = """<!DOCTYPE html>
     <div id="view-board" class="view-screen active">
       <!-- Express Speech Bar (Top) -->
       <div id="express-bar-container" class="express-bar-container">
-        <div class="express-bar" onclick="playExpressSentence()">
+        <div id="express-bar" class="express-bar" onclick="playExpressSentence()">
           <div id="express-chips-scroll" class="express-chips-scroll"></div>
-          <button class="btn-express-clear" onclick="event.stopPropagation(); clearExpressChips()" title="Clear Word">
+          <button id="btn-express-clear" class="btn-express-clear" onclick="event.stopPropagation(); clearExpressChips()" title="Clear Word">
             <svg viewBox="0 0 24 24" style="width: 28px; height: 28px; fill: currentColor;">
               <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
             </svg>
@@ -1188,6 +1238,11 @@ HTML_CONTENT = """<!DOCTYPE html>
         <!-- Visual Scene View -->
         <div id="scene-view" class="scene-view">
           <img id="scene-image" class="scene-bg-img" alt="Scene Background">
+          <div class="scene-toolbar">
+            <button class="btn btn-primary" onclick="triggerSceneBgInput()">Set Background Photo</button>
+            <button class="btn" style="background:#006853; color:#fff;" onclick="addSceneHotspot()">+ Add Hotspot</button>
+            <input type="file" id="scene-bg-file-input" accept="image/*" style="display:none;" onchange="handleSceneBgSelected(event)">
+          </div>
           <div id="scene-hotspots-container"></div>
         </div>
       </main>
@@ -1196,7 +1251,6 @@ HTML_CONTENT = """<!DOCTYPE html>
       <footer id="bottom-bar" class="bottom-bar">
         <!-- Left buttons -->
         <div class="bottom-bar-left">
-          <!-- Previous page arrow (rounded left triangle) -->
           <button id="btn-bar-prev" class="btn-bar" onclick="prevPage()" title="Previous Page">
             <svg viewBox="0 0 24 24" style="width: 32px; height: 32px; fill: #ffffff;">
               <path d="M14.5 5.5l-6.5 6.5 6.5 6.5V5.5z"/>
@@ -1210,7 +1264,7 @@ HTML_CONTENT = """<!DOCTYPE html>
             </svg>
           </button>
 
-          <!-- Editor Mode: Sliders button (3 vertical sliders) -->
+          <!-- Editor Mode: Sliders button -->
           <button id="btn-bar-sliders" class="btn-bar btn-bar-sliders" onclick="togglePageOptions()" title="Page Options">
             <svg viewBox="0 0 24 24" style="width: 32px; height: 32px; fill: #ffffff;">
               <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/>
@@ -1232,7 +1286,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 
         <!-- Right buttons -->
         <div class="bottom-bar-right">
-          <!-- Editor Mode: Layers button (3 stacked sheets) -->
+          <!-- Editor Mode: Layers button -->
           <button id="btn-bar-layers" class="btn-bar" onclick="openPagesDrawer()" title="Pages List">
             <svg viewBox="0 0 24 24" style="width: 30px; height: 30px; fill: #ffffff;">
               <path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9.07l-9-7-9 7 1.63 1.27L12 16z"/>
@@ -1327,7 +1381,7 @@ HTML_CONTENT = """<!DOCTYPE html>
         <div class="popover-row">
           <span>Page Specific Scanning</span>
           <label class="ios-switch">
-            <input type="checkbox" id="toggle-page-scanning">
+            <input type="checkbox" id="toggle-page-scanning" onchange="togglePageScanning(this.checked)">
             <span class="ios-slider"></span>
           </label>
         </div>
@@ -1337,7 +1391,7 @@ HTML_CONTENT = """<!DOCTYPE html>
     </div>
 
     <!-- ========================================================================
-         POPOVER: COLOR PICKER (Page Background Swatches)
+         POPOVER: COLOR PICKER (Swatches & Picker Tabs)
          ======================================================================== -->
     <div id="popover-color-picker" class="popover-backdrop" onclick="closeAllPopovers()">
       <div class="popover-card" onclick="event.stopPropagation()">
@@ -1347,8 +1401,16 @@ HTML_CONTENT = """<!DOCTYPE html>
           <div style="width: 48px;"></div>
         </div>
 
-        <!-- Swatches 4x4 Grid -->
-        <div class="swatches-grid">
+        <!-- Segmented Tab: Swatches | Picker -->
+        <div style="padding: 10px 14px 0;">
+          <div class="segmented-control" style="width: 100%;">
+            <button id="tab-color-swatches" class="segment-btn active" onclick="switchColorTab('swatches')">Swatches</button>
+            <button id="tab-color-picker" class="segment-btn" onclick="switchColorTab('picker')">Picker</button>
+          </div>
+        </div>
+
+        <!-- View 1: Swatches 4x4 Grid -->
+        <div id="color-swatches-view" class="swatches-grid">
           <button class="color-swatch-btn" style="background: #ffffff;" onclick="applyPageBg('#ffffff')"></button>
           <button class="color-swatch-btn" style="background: #111111;" onclick="applyPageBg('#111111')"></button>
           <button class="color-swatch-btn" style="background: #6c757d;" onclick="applyPageBg('#6c757d')"></button>
@@ -1370,6 +1432,18 @@ HTML_CONTENT = """<!DOCTYPE html>
           <button class="color-swatch-btn" style="background: #f4f5f8;" onclick="applyPageBg('#f4f5f8')"></button>
         </div>
 
+        <!-- View 2: Hex & Spectrum Picker -->
+        <div id="color-picker-custom-view" style="display: none; padding: 14px; flex-direction: column; gap: 12px;">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="text" id="picker-hex-input" class="text-input" placeholder="#00A699" value="#00A699">
+            <button class="btn btn-primary" onclick="applyPageBgFromHex()">Set Via Hex</button>
+          </div>
+          <label style="display: flex; align-items: center; justify-content: space-between; font-weight: 600;">
+            <span>Spectrum Palette:</span>
+            <input type="color" id="picker-color-native" value="#00a699" onchange="applyPageBg(this.value)" style="width: 50px; height: 38px; border: none; cursor: pointer;">
+          </label>
+        </div>
+
         <div class="popover-arrow-down"></div>
       </div>
     </div>
@@ -1382,28 +1456,61 @@ HTML_CONTENT = """<!DOCTYPE html>
         <div class="popover-header">
           <span class="popover-title">New Page</span>
         </div>
-        <div class="popover-menu-item" onclick="showToast('Online Gallery')">
+        <div class="popover-menu-item" onclick="openStubModal('Online Gallery')">
           <svg class="icon" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/></svg>
           <span>Online Gallery</span>
         </div>
-        <div class="popover-menu-item" onclick="showToast('My Templates')">
+        <div class="popover-menu-item" onclick="openStubModal('My Templates')">
           <svg class="icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
           <span>My Templates</span>
         </div>
-        <div class="popover-menu-item" onclick="duplicateCurrentPage()">
+        <div class="popover-menu-item" onclick="openStubModal('Import from Another Book')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          <span>Import from Another Book</span>
+        </div>
+        <div id="menu-item-duplicate-page" class="popover-menu-item" onclick="duplicateCurrentPage()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
           <span>Duplicate Page</span>
         </div>
-        <div class="popover-menu-item" onclick="addNewScenePage()">
+        <div class="popover-menu-item" onclick="openStubModal('Page Wizard')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M7.5 5.6L5 7l1.4-2.5L5 2l2.5 1.4L10 2 8.6 4.5 10 7 7.5 5.6zm12 9.8L22 14l-1.4 2.5L22 19l-2.5-1.4L17 19l1.4-2.5L17 14l2.5 1.4zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5L22 2zm-7.63 5.29c-.39-.39-1.02-.39-1.41 0L1.29 18.96c-.39.39-.39 1.02 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05c.39-.39.39-1.02 0-1.41l-2.33-2.35z"/></svg>
+          <span>Page Wizard</span>
+        </div>
+        <div class="popover-menu-item" onclick="openStubModal('Keyboard Page')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/></svg>
+          <span>Keyboard Page</span>
+        </div>
+        <div id="menu-item-add-blank-scene" class="popover-menu-item" onclick="addNewScenePage()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
           <span>Add Blank Scene Page</span>
         </div>
-        <div class="popover-menu-item" onclick="addNewButtonPage()">
+        <div id="menu-item-add-blank-button" class="popover-menu-item" onclick="addNewButtonPage()">
           <svg class="icon" viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg>
           <span>Add Blank Button Page</span>
         </div>
 
         <div class="popover-arrow-down"></div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL: PAGES NAVIGATOR (Layers Sheet Listing All Pages)
+         ======================================================================== -->
+    <div id="modal-pages-navigator" class="modal-backdrop" onclick="closePagesNavigator()">
+      <div class="modal-card" onclick="event.stopPropagation()" style="max-width: 480px;">
+        <div class="modal-header">
+          <span class="modal-title">Pages in this Book</span>
+          <button class="modal-close-btn" onclick="closePagesNavigator()">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="pages-nav-list" class="pages-nav-list"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" onclick="closePagesNavigator(); toggleNewPageMenu();">+ Add New Page</button>
+          <button class="btn" onclick="closePagesNavigator()">Close</button>
+        </div>
       </div>
     </div>
 
@@ -1433,9 +1540,13 @@ HTML_CONTENT = """<!DOCTYPE html>
 
           <div style="display: flex; gap: 8px; justify-content: space-between;">
             <button class="btn btn-primary" onclick="showToast('Voice selected')">Voice</button>
-            <button class="btn" style="background: #006853; color: #fff;" onclick="previewAuditoryCue()">Preview</button>
+            <button id="btn-preview-cue" class="btn" style="background: #006853; color: #fff;" onclick="previewAuditoryCue()">Preview</button>
             <button class="btn" style="background: #006853; color: #fff;" onclick="showToast('Second voice set')">Use Second Voice</button>
           </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeAuditoryCueModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveAuditoryCueModal()">Save Cue</button>
         </div>
       </div>
     </div>
@@ -1455,7 +1566,54 @@ HTML_CONTENT = """<!DOCTYPE html>
         </div>
 
         <div class="modal-body">
-          <!-- Photo Section -->
+          <!-- Label & Text Reposition Section -->
+          <div class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/></svg>
+              <span>Button Label & Text</span>
+            </div>
+            <input type="text" id="modal-label-input" class="text-input" placeholder="e.g. eat, water, yes, help..." oninput="onLabelSizeInput()">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.85rem; font-weight: 600; color: #475569;">Text Position:</span>
+              <div class="segmented-control" style="width: 180px;">
+                <button id="pos-btn-top" class="segment-btn" onclick="setLabelPosition('top')">Top</button>
+                <button id="pos-btn-bottom" class="segment-btn active" onclick="setLabelPosition('bottom')">Bottom</button>
+              </div>
+            </div>
+
+            <label style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; font-weight: 600; color: #475569;">
+              <span>Word size on the tile: <b id="label-size-value">1.0&times;</b></span>
+              <input id="modal-label-size" type="range" min="0.6" max="3" step="0.1" value="1" oninput="onLabelSizeInput()" style="width: 100%;">
+            </label>
+            <div style="display: flex; align-items: center; justify-content: center; min-height: 44px; border: 1px dashed #cbd5e1; border-radius: 6px; background: #ffffff;">
+              <span id="label-size-preview-text" style="font-weight: 700;">Label</span>
+            </div>
+          </div>
+
+          <!-- Color Styling Section -->
+          <div class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.28 19.58 10.59 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
+              <span>Colors (Background & Border)</span>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between;">
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600;">
+                <span>Tile BG:</span>
+                <input type="color" id="modal-tile-bgcolor" value="#ffffff" style="width: 40px; height: 32px; border: none; cursor: pointer;">
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600;">
+                <span>Border:</span>
+                <input type="color" id="modal-tile-bordercolor" value="#000000" style="width: 40px; height: 32px; border: none; cursor: pointer;">
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600;">
+                <span>Text Color:</span>
+                <input type="color" id="modal-tile-textcolor" value="#111111" style="width: 40px; height: 32px; border: none; cursor: pointer;">
+              </label>
+            </div>
+          </div>
+
+          <!-- Photo / Symbol Section -->
           <div class="editor-section">
             <div class="section-title">
               <svg class="icon" viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
@@ -1464,26 +1622,45 @@ HTML_CONTENT = """<!DOCTYPE html>
 
             <div class="photo-preview-box" id="photo-preview-container">
               <img id="modal-photo-img" class="photo-preview-img" alt="Tile Preview" style="display: none;">
+              <div id="modal-symbol-preview" style="display: none;"></div>
               <div id="modal-photo-placeholder" style="color: #64748b; display: flex; flex-direction: column; align-items: center; gap: 6px;">
                 <svg viewBox="0 0 24 24" style="width: 44px; height: 44px; fill: currentColor;"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-                <span style="font-size: 0.85rem; font-weight: 600;">No photo set</span>
+                <span style="font-size: 0.85rem; font-weight: 600;">No photo or symbol set</span>
               </div>
             </div>
 
             <div id="photo-controls-default" style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button class="btn" type="button" onclick="startCamera()">Take Photo</button>
               <button class="btn" type="button" onclick="triggerFileInput()">Upload Image</button>
+              <button class="btn" type="button" onclick="toggleSymbolPicker()">Symbols</button>
               <button id="btn-remove-photo" class="btn btn-danger" type="button" onclick="removePhoto()" style="display: none;">Remove</button>
               <input type="file" id="photo-file-input" accept="image/*" style="display: none;" onchange="handleFileSelected(event)">
             </div>
+
+            <!-- Built-in Symbols Picker -->
+            <div id="symbol-picker-grid" style="display: none; grid-template-columns: repeat(6, 1fr); gap: 6px; padding: 8px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px;">
+              <button class="btn" type="button" onclick="selectSymbol('smile')" style="padding: 4px; font-size: 1.3rem;">😊</button>
+              <button class="btn" type="button" onclick="selectSymbol('frown')" style="padding: 4px; font-size: 1.3rem;">☹️</button>
+              <button class="btn" type="button" onclick="selectSymbol('eat')" style="padding: 4px; font-size: 1.3rem;">🍎</button>
+              <button class="btn" type="button" onclick="selectSymbol('water')" style="padding: 4px; font-size: 1.3rem;">💧</button>
+              <button class="btn" type="button" onclick="selectSymbol('yes')" style="padding: 4px; font-size: 1.3rem;">✅</button>
+              <button class="btn" type="button" onclick="selectSymbol('no')" style="padding: 4px; font-size: 1.3rem;">❌</button>
+              <button class="btn" type="button" onclick="selectSymbol('help')" style="padding: 4px; font-size: 1.3rem;">🙋</button>
+              <button class="btn" type="button" onclick="selectSymbol('home')" style="padding: 4px; font-size: 1.3rem;">🏠</button>
+              <button class="btn" type="button" onclick="selectSymbol('bus')" style="padding: 4px; font-size: 1.3rem;">🚌</button>
+              <button class="btn" type="button" onclick="selectSymbol('book')" style="padding: 4px; font-size: 1.3rem;">📖</button>
+              <button class="btn" type="button" onclick="selectSymbol('heart')" style="padding: 4px; font-size: 1.3rem;">❤️</button>
+              <button class="btn" type="button" onclick="selectSymbol('star')" style="padding: 4px; font-size: 1.3rem;">⭐</button>
+            </div>
           </div>
 
-          <!-- Voice Recording Section -->
+          <!-- Auditory Cue / Voice Recording Section -->
           <div class="editor-section">
             <div class="section-title">
               <svg class="icon" viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
-              <span>Auditory Voice Recording</span>
+              <span>Auditory Cue (Voice / TTS)</span>
             </div>
+            <input type="text" id="modal-tts-input" class="text-input" placeholder="TTS speech (defaults to label)...">
             <div id="audio-status-text" style="font-size: 0.85rem; font-weight: 600; color: #475569;">No voice recording</div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button id="btn-record-voice" class="btn" type="button" onclick="startRecording()"><span id="btn-record-text">Record Voice</span></button>
@@ -1492,30 +1669,34 @@ HTML_CONTENT = """<!DOCTYPE html>
               <button id="btn-remove-audio" class="btn btn-danger" type="button" onclick="removeAudio()" style="display: none;">Remove</button>
             </div>
           </div>
-
-          <!-- Label Section -->
-          <div class="editor-section">
-            <div class="section-title">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/></svg>
-              <span>Button Label</span>
-            </div>
-            <input type="text" id="modal-label-input" class="text-input" placeholder="e.g. eat, water, yes, help..." oninput="onLabelSizeInput()">
-            <label style="display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; font-weight: 600; color: #475569;">
-              <span>Word size on the tile: <b id="label-size-value">1.0&times;</b></span>
-              <input id="modal-label-size" type="range" min="0.6" max="3" step="0.1" value="1" oninput="onLabelSizeInput()" style="width: 100%;">
-            </label>
-            <div style="display: flex; align-items: center; justify-content: center; min-height: 48px; border: 1px dashed #cbd5e1; border-radius: 6px; background: #ffffff;">
-              <span id="label-size-preview-text" style="font-weight: 700;">Label</span>
-            </div>
-          </div>
         </div>
 
         <div class="modal-footer">
           <button class="btn btn-danger" type="button" onclick="clearTileWithConfirm()">Clear Tile</button>
           <div style="display: flex; gap: 8px;">
             <button class="btn" type="button" onclick="closeEditor()">Cancel</button>
-            <button class="btn btn-primary" type="button" onclick="saveEditorTile()">Save</button>
+            <button id="btn-save-tile" class="btn btn-primary" type="button" onclick="saveEditorTile()">Save</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL: STUB DIALOG (Settings, Downloads, Help, Feedback)
+         ======================================================================== -->
+    <div id="modal-stub" class="modal-backdrop" onclick="closeStubModal()">
+      <div class="modal-card" onclick="event.stopPropagation()" style="max-width: 420px;">
+        <div class="modal-header">
+          <span id="stub-modal-title" class="modal-title">Settings</span>
+          <button class="modal-close-btn" onclick="closeStubModal()">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          </button>
+        </div>
+        <div id="stub-modal-body" class="modal-body">
+          <p style="font-weight: 600; color: #475569;">talk tiles AAC Communication Book v2.3</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" onclick="closeStubModal()">OK</button>
         </div>
       </div>
     </div>
@@ -1569,13 +1750,13 @@ HTML_CONTENT = """<!DOCTYPE html>
     const DB_NAME = 'aac-board';
     const DB_VERSION = 1;
     const STORE_NAME = 'tiles';
+    const STORAGE_PAGES_KEY = 'talk_tiles_pages_v2';
 
     let dbInstance = null;
     let cachedTiles = new Map(); // id -> tile record
     let activeObjectURLs = new Map();
 
-    // Multi-page state
-    let pages = [
+    const DEFAULT_PAGES = [
       {
         id: 1,
         title: "Colors",
@@ -1639,6 +1820,7 @@ HTML_CONTENT = """<!DOCTYPE html>
       }
     ];
 
+    let pages = JSON.parse(JSON.stringify(DEFAULT_PAGES));
     let currentPageIndex = 0;
     let isEditMode = false;
     let isPinned = false;
@@ -1650,6 +1832,8 @@ HTML_CONTENT = """<!DOCTYPE html>
     let pendingPhotoBlob = null;
     let pendingPhotoWrite = null;
     let pendingAudioBlob = null;
+    let pendingSymbol = null;
+    let pendingLabelPosition = 'bottom';
     let currentPlayingAudio = null;
     let currentPlayingSlot = null;
     let cameraStream = null;
@@ -1667,10 +1851,50 @@ HTML_CONTENT = """<!DOCTYPE html>
     let recordMimeType = '';
     let previewAudioPlayer = null;
 
+    // Hotspot Drag State
+    let activeDragHotspot = null;
+    let dragMode = null; // 'move' or handle name e.g. 'nw'
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let initialHotspotPos = null;
+
     const LABEL_SIZE_MIN = 0.6;
     const LABEL_SIZE_MAX = 3;
 
-    /* --- Database Helpers --- */
+    /* --- Speech Synthesis Wrapper & Telemetry --- */
+    window.__spokenHistory = [];
+    window.__lastSpoken = "";
+
+    function speakText(text) {
+      if (!text) return;
+      const clean = String(text).trim();
+      window.__lastSpoken = clean;
+      window.__spokenHistory.push(clean);
+
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(clean);
+        utter.rate = 0.95;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    /* --- Storage Helpers --- */
+    function savePagesToStorage() {
+      try {
+        localStorage.setItem(STORAGE_PAGES_KEY, JSON.stringify(pages));
+      } catch (e) { console.error('Save pages error', e); }
+    }
+
+    function loadPagesFromStorage() {
+      try {
+        const stored = localStorage.getItem(STORAGE_PAGES_KEY);
+        if (stored) {
+          pages = JSON.parse(stored);
+        }
+      } catch (e) { console.error('Load pages error', e); }
+    }
+
     function openDatabase() {
       return new Promise((resolve, reject) => {
         const req = indexedDB.open(DB_NAME, DB_VERSION);
@@ -1714,6 +1938,7 @@ HTML_CONTENT = """<!DOCTYPE html>
           const p = pages[currentPageIndex];
           if (p && p.tiles) {
             p.tiles[tile.id] = tile;
+            savePagesToStorage();
           }
           resolve(tile);
         };
@@ -1730,7 +1955,10 @@ HTML_CONTENT = """<!DOCTYPE html>
         req.onsuccess = () => {
           cachedTiles.delete(id);
           const p = pages[currentPageIndex];
-          if (p && p.tiles) delete p.tiles[id];
+          if (p && p.tiles) {
+            delete p.tiles[id];
+            savePagesToStorage();
+          }
           resolve();
         };
         req.onerror = () => reject(req.error);
@@ -1760,6 +1988,60 @@ HTML_CONTENT = """<!DOCTYPE html>
       setTimeout(() => {
         hud.classList.remove('open');
       }, 1100);
+    }
+
+    /* --- Stub Modals (Settings, Downloads, Help, Feedback) --- */
+    function openStubModal(title) {
+      const modal = document.getElementById('modal-stub');
+      const titleEl = document.getElementById('stub-modal-title');
+      const bodyEl = document.getElementById('stub-modal-body');
+      titleEl.textContent = title;
+
+      if (title === 'Settings') {
+        bodyEl.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <label style="display: flex; justify-content: space-between; align-items: center; font-weight: 600;">
+              <span>Speech Rate (0.95x):</span>
+              <input type="range" min="0.5" max="1.5" step="0.05" value="0.95">
+            </label>
+            <label style="display: flex; justify-content: space-between; align-items: center; font-weight: 600;">
+              <span>High Contrast Borders:</span>
+              <input type="checkbox" checked>
+            </label>
+            <p style="font-size: 0.85rem; color: #64748b;">talk tiles AAC Communication Book v2.3 &copy; 2026</p>
+          </div>
+        `;
+      } else if (title === 'Downloads') {
+        bodyEl.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div class="popover-menu-item" style="border: 1px solid #e2e8f0; border-radius: 6px;">📥 Download Core Vocabulary Book</div>
+            <div class="popover-menu-item" style="border: 1px solid #e2e8f0; border-radius: 6px;">📥 Download Classroom Symbols</div>
+            <div class="popover-menu-item" style="border: 1px solid #e2e8f0; border-radius: 6px;">📥 Download High-Quality TTS Voices</div>
+          </div>
+        `;
+      } else if (title === 'Help') {
+        bodyEl.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; color: #334155;">
+            <p><b>Navigation:</b> Tap Player to speak. Tap Page Editor to customize buttons and background.</p>
+            <p><b>Express Bar:</b> Tap tiles to build sentences, then tap the bar to speak the entire phrase.</p>
+            <p><b>Scene Pages:</b> Tap interactive hotspots to hear audio cues.</p>
+          </div>
+        `;
+      } else if (title === 'Feedback') {
+        bodyEl.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <textarea class="text-input" style="height: 90px; padding: 8px;" placeholder="Type your feedback or feature request here..."></textarea>
+            <button class="btn btn-primary" onclick="closeStubModal(); showToast('Feedback sent! Thank you.');">Send Feedback</button>
+          </div>
+        `;
+      } else {
+        bodyEl.innerHTML = `<p style="font-weight: 600; color: #475569;">${title} is ready and available in talk tiles.</p>`;
+      }
+      modal.classList.add('open');
+    }
+
+    function closeStubModal() {
+      document.getElementById('modal-stub').classList.remove('open');
     }
 
     /* --- Navigation & View Switching --- */
@@ -1849,6 +2131,7 @@ HTML_CONTENT = """<!DOCTYPE html>
       if (!p) return;
       p.gridSize = count;
       p.type = "grid";
+      savePagesToStorage();
 
       document.querySelectorAll('#popover-page-options .segment-btn').forEach(btn => {
         btn.classList.toggle('active', parseInt(btn.dataset.grid, 10) === count);
@@ -1878,8 +2161,53 @@ HTML_CONTENT = """<!DOCTYPE html>
     }
 
     function openPagesDrawer() {
-      showToast(`Book has ${pages.length} pages.`);
-      nextPage();
+      closeAllPopovers();
+      const listEl = document.getElementById('pages-nav-list');
+      listEl.innerHTML = '';
+
+      pages.forEach((p, idx) => {
+        const item = document.createElement('div');
+        item.className = 'page-nav-item' + (idx === currentPageIndex ? ' active' : '');
+        item.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-weight: 800; color: #008369; min-width: 24px;">${idx + 1}.</span>
+            <div>
+              <div style="font-weight: 700; font-size: 1.05rem;">${p.title || `Page ${idx + 1}`}</div>
+              <div style="font-size: 0.82rem; color: #64748b;">${p.type === 'scene' ? 'Visual Scene Page' : `${p.gridSize || 4}-button grid`}${p.express ? ' • Express' : ''}</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-primary" style="height: 32px; padding: 0 10px;" onclick="jumpToPage(${idx})">Open</button>
+            ${pages.length > 1 ? `<button class="btn btn-danger" style="height: 32px; padding: 0 8px;" onclick="event.stopPropagation(); deletePage(${idx})">✕</button>` : ''}
+          </div>
+        `;
+        item.onclick = () => jumpToPage(idx);
+        listEl.appendChild(item);
+      });
+
+      document.getElementById('modal-pages-navigator').classList.add('open');
+    }
+
+    function closePagesNavigator() {
+      document.getElementById('modal-pages-navigator').classList.remove('open');
+    }
+
+    function jumpToPage(idx) {
+      if (idx >= 0 && idx < pages.length) {
+        currentPageIndex = idx;
+        closePagesNavigator();
+        renderCurrentPage();
+      }
+    }
+
+    function deletePage(idx) {
+      if (pages.length <= 1) return;
+      pages.splice(idx, 1);
+      if (currentPageIndex >= pages.length) currentPageIndex = pages.length - 1;
+      savePagesToStorage();
+      openPagesDrawer();
+      renderCurrentPage();
+      showToast('Page deleted');
     }
 
     function addNewButtonPage() {
@@ -1895,6 +2223,7 @@ HTML_CONTENT = """<!DOCTYPE html>
         tiles: {}
       });
       currentPageIndex = pages.length - 1;
+      savePagesToStorage();
       closeAllPopovers();
       renderCurrentPage();
       showCompleteHUD();
@@ -1914,6 +2243,7 @@ HTML_CONTENT = """<!DOCTYPE html>
         hotspots: []
       });
       currentPageIndex = pages.length - 1;
+      savePagesToStorage();
       closeAllPopovers();
       renderCurrentPage();
       showCompleteHUD();
@@ -1927,6 +2257,7 @@ HTML_CONTENT = """<!DOCTYPE html>
       dup.title = `${current.title} (Copy)`;
       pages.push(dup);
       currentPageIndex = pages.length - 1;
+      savePagesToStorage();
       closeAllPopovers();
       renderCurrentPage();
       showCompleteHUD();
@@ -1941,6 +2272,7 @@ HTML_CONTENT = """<!DOCTYPE html>
         const p = pages[currentPageIndex];
         document.getElementById('toggle-page-enabled').checked = p.enabled !== false;
         document.getElementById('toggle-express-page').checked = !!p.express;
+        document.getElementById('toggle-page-scanning').checked = !!p.scanning;
         document.getElementById('options-bg-preview').style.background = p.bg || '#ffffff';
         document.querySelectorAll('#popover-page-options .segment-btn').forEach(btn => {
           btn.classList.toggle('active', parseInt(btn.dataset.grid, 10) === (p.gridSize || 4));
@@ -1954,12 +2286,25 @@ HTML_CONTENT = """<!DOCTYPE html>
       document.getElementById('popover-color-picker').classList.add('open');
     }
 
+    function switchColorTab(tab) {
+      document.getElementById('tab-color-swatches').classList.toggle('active', tab === 'swatches');
+      document.getElementById('tab-color-picker').classList.toggle('active', tab === 'picker');
+      document.getElementById('color-swatches-view').style.display = tab === 'swatches' ? 'grid' : 'none';
+      document.getElementById('color-picker-custom-view').style.display = tab === 'picker' ? 'flex' : 'none';
+    }
+
     function applyPageBg(color) {
       const p = pages[currentPageIndex];
       if (p) p.bg = color;
+      savePagesToStorage();
       closeAllPopovers();
       renderCurrentPage();
       showCompleteHUD();
+    }
+
+    function applyPageBgFromHex() {
+      const hex = document.getElementById('picker-hex-input').value.trim();
+      if (hex) applyPageBg(hex);
     }
 
     function toggleNewPageMenu() {
@@ -1976,6 +2321,7 @@ HTML_CONTENT = """<!DOCTYPE html>
     function toggleExpressPage(enable) {
       const p = pages[currentPageIndex];
       if (p) p.express = enable;
+      savePagesToStorage();
       renderCurrentPage();
       showCompleteHUD();
     }
@@ -1983,6 +2329,14 @@ HTML_CONTENT = """<!DOCTYPE html>
     function togglePageEnabled(enable) {
       const p = pages[currentPageIndex];
       if (p) p.enabled = enable;
+      savePagesToStorage();
+      showCompleteHUD();
+    }
+
+    function togglePageScanning(enable) {
+      const p = pages[currentPageIndex];
+      if (p) p.scanning = enable;
+      savePagesToStorage();
       showCompleteHUD();
     }
 
@@ -2068,9 +2422,8 @@ HTML_CONTENT = """<!DOCTYPE html>
         }
       }
 
-      if (data && data.bgColor) {
-        tile.style.backgroundColor = data.bgColor;
-      }
+      if (data && data.bgColor) tile.style.backgroundColor = data.bgColor;
+      if (data && data.borderColor) tile.style.borderColor = data.borderColor;
 
       const imgWrap = document.createElement('div');
       imgWrap.className = 'tile-image-wrap';
@@ -2083,27 +2436,50 @@ HTML_CONTENT = """<!DOCTYPE html>
         if (typeof data.photo !== 'string') activeObjectURLs.set(slotId, photoUrl);
         img.src = photoUrl;
         imgWrap.appendChild(img);
-      } else if (data && data.symbol === 'smile') {
-        imgWrap.innerHTML = `<svg viewBox="0 0 24 24" style="width: 80px; height: 80px; fill: #2ecc71;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>`;
-      } else if (data && data.symbol === 'frown') {
-        imgWrap.innerHTML = `<svg viewBox="0 0 24 24" style="width: 80px; height: 80px; fill: #e74c3c;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 3.5c-2.33 0-4.31 1.46-5.11 3.5h10.22c-.8-2.04-2.78-3.5-5.11-3.5z"/></svg>`;
+      } else if (data && data.symbol) {
+        imgWrap.innerHTML = getSymbolSvg(data.symbol);
       }
-      tile.appendChild(imgWrap);
-
+      
+      const labelDiv = document.createElement('div');
       if (data && data.label) {
-        const labelDiv = document.createElement('div');
         labelDiv.className = 'tile-label';
         labelDiv.textContent = data.label;
         if (data.labelColor) labelDiv.style.color = data.labelColor;
         labelDiv.style.fontSize = labelFontSizeCss(data.labelSize);
         labelDiv.dataset.requestedSize = labelDiv.style.fontSize;
-        tile.appendChild(labelDiv);
+      }
+
+      if (data && data.labelPosition === 'top') {
+        if (data.label) tile.appendChild(labelDiv);
+        tile.appendChild(imgWrap);
+      } else {
+        tile.appendChild(imgWrap);
+        if (data && data.label) tile.appendChild(labelDiv);
       }
 
       tile.addEventListener('pointerup', () => handleTileTap(slotId, data));
       return tile;
     }
 
+    function getSymbolSvg(symbol) {
+      switch (symbol) {
+        case 'smile': return `<svg viewBox="0 0 24 24" style="width: 80px; height: 80px; fill: #2ecc71;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>`;
+        case 'frown': return `<svg viewBox="0 0 24 24" style="width: 80px; height: 80px; fill: #e74c3c;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 3.5c-2.33 0-4.31 1.46-5.11 3.5h10.22c-.8-2.04-2.78-3.5-5.11-3.5z"/></svg>`;
+        case 'eat': return `<span style="font-size: 72px;">🍎</span>`;
+        case 'water': return `<span style="font-size: 72px;">💧</span>`;
+        case 'yes': return `<span style="font-size: 72px;">✅</span>`;
+        case 'no': return `<span style="font-size: 72px;">❌</span>`;
+        case 'help': return `<span style="font-size: 72px;">🙋</span>`;
+        case 'home': return `<span style="font-size: 72px;">🏠</span>`;
+        case 'bus': return `<span style="font-size: 72px;">🚌</span>`;
+        case 'book': return `<span style="font-size: 72px;">📖</span>`;
+        case 'heart': return `<span style="font-size: 72px;">❤️</span>`;
+        case 'star': return `<span style="font-size: 72px;">⭐</span>`;
+        default: return `<span style="font-size: 72px;">⭐</span>`;
+      }
+    }
+
+    /* --- Scene Page Rendering & Hotspot Resizing --- */
     function renderScenePage(page) {
       const imgEl = document.getElementById('scene-image');
       imgEl.src = page.sceneBg || '';
@@ -2115,6 +2491,7 @@ HTML_CONTENT = """<!DOCTYPE html>
       (page.hotspots || []).forEach(spot => {
         const spotEl = document.createElement('div');
         spotEl.className = 'scene-hotspot';
+        spotEl.id = `hotspot-${spot.id}`;
         spotEl.style.left = `${spot.x}%`;
         spotEl.style.top = `${spot.y}%`;
         spotEl.style.width = `${spot.w}%`;
@@ -2122,21 +2499,109 @@ HTML_CONTENT = """<!DOCTYPE html>
 
         if (isEditMode) {
           spotEl.innerHTML = `
-            <div class="hotspot-handle handle-nw"></div>
-            <div class="hotspot-handle handle-ne"></div>
-            <div class="hotspot-handle handle-sw"></div>
-            <div class="hotspot-handle handle-se"></div>
+            <div class="hotspot-handle handle-nw" data-handle="nw"></div>
+            <div class="hotspot-handle handle-n" data-handle="n"></div>
+            <div class="hotspot-handle handle-ne" data-handle="ne"></div>
+            <div class="hotspot-handle handle-e" data-handle="e"></div>
+            <div class="hotspot-handle handle-se" data-handle="se"></div>
+            <div class="hotspot-handle handle-s" data-handle="s"></div>
+            <div class="hotspot-handle handle-sw" data-handle="sw"></div>
+            <div class="hotspot-handle handle-w" data-handle="w"></div>
           `;
-          spotEl.onclick = () => showToast(`Hotspot: ${spot.label}`);
+          spotEl.addEventListener('pointerdown', (e) => initHotspotDrag(e, spot));
         } else {
           spotEl.onclick = () => {
-            spotEl.classList.add('active');
+            spotEl.classList.add('tap-active');
             speakText(spot.tts || spot.label);
-            setTimeout(() => spotEl.classList.remove('active'), 600);
+            setTimeout(() => spotEl.classList.remove('tap-active'), 500);
           };
         }
         container.appendChild(spotEl);
       });
+    }
+
+    function triggerSceneBgInput() {
+      const input = document.getElementById('scene-bg-file-input');
+      input.value = '';
+      input.click();
+    }
+
+    function handleSceneBgSelected(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const p = pages[currentPageIndex];
+        if (p) {
+          p.sceneBg = evt.target.result;
+          savePagesToStorage();
+          renderCurrentPage();
+          showCompleteHUD();
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function addSceneHotspot() {
+      const p = pages[currentPageIndex];
+      if (!p) return;
+      p.hotspots = p.hotspots || [];
+      const newId = p.hotspots.length + 1;
+      p.hotspots.push({
+        id: newId,
+        x: 35,
+        y: 35,
+        w: 25,
+        h: 25,
+        label: `Hotspot ${newId}`,
+        tts: `Hotspot ${newId}`
+      });
+      savePagesToStorage();
+      renderCurrentPage();
+      showCompleteHUD();
+    }
+
+    function initHotspotDrag(e, spot) {
+      e.stopPropagation();
+      activeDragHotspot = spot;
+      const handle = e.target.dataset.handle;
+      dragMode = handle || 'move';
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      initialHotspotPos = { x: spot.x, y: spot.y, w: spot.w, h: spot.h };
+
+      window.addEventListener('pointermove', onHotspotDragMove);
+      window.addEventListener('pointerup', onHotspotDragEnd);
+    }
+
+    function onHotspotDragMove(e) {
+      if (!activeDragHotspot || !initialHotspotPos) return;
+      const container = document.getElementById('board-content');
+      const rect = container.getBoundingClientRect();
+      const dx = ((e.clientX - dragStartX) / rect.width) * 100;
+      const dy = ((e.clientY - dragStartY) / rect.height) * 100;
+
+      if (dragMode === 'move') {
+        activeDragHotspot.x = Math.max(0, Math.min(100 - activeDragHotspot.w, initialHotspotPos.x + dx));
+        activeDragHotspot.y = Math.max(0, Math.min(100 - activeDragHotspot.h, initialHotspotPos.y + dy));
+      } else if (dragMode === 'se') {
+        activeDragHotspot.w = Math.max(5, initialHotspotPos.w + dx);
+        activeDragHotspot.h = Math.max(5, initialHotspotPos.h + dy);
+      } else if (dragMode === 'nw') {
+        activeDragHotspot.x = initialHotspotPos.x + dx;
+        activeDragHotspot.y = initialHotspotPos.y + dy;
+        activeDragHotspot.w = Math.max(5, initialHotspotPos.w - dx);
+        activeDragHotspot.h = Math.max(5, initialHotspotPos.h - dy);
+      }
+      renderCurrentPage();
+    }
+
+    function onHotspotDragEnd() {
+      activeDragHotspot = null;
+      dragMode = null;
+      savePagesToStorage();
+      window.removeEventListener('pointermove', onHotspotDragMove);
+      window.removeEventListener('pointerup', onHotspotDragEnd);
     }
 
     /* --- Tile Actions & Audio Playback --- */
@@ -2164,14 +2629,6 @@ HTML_CONTENT = """<!DOCTYPE html>
       } else {
         openEditor(slotId);
       }
-    }
-
-    function speakText(text) {
-      if (!window.speechSynthesis || !text) return;
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.rate = 0.95;
-      window.speechSynthesis.speak(utter);
     }
 
     function playTileAudio(slotId, audioBlob) {
@@ -2220,7 +2677,12 @@ HTML_CONTENT = """<!DOCTYPE html>
     }
 
     function handleUndoAction() {
-      showToast('Back action');
+      if (expressCollectedChips.length > 0) {
+        clearExpressChips();
+        showToast('Undid last word');
+      } else {
+        showToast('Back action');
+      }
     }
 
     /* --- Express Sentence Bar --- */
@@ -2235,7 +2697,11 @@ HTML_CONTENT = """<!DOCTYPE html>
       expressCollectedChips.forEach((item, idx) => {
         const chip = document.createElement('div');
         chip.className = 'express-chip';
-        chip.textContent = item.label;
+        if (item.symbol) {
+          chip.innerHTML = `${item.symbol === 'smile' ? '😊' : item.symbol === 'frown' ? '☹️' : '⭐'} <span>${item.label}</span>`;
+        } else {
+          chip.textContent = item.label;
+        }
         container.appendChild(chip);
       });
       container.scrollLeft = container.scrollWidth;
@@ -2255,9 +2721,15 @@ HTML_CONTENT = """<!DOCTYPE html>
     }
 
     /* --- Auditory Cue Modal Logic --- */
+    let currentAuditoryMode = 'tts';
+
     function openAuditoryCueModal() {
       closeAllPopovers();
-      document.getElementById('modal-auditory-cue').classList.add('open');
+      const modal = document.getElementById('modal-auditory-cue');
+      const input = document.getElementById('cue-text-input');
+      const p = pages[currentPageIndex];
+      input.value = (p && p.auditoryCue) || "";
+      modal.classList.add('open');
     }
 
     function closeAuditoryCueModal() {
@@ -2265,6 +2737,7 @@ HTML_CONTENT = """<!DOCTYPE html>
     }
 
     function setAuditoryMode(mode) {
+      currentAuditoryMode = mode;
       document.getElementById('tab-cue-recorded').classList.toggle('active', mode === 'recorded');
       document.getElementById('tab-cue-tts').classList.toggle('active', mode === 'tts');
       document.getElementById('tab-cue-none').classList.toggle('active', mode === 'none');
@@ -2273,6 +2746,18 @@ HTML_CONTENT = """<!DOCTYPE html>
     function previewAuditoryCue() {
       const text = document.getElementById('cue-text-input').value.trim();
       speakText(text || "Preview Auditory Cue");
+    }
+
+    function saveAuditoryCueModal() {
+      const text = document.getElementById('cue-text-input').value.trim();
+      const p = pages[currentPageIndex];
+      if (p) {
+        p.auditoryCue = text;
+        p.auditoryMode = currentAuditoryMode;
+        savePagesToStorage();
+        showCompleteHUD();
+      }
+      closeAuditoryCueModal();
     }
 
     /* --- Tile Editor Modal Implementation --- */
@@ -2289,16 +2774,41 @@ HTML_CONTENT = """<!DOCTYPE html>
 
       pendingPhotoBlob = (existingData && existingData.photo) || null;
       pendingAudioBlob = (existingData && existingData.audio) || null;
+      pendingSymbol = (existingData && existingData.symbol) || null;
+      pendingLabelPosition = (existingData && existingData.labelPosition) || 'bottom';
 
       document.getElementById('modal-slot-title').textContent = `Edit Button #${slotId}`;
       document.getElementById('modal-label-input').value = (existingData && existingData.label) || '';
+      document.getElementById('modal-tts-input').value = (existingData && existingData.tts) || '';
+      document.getElementById('modal-tile-bgcolor').value = (existingData && existingData.bgColor) || '#ffffff';
+      document.getElementById('modal-tile-bordercolor').value = (existingData && existingData.borderColor) || '#000000';
+      document.getElementById('modal-tile-textcolor').value = (existingData && existingData.labelColor) || '#111111';
       document.getElementById('modal-label-size').value = String(normalizeLabelSize(existingData && existingData.labelSize));
+      
+      setLabelPosition(pendingLabelPosition);
       onLabelSizeInput();
-
       updateModalPhotoPreview();
       updateModalAudioPreview();
 
       document.getElementById('editor-modal').classList.add('open');
+    }
+
+    function setLabelPosition(pos) {
+      pendingLabelPosition = pos;
+      document.getElementById('pos-btn-top').classList.toggle('active', pos === 'top');
+      document.getElementById('pos-btn-bottom').classList.toggle('active', pos === 'bottom');
+    }
+
+    function toggleSymbolPicker() {
+      const picker = document.getElementById('symbol-picker-grid');
+      picker.style.display = picker.style.display === 'none' ? 'grid' : 'none';
+    }
+
+    function selectSymbol(sym) {
+      pendingSymbol = sym;
+      pendingPhotoBlob = null;
+      document.getElementById('symbol-picker-grid').style.display = 'none';
+      updateModalPhotoPreview();
     }
 
     function closeEditor() {
@@ -2309,6 +2819,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 
       pendingPhotoBlob = null;
       pendingAudioBlob = null;
+      pendingSymbol = null;
       currentEditingSlot = null;
 
       document.getElementById('editor-modal').classList.remove('open');
@@ -2319,14 +2830,24 @@ HTML_CONTENT = """<!DOCTYPE html>
       if (pendingPhotoWrite) await pendingPhotoWrite;
 
       const labelText = document.getElementById('modal-label-input').value.trim();
+      const ttsText = document.getElementById('modal-tts-input').value.trim() || labelText;
       const labelSize = normalizeLabelSize(document.getElementById('modal-label-size').value);
+      const bgColor = document.getElementById('modal-tile-bgcolor').value;
+      const borderColor = document.getElementById('modal-tile-bordercolor').value;
+      const labelColor = document.getElementById('modal-tile-textcolor').value;
+
       const updatedTile = {
         id: currentEditingSlot,
         photo: pendingPhotoBlob,
+        symbol: pendingSymbol,
         audio: pendingAudioBlob,
         label: labelText,
-        tts: labelText,
+        tts: ttsText,
         labelSize: labelSize,
+        labelPosition: pendingLabelPosition,
+        bgColor: bgColor,
+        borderColor: borderColor,
+        labelColor: labelColor,
         updatedAt: Date.now()
       };
 
@@ -2399,17 +2920,26 @@ HTML_CONTENT = """<!DOCTYPE html>
     /* --- Photo & Camera Management --- */
     function updateModalPhotoPreview() {
       const imgEl = document.getElementById('modal-photo-img');
+      const symEl = document.getElementById('modal-symbol-preview');
       const placeholder = document.getElementById('modal-photo-placeholder');
       const removeBtn = document.getElementById('btn-remove-photo');
 
       if (pendingPhotoBlob) {
         imgEl.src = (typeof pendingPhotoBlob === 'string') ? pendingPhotoBlob : URL.createObjectURL(pendingPhotoBlob);
         imgEl.style.display = 'block';
+        symEl.style.display = 'none';
+        placeholder.style.display = 'none';
+        removeBtn.style.display = 'inline-flex';
+      } else if (pendingSymbol) {
+        imgEl.style.display = 'none';
+        symEl.innerHTML = getSymbolSvg(pendingSymbol);
+        symEl.style.display = 'block';
         placeholder.style.display = 'none';
         removeBtn.style.display = 'inline-flex';
       } else {
         imgEl.src = '';
         imgEl.style.display = 'none';
+        symEl.style.display = 'none';
         placeholder.style.display = 'flex';
         removeBtn.style.display = 'none';
       }
@@ -2511,6 +3041,7 @@ HTML_CONTENT = """<!DOCTYPE html>
       pendingPhotoWrite = new Promise((resolve) => {
         canvas.toBlob((blob) => {
           pendingPhotoBlob = blob;
+          pendingSymbol = null;
           closeCameraFullscreen();
           updateModalPhotoPreview();
           showToast('Photo staged — tap Save');
@@ -2530,11 +3061,13 @@ HTML_CONTENT = """<!DOCTYPE html>
       const file = event.target.files && event.target.files[0];
       if (!file) return;
       pendingPhotoBlob = file;
+      pendingSymbol = null;
       updateModalPhotoPreview();
     }
 
     function removePhoto() {
       pendingPhotoBlob = null;
+      pendingSymbol = null;
       updateModalPhotoPreview();
     }
 
@@ -2623,6 +3156,7 @@ HTML_CONTENT = """<!DOCTYPE html>
       localStorage.removeItem('aac_locked');
       isPinned = false;
       applyLockState();
+      loadPagesFromStorage();
 
       try {
         await loadAllTilesFromDB();
@@ -2645,4 +3179,4 @@ with open('/home/mike/aac-board/index.html', 'w') as f:
 with open('/home/mike/aac-board/app/assets/index.html', 'w') as f:
     f.write(HTML_CONTENT)
 
-print("Generated pixel-faithful index.html and app/assets/index.html successfully!")
+print("Generated index.html and app/assets/index.html with full BEHAVIOR-SPEC capabilities!")
