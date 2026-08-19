@@ -1095,6 +1095,169 @@
       transform: scale(0.96);
     }
 
+    /* Save Options Popover Menu */
+    .save-options-menu {
+      position: absolute;
+      top: 36px;
+      right: 0;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      border: 1px solid #cbd5e1;
+      z-index: 300;
+      min-width: 230px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: modal-pop 0.12s ease-out;
+    }
+
+    .save-menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #1e293b;
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.1s;
+      user-select: none;
+    }
+
+    .save-menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .save-menu-item:hover, .save-menu-item:active {
+      background: #f0fdf4;
+      color: #008369;
+    }
+
+    .save-menu-icon {
+      font-size: 1rem;
+      color: #008369;
+      font-weight: 700;
+    }
+
+    /* Schemes Dropdown */
+    .schemes-dropdown {
+      position: absolute;
+      top: 34px;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      z-index: 200;
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .scheme-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #1e293b;
+      transition: background 0.1s;
+    }
+
+    .scheme-option:hover {
+      background: #f1f5f9;
+    }
+
+    /* Sound It Out Syllable Chips */
+    .syllable-chip {
+      padding: 6px 12px;
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #1e293b;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .syllable-chip.active {
+      border-color: #008369 !important;
+      background: #dcfce7 !important;
+      color: #008369 !important;
+      transform: scale(1.08);
+      box-shadow: 0 4px 10px rgba(0, 131, 105, 0.25);
+    }
+
+    /* Sound It Out Full-Screen Player Overlay */
+    .sounditout-player-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 450;
+      padding: 20px;
+      animation: fade-in 0.15s ease-out;
+    }
+
+    .sounditout-player-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+      max-width: 90vw;
+      animation: modal-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sio-player-word {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .sio-player-syllables {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .sio-syllable-pill {
+      padding: 10px 20px;
+      background: #f1f5f9;
+      border: 3px solid #cbd5e1;
+      border-radius: 14px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #334155;
+      transition: all 0.18s ease;
+    }
+
+    .sio-syllable-pill.active {
+      background: #dcfce7 !important;
+      border-color: #008369 !important;
+      color: #008369 !important;
+      transform: scale(1.15);
+      box-shadow: 0 8px 20px rgba(0, 131, 105, 0.35);
+    }
+
     /* --- Keyboard Communication Page Styles --- */
     .keyboard-view {
       position: absolute;
@@ -2045,13 +2208,36 @@
             <span class="modal-title" style="font-size: 1.15rem; font-weight: 800;">Quick Edit</span>
             <span id="modal-slot-title" style="font-size: 0.8rem; font-weight: 600; color: #64748b;">Button 1 of 4</span>
           </div>
-          <button id="btn-save-tile-header" class="btn btn-primary" style="height: 32px; padding: 0 14px; font-weight: 700;" onclick="saveEditorTile()">Save</button>
+          <div style="position: relative; display: flex; align-items: center;">
+            <button id="btn-save-tile-header" class="btn btn-primary" style="height: 32px; padding: 0 10px; font-weight: 700; border-top-right-radius: 0; border-bottom-right-radius: 0;" onclick="saveEditorTile()">Save</button>
+            <button id="btn-save-menu-toggle" class="btn btn-primary" style="height: 32px; padding: 0 6px; border-left: 1px solid rgba(255,255,255,0.3); border-top-left-radius: 0; border-bottom-left-radius: 0;" onclick="toggleSaveMenu(event)">▾</button>
+
+            <!-- Save Options Popover Menu (R1) -->
+            <div id="save-options-menu" class="save-options-menu" style="display: none;">
+              <div class="save-menu-item" onclick="handleSaveOption('save')">
+                <span class="save-menu-label">Save</span>
+                <span class="save-menu-icon">✓</span>
+              </div>
+              <div class="save-menu-item" onclick="handleSaveOption('save_prev')">
+                <span class="save-menu-label">Save &amp; Previous</span>
+                <span class="save-menu-icon">←</span>
+              </div>
+              <div class="save-menu-item" onclick="handleSaveOption('save_next')">
+                <span class="save-menu-label">Save &amp; Next</span>
+                <span class="save-menu-icon">→</span>
+              </div>
+              <div class="save-menu-item" onclick="handleSaveOption('save_classic')">
+                <span class="save-menu-label">Save &amp; Open Classic Editor</span>
+                <span class="save-menu-icon">☰</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="modal-body" style="padding: 14px 16px; gap: 12px;">
           <!-- 2-Column Responsive Layout -->
           <div class="quick-edit-layout">
-            <!-- Left Column: PREVIEW & BUTTON TEXT -->
+            <!-- Left Column: PREVIEW & BUTTON TEXT & COLOR SCHEME -->
             <div style="display: flex; flex-direction: column; gap: 10px;">
               <div class="editor-section" style="padding: 10px;">
                 <div class="section-title" style="font-size: 0.8rem; color: #64748b;">PREVIEW</div>
@@ -2090,6 +2276,33 @@
                   <button type="button" class="quick-word-chip" onclick="setQuickWord('what')">what</button>
                 </div>
               </div>
+
+              <!-- Quick Color Scheme · Classic (R3) -->
+              <div class="editor-section" style="padding: 10px;">
+                <div style="font-size: 0.75rem; font-weight: 800; color: #64748b; margin-bottom: 6px;">QUICK COLOR SCHEME · CLASSIC</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <div id="quick-scheme-swatch" style="width: 20px; height: 20px; border-radius: 4px; border: 1px solid #cbd5e1; background: #f97316;"></div>
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #334155;">SUGGESTED: <b id="quick-scheme-name">Orange</b></span>
+                  </div>
+                  <button type="button" class="btn btn-primary" id="btn-apply-scheme" onclick="applySuggestedColorScheme()" style="padding: 2px 10px; height: 28px; font-size: 0.78rem; font-weight: 700; background: #008369;">Apply</button>
+                </div>
+                
+                <div style="position: relative; margin-top: 6px;">
+                  <button type="button" class="btn" onclick="toggleColorSchemesPicker(event)" style="width: 100%; justify-content: space-between; font-size: 0.8rem; padding: 4px 8px; height: 30px; background: #f8fafc;">
+                    <span>🔤 Choose another scheme...</span>
+                    <span>▾</span>
+                  </button>
+                  <div id="color-schemes-picker" class="schemes-dropdown" style="display: none;"></div>
+                </div>
+
+                <div style="margin-top: 6px;">
+                  <button type="button" class="btn" onclick="toggleFontsAndColors()" style="width: 100%; justify-content: space-between; font-size: 0.8rem; padding: 4px 8px; height: 30px; background: #f8fafc; border: none;">
+                    <span>🎨 Fonts and Colors</span>
+                    <span>›</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
             <!-- Right Column: IMAGE & ACTION & Tools -->
@@ -2106,27 +2319,67 @@
                 </div>
               </div>
 
-              <!-- ACTION: Speak Text & Suggestions -->
+              <!-- ACTION: Speak Text vs Sound It Out (R2) -->
               <div class="editor-section" style="padding: 10px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                   <span class="section-title" style="font-size: 0.8rem; color: #64748b;">ACTION</span>
-                  <div style="font-weight: 700; color: #008369; background: #e6f4ea; padding: 3px 8px; border-radius: 6px; font-size: 0.82rem; border: 1px solid #b8e8db;">
-                    💬 Speak Text ▾
-                  </div>
-                </div>
-                <div style="display: flex; gap: 6px; align-items: center;">
-                  <input type="text" id="modal-tts-input" class="text-input" placeholder="TTS speech (defaults to label)..." style="flex: 1;">
-                  <button type="button" class="btn" onclick="previewAuditoryTTS()" title="Test speech" style="flex-shrink: 0; padding: 0 8px; height: 38px;">▶ 🗣️</button>
+                  <select id="modal-action-type" onchange="onActionTypeChange()" style="font-weight: 700; color: #008369; background: #e6f4ea; padding: 3px 8px; border-radius: 6px; font-size: 0.82rem; border: 1px solid #b8e8db; cursor: pointer;">
+                    <option value="speak">💬 Speak Text</option>
+                    <option value="sounditout">🔤 Sound It Out</option>
+                  </select>
                 </div>
 
-                <!-- Speech suggestions -->
-                <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 6px;">Suggestions</div>
-                <div id="speech-suggestions-bar" class="speech-suggestions-bar"></div>
+                <!-- Mode 1: Speak Text -->
+                <div id="action-speak-container">
+                  <div style="display: flex; gap: 6px; align-items: center;">
+                    <input type="text" id="modal-tts-input" class="text-input" placeholder="TTS speech (defaults to label)..." style="flex: 1;">
+                    <button type="button" class="btn" onclick="previewAuditoryTTS()" title="Test speech" style="flex-shrink: 0; padding: 0 8px; height: 38px;">▶ 🗣️</button>
+                  </div>
+                  <!-- Speech suggestions -->
+                  <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; margin-top: 6px;">Suggestions</div>
+                  <div id="speech-suggestions-bar" class="speech-suggestions-bar"></div>
+                </div>
+
+                <!-- Mode 2: Sound It Out (R2) -->
+                <div id="action-sounditout-container" style="display: none; flex-direction: column; gap: 8px;">
+                  <p style="font-size: 0.74rem; color: #64748b; line-height: 1.35; margin: 0;">Sound It Out: Highlights each word segment as it is spoken, supporting decoding practice and early literacy skills.</p>
+                  
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <span style="font-size: 0.8rem; font-weight: 700; color: #475569; width: 45px;">Word:</span>
+                      <input type="text" id="sounditout-word-input" class="text-input" placeholder="e.g. butterfly..." oninput="onSoundItOutWordInput()" style="flex: 1; height: 32px; font-weight: 700;">
+                    </div>
+
+                    <!-- Syllables row -->
+                    <div id="sounditout-syllables-bar" style="display: flex; gap: 8px; align-items: center; margin-top: 4px; flex-wrap: wrap; min-height: 38px;"></div>
+                  </div>
+
+                  <!-- Action buttons -->
+                  <div style="display: flex; gap: 8px; margin-top: 4px;">
+                    <button type="button" class="btn btn-primary" id="btn-preview-sounditout" onclick="previewSoundItOutAnimation()" style="flex: 1; background: #008369; font-weight: 700; font-size: 0.82rem; height: 34px;">
+                      <span id="preview-anim-text">▶ Preview Animation</span>
+                    </button>
+                    <button type="button" class="btn" id="btn-record-sounditout" onclick="recordWithAnimation()" style="flex: 1; font-size: 0.82rem; height: 34px;">
+                      ⏺ Record with Animation
+                    </button>
+                  </div>
+
+                  <!-- Progress Tracker -->
+                  <div style="margin-top: 6px; border-top: 1px solid #e2e8f0; padding-top: 6px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b;">Progress</span>
+                    <div class="segmented-control" id="sounditout-progress-tracker" style="width: 100%; margin-top: 4px;">
+                      <button type="button" class="segment-btn active" data-progress="none" onclick="setSoundItOutProgress('none')">—</button>
+                      <button type="button" class="segment-btn" data-progress="learning" onclick="setSoundItOutProgress('learning')">Learning</button>
+                      <button type="button" class="segment-btn" data-progress="learned" onclick="setSoundItOutProgress('learned')">Learned</button>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #64748b; margin-top: 2px; display: block;">Track your progress — doesn't change how the button works</span>
+                  </div>
+                </div>
               </div>
 
               <!-- More Options Accordion / Controls -->
-              <details class="editor-section" style="padding: 8px 10px; cursor: pointer;">
-                <summary style="font-size: 0.85rem; font-weight: 700; color: #334155; user-select: none;">⚙️ Tile Styling & Media Tools</summary>
+              <details id="editor-details-styling" class="editor-section" style="padding: 8px 10px; cursor: pointer;">
+                <summary style="font-size: 0.85rem; font-weight: 700; color: #334155; user-select: none;">⚙️ Tile Styling &amp; Media Tools</summary>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; cursor: default;">
                   <!-- Color Styling -->
                   <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between;">
@@ -2477,6 +2730,16 @@
         <div class="modal-footer">
           <button class="btn" onclick="closeImportModal()">Close</button>
         </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         SOUND IT OUT PLAYER OVERLAY (R2)
+         ======================================================================== -->
+    <div id="sounditout-player-overlay" class="sounditout-player-overlay" onclick="dismissSoundItOutPlayer()">
+      <div class="sounditout-player-card" onclick="event.stopPropagation()">
+        <div id="sio-player-word" class="sio-player-word">butterfly</div>
+        <div id="sio-player-syllables" class="sio-player-syllables"></div>
       </div>
     </div>
 
@@ -4109,7 +4372,9 @@
         addExpressChip(data);
       }
 
-      if (data && data.audio) {
+      if (data && data.actionType === 'sounditout') {
+        playSoundItOutPlayer(data.soundItOutWord || data.label, slotId);
+      } else if (data && data.audio) {
         playTileAudio(slotId, data.audio);
       } else if (data && (data.tts || data.label)) {
         speakText(data.tts || data.label);
@@ -4275,6 +4540,23 @@
       document.getElementById('modal-label-size').value = String(normalizeLabelSize(existingData && existingData.labelSize));
       
       setLabelPosition(pendingLabelPosition);
+
+      // Initialize Action Type & Sound It Out (R2)
+      currentActionType = (existingData && existingData.actionType) || 'speak';
+      const actionSelect = document.getElementById('modal-action-type');
+      if (actionSelect) actionSelect.value = currentActionType;
+
+      const sioInput = document.getElementById('sounditout-word-input');
+      if (sioInput) {
+        sioInput.value = (existingData && existingData.soundItOutWord) || labelVal || '';
+        sioInput.dataset.autofilled = (existingData && existingData.soundItOutWord && existingData.soundItOutWord !== existingData.label) ? 'false' : 'true';
+      }
+      setSoundItOutProgress((existingData && existingData.soundItOutProgress) || 'none');
+      onActionTypeChange();
+
+      // Initialize Suggested Color Scheme (R3)
+      updateSuggestedColorSchemeUI(labelVal || 'Orange');
+
       onQuickEditLabelInput();
       updateModalPhotoPreview();
       updateModalAudioPreview();
@@ -4914,6 +5196,16 @@
       if (clearBtn) clearBtn.style.display = val.length > 0 ? 'flex' : 'none';
 
       renderSpeechSuggestions(val);
+      updateSuggestedColorSchemeUI(val || 'Orange');
+
+      const sioInp = document.getElementById('sounditout-word-input');
+      if (sioInp && (!sioInp.value.trim() || sioInp.dataset.autofilled === 'true')) {
+        sioInp.value = val;
+        sioInp.dataset.autofilled = 'true';
+        if (currentActionType === 'sounditout') {
+          renderSoundItOutSyllables();
+        }
+      }
 
       if (quickImageDebounceTimer) clearTimeout(quickImageDebounceTimer);
       quickImageDebounceTimer = setTimeout(() => {
@@ -4939,6 +5231,303 @@
                    document.getElementById('modal-label-input').value.trim() ||
                    'Quick Edit';
       speakText(text);
+    }
+
+    /* --- Quick Color Scheme · Classic (R3) --- */
+    const AAC_COLOR_SCHEMES = [
+      { name: 'Orange', bg: '#ffedd5', border: '#ea580c', text: '#7c2d12', swatch: '#f97316' },
+      { name: 'Yellow', bg: '#fef9c3', border: '#ca8a04', text: '#713f12', swatch: '#eab308' },
+      { name: 'Green', bg: '#dcfce7', border: '#16a34a', text: '#14532d', swatch: '#22c55e' },
+      { name: 'Blue', bg: '#dbeafe', border: '#2563eb', text: '#1e3a8a', swatch: '#3b82f6' },
+      { name: 'Purple', bg: '#f3e8ff', border: '#9333ea', text: '#581c87', swatch: '#a855f7' },
+      { name: 'Pink', bg: '#fce7f3', border: '#db2777', text: '#831843', swatch: '#ec4899' },
+      { name: 'Teal', bg: '#ccfbf1', border: '#0d9488', text: '#134e4a', swatch: '#14b8a6' },
+      { name: 'Red', bg: '#fee2e2', border: '#dc2626', text: '#7f1d1d', swatch: '#ef4444' },
+      { name: 'Slate', bg: '#f1f5f9', border: '#475569', text: '#0f172a', swatch: '#64748b' },
+      { name: 'Classic White', bg: '#ffffff', border: '#000000', text: '#111111', swatch: '#ffffff' }
+    ];
+
+    let currentSuggestedScheme = AAC_COLOR_SCHEMES[0];
+
+    function getSuggestedScheme(word) {
+      if (!word || !word.trim()) return AAC_COLOR_SCHEMES[0];
+      const str = word.trim().toLowerCase();
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+      }
+      return AAC_COLOR_SCHEMES[hash % AAC_COLOR_SCHEMES.length];
+    }
+
+    function updateSuggestedColorSchemeUI(word) {
+      currentSuggestedScheme = getSuggestedScheme(word);
+      const nameEl = document.getElementById('quick-scheme-name');
+      const swatchEl = document.getElementById('quick-scheme-swatch');
+      if (nameEl) nameEl.textContent = currentSuggestedScheme.name;
+      if (swatchEl) {
+        swatchEl.style.background = currentSuggestedScheme.swatch;
+        swatchEl.style.borderColor = currentSuggestedScheme.border;
+      }
+    }
+
+    function applySuggestedColorScheme(scheme) {
+      const s = scheme || currentSuggestedScheme;
+      if (!s) return;
+      document.getElementById('modal-tile-bgcolor').value = s.bg;
+      document.getElementById('modal-tile-bordercolor').value = s.border;
+      document.getElementById('modal-tile-textcolor').value = s.text;
+      
+      const previewBox = document.getElementById('photo-preview-container');
+      const previewText = document.getElementById('label-size-preview-text');
+      if (previewBox) {
+        previewBox.style.backgroundColor = s.bg;
+        previewBox.style.borderColor = s.border;
+      }
+      if (previewText) {
+        previewText.style.color = s.text;
+      }
+      showToast(`Applied ${s.name} scheme`);
+    }
+
+    function toggleColorSchemesPicker(e) {
+      if (e) e.stopPropagation();
+      const picker = document.getElementById('color-schemes-picker');
+      if (!picker) return;
+      if (picker.style.display === 'flex') {
+        picker.style.display = 'none';
+        return;
+      }
+
+      picker.innerHTML = '';
+      AAC_COLOR_SCHEMES.forEach(s => {
+        const row = document.createElement('div');
+        row.className = 'scheme-option';
+        row.innerHTML = `<div style="width:16px; height:16px; border-radius:3px; background:${s.swatch}; border:1px solid #cbd5e1; flex-shrink:0;"></div><span>${s.name}</span>`;
+        row.onclick = () => {
+          applySuggestedColorScheme(s);
+          picker.style.display = 'none';
+        };
+        picker.appendChild(row);
+      });
+      picker.style.display = 'flex';
+    }
+
+    function toggleFontsAndColors() {
+      const details = document.getElementById('editor-details-styling');
+      if (details) {
+        details.open = !details.open;
+        if (details.open) details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    /* --- Sound It Out Action & Phonics Syllables (R2) --- */
+    let currentActionType = 'speak';
+    let currentSoundItOutProgress = 'none';
+    let isSoundItOutAnimating = false;
+
+    function syllabifyWord(word) {
+      if (!word || !word.trim()) return [];
+      const w = word.trim().toLowerCase();
+
+      const overrides = {
+        'butterfly': ['but', 'ter', 'fly'],
+        'flower': ['flow', 'er'],
+        'water': ['wa', 'ter'],
+        'banana': ['ba', 'na', 'na'],
+        'elephant': ['el', 'e', 'phant'],
+        'dinosaur': ['di', 'no', 'saur'],
+        'happy': ['hap', 'py'],
+        'hungry': ['hun', 'gry'],
+        'thirsty': ['thirs', 'ty'],
+        'bathroom': ['bath', 'room'],
+        'bedroom': ['bed', 'room'],
+        'playground': ['play', 'ground'],
+        'cereal': ['ce', 're', 'al'],
+        'cookie': ['cook', 'ie'],
+        'crackers': ['crack', 'ers'],
+        'hamburger': ['ham', 'bur', 'ger'],
+        'sandwich': ['sand', 'wich'],
+        'chocolate': ['choc', 'o', 'late'],
+        'watermelon': ['wa', 'ter', 'mel', 'on'],
+        'yesterday': ['yes', 'ter', 'day'],
+        'tomorrow': ['to', 'mor', 'row'],
+        'together': ['to', 'geth', 'er'],
+        'computer': ['com', 'pu', 'ter'],
+        'telephone': ['tel', 'e', 'phone'],
+        'umbrella': ['um', 'brel', 'la'],
+        'hospital': ['hos', 'pi', 'tal']
+      };
+
+      if (overrides[w]) return overrides[w];
+
+      const syllableRegex = /[^aeiouy]*[aeiouy]+(?:[^aeiouy]*$|[^aeiouy](?=[^aeiouy]))?/gi;
+      const matches = w.match(syllableRegex);
+      if (!matches || matches.length <= 1) {
+        return [w];
+      }
+      return matches;
+    }
+
+    function onActionTypeChange() {
+      const type = document.getElementById('modal-action-type').value;
+      currentActionType = type;
+      const speakBox = document.getElementById('action-speak-container');
+      const soundBox = document.getElementById('action-sounditout-container');
+      if (type === 'sounditout') {
+        if (speakBox) speakBox.style.display = 'none';
+        if (soundBox) soundBox.style.display = 'flex';
+        const label = document.getElementById('modal-label-input').value.trim();
+        const wordInp = document.getElementById('sounditout-word-input');
+        if (wordInp && (!wordInp.value.trim() || wordInp.dataset.autofilled === 'true')) {
+          if (label) {
+            wordInp.value = label;
+            wordInp.dataset.autofilled = 'true';
+          }
+        }
+        renderSoundItOutSyllables();
+      } else {
+        if (speakBox) speakBox.style.display = 'block';
+        if (soundBox) soundBox.style.display = 'none';
+      }
+    }
+
+    function onSoundItOutWordInput() {
+      const inp = document.getElementById('sounditout-word-input');
+      if (inp) inp.dataset.autofilled = 'false';
+      renderSoundItOutSyllables();
+    }
+
+    function renderSoundItOutSyllables() {
+      const container = document.getElementById('sounditout-syllables-bar');
+      if (!container) return;
+      container.innerHTML = '';
+      const word = document.getElementById('sounditout-word-input').value.trim() ||
+                   document.getElementById('modal-label-input').value.trim() || 'butterfly';
+      const syllables = syllabifyWord(word);
+
+      syllables.forEach((syl, idx) => {
+        const chip = document.createElement('div');
+        chip.className = 'syllable-chip';
+        chip.id = `sio-chip-${idx}`;
+        chip.textContent = syl;
+        chip.onclick = () => speakText(syl);
+        container.appendChild(chip);
+      });
+    }
+
+    async function previewSoundItOutAnimation() {
+      if (isSoundItOutAnimating) return;
+      isSoundItOutAnimating = true;
+      const btnText = document.getElementById('preview-anim-text');
+      if (btnText) btnText.textContent = 'Playing...';
+
+      const word = document.getElementById('sounditout-word-input').value.trim() ||
+                   document.getElementById('modal-label-input').value.trim() || 'butterfly';
+      const syllables = syllabifyWord(word);
+
+      for (let i = 0; i < syllables.length; i++) {
+        const chip = document.getElementById(`sio-chip-${i}`);
+        if (chip) chip.classList.add('active');
+        speakText(syllables[i]);
+        await new Promise(r => setTimeout(r, 650));
+        if (chip) chip.classList.remove('active');
+      }
+
+      // Highlight all and speak whole word
+      document.querySelectorAll('#sounditout-syllables-bar .syllable-chip').forEach(c => c.classList.add('active'));
+      speakText(word);
+      await new Promise(r => setTimeout(r, 800));
+      document.querySelectorAll('#sounditout-syllables-bar .syllable-chip').forEach(c => c.classList.remove('active'));
+
+      if (btnText) btnText.textContent = '▶ Preview Animation';
+      isSoundItOutAnimating = false;
+    }
+
+    function recordWithAnimation() {
+      showToast('Recording ready (previewing animation)');
+      previewSoundItOutAnimation();
+    }
+
+    function setSoundItOutProgress(val) {
+      currentSoundItOutProgress = val;
+      const btns = document.querySelectorAll('#sounditout-progress-tracker .segment-btn');
+      btns.forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-progress') === val);
+      });
+    }
+
+    // Player Mode Overlay for Sound It Out
+    async function playSoundItOutPlayer(word, slotId) {
+      const overlay = document.getElementById('sounditout-player-overlay');
+      const wordEl = document.getElementById('sio-player-word');
+      const sylsEl = document.getElementById('sio-player-syllables');
+      if (!overlay || !wordEl || !sylsEl) {
+        speakText(word);
+        return;
+      }
+
+      const cleanWord = (word || '').trim() || 'Sound It Out';
+      const syllables = syllabifyWord(cleanWord);
+
+      wordEl.textContent = cleanWord;
+      sylsEl.innerHTML = '';
+
+      syllables.forEach((syl, i) => {
+        const pill = document.createElement('div');
+        pill.className = 'sio-syllable-pill';
+        pill.id = `sio-player-pill-${i}`;
+        pill.textContent = syl;
+        sylsEl.appendChild(pill);
+      });
+
+      overlay.style.display = 'flex';
+
+      for (let i = 0; i < syllables.length; i++) {
+        const pill = document.getElementById(`sio-player-pill-${i}`);
+        if (pill) pill.classList.add('active');
+        speakText(syllables[i]);
+        await new Promise(r => setTimeout(r, 650));
+        if (pill) pill.classList.remove('active');
+      }
+
+      // Highlight whole word & all pills
+      document.querySelectorAll('.sio-syllable-pill').forEach(p => p.classList.add('active'));
+      speakText(cleanWord);
+      await new Promise(r => setTimeout(r, 900));
+
+      overlay.style.display = 'none';
+    }
+
+    function dismissSoundItOutPlayer() {
+      const overlay = document.getElementById('sounditout-player-overlay');
+      if (overlay) overlay.style.display = 'none';
+    }
+
+    /* --- Save Menu & Save Options (R1) --- */
+    function toggleSaveMenu(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('save-options-menu');
+      if (!menu) return;
+      const isOpen = menu.style.display === 'flex';
+      menu.style.display = isOpen ? 'none' : 'flex';
+    }
+
+    function closeSaveMenu() {
+      const menu = document.getElementById('save-options-menu');
+      if (menu) menu.style.display = 'none';
+    }
+
+    async function handleSaveOption(option) {
+      closeSaveMenu();
+      if (option === 'save') {
+        await saveEditorTile();
+      } else if (option === 'save_prev') {
+        await saveAndPrevTile();
+      } else if (option === 'save_next') {
+        await saveAndNextTile();
+      } else if (option === 'save_classic') {
+        await saveAndOpenClassic();
+      }
     }
 
     let saveHoldTimer = null;
@@ -4977,8 +5566,8 @@
       btn.addEventListener('pointerleave', cancelHold);
     }
 
-    async function saveAndNextTile() {
-      if (!currentEditingSlot) return;
+    async function saveCurrentTileRecord() {
+      if (!currentEditingSlot) return null;
       if (pendingPhotoWrite) await pendingPhotoWrite;
 
       const labelText = document.getElementById('modal-label-input').value.trim();
@@ -4987,6 +5576,7 @@
       const bgColor = document.getElementById('modal-tile-bgcolor').value;
       const borderColor = document.getElementById('modal-tile-bordercolor').value;
       const labelColor = document.getElementById('modal-tile-textcolor').value;
+      const sioWord = document.getElementById('sounditout-word-input').value.trim() || labelText;
 
       const updatedTile = {
         id: currentEditingSlot,
@@ -4995,6 +5585,9 @@
         audio: pendingAudioBlob,
         label: labelText,
         tts: ttsText,
+        actionType: currentActionType,
+        soundItOutWord: sioWord,
+        soundItOutProgress: currentSoundItOutProgress,
         labelSize: labelSize,
         labelPosition: pendingLabelPosition,
         bgColor: bgColor,
@@ -5003,9 +5596,15 @@
         updatedAt: Date.now()
       };
 
+      await saveTileToDB(updatedTile);
+      renderCurrentPage();
+      return updatedTile;
+    }
+
+    async function saveAndNextTile() {
+      if (!currentEditingSlot) return;
       try {
-        await saveTileToDB(updatedTile);
-        renderCurrentPage();
+        await saveCurrentTileRecord();
         showCompleteHUD();
 
         const p = pages[currentPageIndex];
@@ -5037,11 +5636,48 @@
       }
     }
 
+    async function saveAndPrevTile() {
+      if (!currentEditingSlot) return;
+      try {
+        await saveCurrentTileRecord();
+        showCompleteHUD();
+
+        const p = pages[currentPageIndex];
+        const totalSlots = p ? p.gridSize || 4 : 4;
+        const prevSlot = currentEditingSlot > 1 ? currentEditingSlot - 1 : totalSlots;
+
+        showToast(`Saved! Opening Button #${prevSlot}`);
+        openEditor(prevSlot);
+      } catch (err) {
+        showToast('Failed to save tile', 'error');
+      }
+    }
+
+    async function saveAndOpenClassic() {
+      if (!currentEditingSlot) return;
+      try {
+        await saveCurrentTileRecord();
+        showCompleteHUD();
+        showToast('Saved! Switched to Classic Tools');
+        const details = document.getElementById('editor-details-styling');
+        if (details) {
+          details.open = true;
+          details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } catch (err) {
+        showToast('Failed to save tile', 'error');
+      }
+    }
+
     function closeEditor() {
       closeCameraFullscreen();
       stopAudioStream();
       stopRecordingTimer();
       stopAudioPreview();
+      closeSaveMenu();
+
+      const picker = document.getElementById('color-schemes-picker');
+      if (picker) picker.style.display = 'none';
 
       pendingPhotoBlob = null;
       pendingAudioBlob = null;
@@ -5053,34 +5689,9 @@
 
     async function saveEditorTile() {
       if (!currentEditingSlot) return;
-      if (pendingPhotoWrite) await pendingPhotoWrite;
-
-      const labelText = document.getElementById('modal-label-input').value.trim();
-      const ttsText = document.getElementById('modal-tts-input').value.trim() || labelText;
-      const labelSize = normalizeLabelSize(document.getElementById('modal-label-size').value);
-      const bgColor = document.getElementById('modal-tile-bgcolor').value;
-      const borderColor = document.getElementById('modal-tile-bordercolor').value;
-      const labelColor = document.getElementById('modal-tile-textcolor').value;
-
-      const updatedTile = {
-        id: currentEditingSlot,
-        photo: pendingPhotoBlob,
-        symbol: pendingSymbol,
-        audio: pendingAudioBlob,
-        label: labelText,
-        tts: ttsText,
-        labelSize: labelSize,
-        labelPosition: pendingLabelPosition,
-        bgColor: bgColor,
-        borderColor: borderColor,
-        labelColor: labelColor,
-        updatedAt: Date.now()
-      };
-
       try {
-        await saveTileToDB(updatedTile);
+        await saveCurrentTileRecord();
         closeEditor();
-        renderCurrentPage();
         showCompleteHUD();
       } catch (err) {
         showToast('Failed to save tile', 'error');
