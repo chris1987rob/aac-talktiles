@@ -456,50 +456,129 @@
       cursor: pointer;
       touch-action: none;
       box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: border-color 0.15s, background-color 0.15s, transform 0.08s;
     }
 
     /* Hotspot in Editor Mode */
     .mode-editor .scene-hotspot {
-      background: rgba(59, 91, 219, 0.42);
-      border: 2px solid #2b4cd9;
-      border-radius: 4px;
+      background: rgba(59, 91, 219, 0.35);
+      border: 2px dashed #2b4cd9;
+    }
+
+    .mode-editor .scene-hotspot:hover {
+      background: rgba(59, 91, 219, 0.5);
+      border-color: #1a36b8;
+    }
+
+    .hotspot-label-pill {
+      background: rgba(15, 23, 42, 0.85);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 10px;
+      pointer-events: none;
+      white-space: nowrap;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Hotspot in User Mode */
     .mode-user .scene-hotspot {
       background: transparent;
-      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border: 1.5px solid transparent;
     }
 
+    .mode-user .scene-hotspot.style-highlight {
+      border: 2px solid rgba(255, 235, 59, 0.7);
+      background: rgba(255, 235, 59, 0.12);
+    }
+
+    .mode-user .scene-hotspot.style-outline {
+      border: 2px dashed rgba(255, 255, 255, 0.5);
+    }
+
+    .mode-user .scene-hotspot:active,
     .scene-hotspot.tap-active {
-      border: 3px solid #00e676 !important;
-      background: rgba(0, 230, 118, 0.35) !important;
-      box-shadow: 0 0 16px rgba(0, 230, 118, 0.6) !important;
+      border: 4px solid #00e676 !important;
+      background: rgba(0, 230, 118, 0.4) !important;
+      box-shadow: 0 0 24px rgba(0, 230, 118, 0.85), inset 0 0 12px rgba(0, 230, 118, 0.5) !important;
+      transform: scale(1.02);
+      z-index: 50;
     }
 
     .hotspot-handle {
       position: absolute;
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       background: #ffffff;
       border: 2px solid #2b4cd9;
       border-radius: 50%;
       display: none;
       z-index: 5;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     }
 
     .mode-editor .hotspot-handle {
       display: block;
     }
 
-    .handle-nw { top: -6px; left: -6px; cursor: nwse-resize; }
-    .handle-n  { top: -6px; left: calc(50% - 6px); cursor: ns-resize; }
-    .handle-ne { top: -6px; right: -6px; cursor: nesw-resize; }
-    .handle-e  { right: -6px; top: calc(50% - 6px); cursor: ew-resize; }
-    .handle-se { bottom: -6px; right: -6px; cursor: nwse-resize; }
-    .handle-s  { bottom: -6px; left: calc(50% - 6px); cursor: ns-resize; }
-    .handle-sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
-    .handle-w  { left: -6px; top: calc(50% - 6px); cursor: ew-resize; }
+    .handle-nw { top: -7px; left: -7px; cursor: nwse-resize; }
+    .handle-n  { top: -7px; left: calc(50% - 7px); cursor: ns-resize; }
+    .handle-ne { top: -7px; right: -7px; cursor: nesw-resize; }
+    .handle-e  { right: -7px; top: calc(50% - 7px); cursor: ew-resize; }
+    .handle-se { bottom: -7px; right: -7px; cursor: nwse-resize; }
+    .handle-s  { bottom: -7px; left: calc(50% - 7px); cursor: ns-resize; }
+    .handle-sw { bottom: -7px; left: -7px; cursor: nesw-resize; }
+    .handle-w  { left: -7px; top: calc(50% - 7px); cursor: ew-resize; }
+
+    /* Sound It Out Phonics Display */
+    .phonics-display-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px;
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 3px solid #008369;
+    }
+
+    .phonics-syllables-wrap {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .phonics-syllable-card {
+      padding: 14px 22px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 3px solid #cbd5e1;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #1e293b;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+      transition: all 0.2s ease;
+    }
+
+    .phonics-syllable-card.active {
+      border-color: #008369;
+      background: #008369;
+      color: #ffffff;
+      transform: scale(1.18);
+      box-shadow: 0 8px 20px rgba(0,131,105,0.35);
+    }
 
     /* ==========================================================================
        3. SIGNATURE BOTTOM BAR (GoTalk Now Teal Bar)
@@ -1803,10 +1882,16 @@
 
         <!-- Visual Scene View -->
         <div id="scene-view" class="scene-view">
-          <img id="scene-image" class="scene-bg-img" alt="Scene Background">
+          <img id="scene-image" class="scene-bg-img" alt="Scene Background" style="display: none;">
+          <div id="scene-empty-placeholder" class="scene-empty-placeholder" style="display: none;">
+            <div style="font-size: 3.5rem;">🖼️</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: #1e293b;">Visual Scene Display</div>
+            <div style="font-size: 0.95rem; max-width: 420px; text-align: center; color: #64748b;">Set a photo as your background, then tap anywhere on items or people to play speech or sounds.</div>
+            <button class="btn btn-primary" onclick="openScenePicker()" style="padding: 12px 24px; font-weight: 700; font-size: 1.05rem;">🖼️ Choose Photo or Scene Preset</button>
+          </div>
           <div class="scene-toolbar">
-            <button class="btn btn-primary" onclick="triggerSceneBgInput()">Set Background Photo</button>
-            <button class="btn" style="background:#006853; color:#fff;" onclick="addSceneHotspot()">+ Add Hotspot</button>
+            <button class="btn btn-primary" onclick="openScenePicker()">🖼️ Set Background Scene</button>
+            <button class="btn" style="background:#006853; color:#fff; font-weight: 700;" onclick="addSceneHotspot()">+ Add Hotspot</button>
             <input type="file" id="scene-bg-file-input" accept="image/*" style="display:none;" onchange="handleSceneBgSelected(event)">
           </div>
           <div id="scene-hotspots-container"></div>
@@ -2734,6 +2819,121 @@
     </div>
 
     <!-- ========================================================================
+         MODAL: HOTSPOT EDITOR (Visual Scene Display Touch Zones)
+         ======================================================================== -->
+    <div id="modal-hotspot-editor" class="modal-backdrop" onclick="closeHotspotEditor()">
+      <div class="modal-card" onclick="event.stopPropagation()" style="max-width: 520px;">
+        <div class="modal-header" style="background: #008369; color: #ffffff;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            <span class="modal-title" style="color: #ffffff;" id="hotspot-modal-title">Edit Hotspot Zone</span>
+          </div>
+          <button class="modal-close-btn" onclick="closeHotspotEditor()">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body" style="gap: 14px;">
+          <!-- 1. Hotspot Label -->
+          <div class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/></svg>
+              <span>Hotspot Label (Name on photo)</span>
+            </div>
+            <input type="text" id="hotspot-label-input" class="text-input" placeholder="e.g. Couch, Cat, Television, Teacher, Swing...">
+          </div>
+
+          <!-- 2. Speech Action -->
+          <div class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+              <span>Speech & Sound Action</span>
+            </div>
+            <div class="segmented-control" style="width: 100%; margin-bottom: 8px;">
+              <button id="hs-tab-tts" class="segment-btn active" onclick="setHotspotActionMode('tts')">Text-to-Speech</button>
+              <button id="hs-tab-recorded" class="segment-btn" onclick="setHotspotActionMode('recorded')">Recorded Voice</button>
+              <button id="hs-tab-jump" class="segment-btn" onclick="setHotspotActionMode('jump')">Jump to Page</button>
+            </div>
+
+            <div id="hs-action-tts-wrap">
+              <input type="text" id="hotspot-tts-input" class="text-input" placeholder="What to speak when tapped (e.g. Look at the fluffy cat!)">
+            </div>
+
+            <div id="hs-action-recorded-wrap" style="display: none; flex-direction: column; gap: 8px;">
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button id="btn-hs-record" class="btn btn-primary" onclick="toggleHotspotVoiceRecord()" style="flex: 1; font-weight: 700;">🎙 Record Audio</button>
+                <button id="btn-hs-play-rec" class="btn" onclick="playHotspotRecordedAudio()" style="background: #e2e8f0; font-weight: 600;">▶ Play Preview</button>
+              </div>
+              <div id="hs-rec-status" style="font-size: 0.8rem; color: #64748b; font-weight: 600;"></div>
+            </div>
+
+            <div id="hs-action-jump-wrap" style="display: none;">
+              <label style="font-size: 0.85rem; font-weight: 600; color: #475569;">Target Page to Jump:</label>
+              <select id="hotspot-jump-select" class="text-input" style="height: 42px; margin-top: 4px;"></select>
+            </div>
+          </div>
+
+          <!-- 3. Visual Appearance -->
+          <div class="editor-section">
+            <div class="section-title">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              <span>Visual Hotspot Style (Player Mode)</span>
+            </div>
+            <div class="segmented-control" style="width: 100%;">
+              <button id="hs-style-invisible" class="segment-btn active" onclick="setHotspotStyle('invisible')">Invisible</button>
+              <button id="hs-style-highlight" class="segment-btn" onclick="setHotspotStyle('highlight')">Yellow Glow</button>
+              <button id="hs-style-outline" class="segment-btn" onclick="setHotspotStyle('outline')">Dashed Box</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="justify-content: space-between;">
+          <button class="btn btn-danger" onclick="deleteCurrentHotspot()">🗑 Delete Hotspot</button>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn" onclick="previewHotspotSpeech()">▶ Preview</button>
+            <button class="btn btn-primary" onclick="saveHotspotEditor()">Save Hotspot</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
+         MODAL: SCENE BACKGROUND PICKER (Upload, Camera, or Built-in AAC Scenes)
+         ======================================================================== -->
+    <div id="modal-scene-picker" class="modal-backdrop" onclick="closeScenePicker()">
+      <div class="modal-card wide" onclick="event.stopPropagation()" style="max-width: 700px;">
+        <div class="modal-header" style="background: #008369; color: #ffffff;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <span class="modal-title" style="color: #ffffff;">Set Visual Scene Background</span>
+          </div>
+          <button class="modal-close-btn" onclick="closeScenePicker()">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body" style="gap: 16px;">
+          <!-- Custom photo actions -->
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary" onclick="triggerSceneBgInput()" style="flex: 1; padding: 12px; font-weight: 700;">
+              📁 Upload Photo from Computer / iPad
+            </button>
+            <button class="btn" onclick="triggerSceneCamera()" style="flex: 1; padding: 12px; font-weight: 700; background: #e2e8f0;">
+              📷 Take Live Photo with Camera
+            </button>
+          </div>
+
+          <div style="font-weight: 700; font-size: 0.95rem; color: #334155; margin-top: 4px;">Or Select a Ready-to-Use AAC Visual Scene:</div>
+          <div id="scene-presets-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn" onclick="closeScenePicker()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================
          SOUND IT OUT PLAYER OVERLAY (R2)
          ======================================================================== -->
     <div id="sounditout-player-overlay" class="sounditout-player-overlay" onclick="dismissSoundItOutPlayer()">
@@ -3063,10 +3263,51 @@
         `;
       } else if (title === 'Help') {
         bodyEl.innerHTML = `
-          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; color: #334155;">
-            <p><b>Navigation:</b> Tap Player to speak. Tap Page Editor to customize buttons and background.</p>
-            <p><b>Express Bar:</b> Tap tiles to build sentences, then tap the bar to speak the entire phrase.</p>
-            <p><b>Scene Pages:</b> Tap interactive hotspots to hear audio cues.</p>
+          <div style="display: flex; flex-direction: column; gap: 14px; max-height: 480px; overflow-y: auto; font-size: 0.9rem; color: #334155; padding-right: 4px;">
+            <div style="background: #e6f4ea; border-left: 4px solid #008369; padding: 10px 12px; border-radius: 4px;">
+              <strong style="color: #008369; font-size: 1rem;">GoTalk Now / Talk Tiles User Guide &amp; SLP Reference</strong>
+              <div style="font-size: 0.82rem; color: #475569; margin-top: 2px;">Comprehensive documentation for all communication modes, page formats, and editing tools.</div>
+            </div>
+
+            <!-- Section 1 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+              <h4 style="margin: 0 0 6px 0; color: #008369; font-size: 0.95rem;">1. Core System &amp; Navigation Modes</h4>
+              <p style="margin: 0 0 4px 0;"><b>Player Mode:</b> Pure communication playback mode. Tapping any button speaks its word or adds it to the Express sentence bar. Tap the green <b>▶ Play</b> button to speak the entire page.</p>
+              <p style="margin: 0 0 4px 0;"><b>Page Editor Mode:</b> Authoring mode for parents, educators, and SLPs. Tapping any button opens Quick Edit. Tap <b>⚙ Options</b> to adjust grid layout, or <b>+</b> to create new pages.</p>
+              <p style="margin: 0;"><b>Page Flipping:</b> Use the bottom left <b>◀ Previous</b> and <b>▶ Next</b> arrows, swipe left/right across the board, or tap the center page title (<b>Page 1 - Colors ▾</b>) to jump directly to any page in the book.</p>
+            </div>
+
+            <!-- Section 2 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+              <h4 style="margin: 0 0 6px 0; color: #008369; font-size: 0.95rem;">2. Supported Page Types &amp; Formats</h4>
+              <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px;">
+                <li><b>Standard Button Grids:</b> Choose between 1, 2, 4, 9, 16, 25, or 36 buttons per page. Auto-fits text and adjusts font size dynamically.</li>
+                <li><b>Visual Scene Displays (VSDs):</b> Full-bleed photo or illustrated background with interactive audio hotspots. Tap meaningful areas (e.g. cat, sofa, blackboard) to hear speech.</li>
+                <li><b>Keyboard Communication Page:</b> Full QWERTY talking keyboard with quick phrase prediction chips, typing display box, and text-to-speech output.</li>
+              </ul>
+            </div>
+
+            <!-- Section 3 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+              <h4 style="margin: 0 0 6px 0; color: #008369; font-size: 0.95rem;">3. Interactive Visual Scene Displays (Hotspots)</h4>
+              <p style="margin: 0 0 4px 0;"><b>Adding Hotspots:</b> In Page Editor mode, tap <b>+ Add Hotspot</b>. Drag to position the zone over any object in your photo, or drag the blue circular handles to resize.</p>
+              <p style="margin: 0 0 4px 0;"><b>Hotspot Speech:</b> Tap a hotspot in Editor mode to open the Hotspot Editor. Choose <b>Text-to-Speech</b>, <b>Recorded Voice</b>, or <b>Jump to Page</b>.</p>
+              <p style="margin: 0;"><b>Built-in Scenes:</b> Tap <b>🖼️ Set Background Scene</b> to pick ready-to-use AAC scenes (Living Room, Classroom, Playground, Kitchen) or upload your own photo.</p>
+            </div>
+
+            <!-- Section 4 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+              <h4 style="margin: 0 0 6px 0; color: #008369; font-size: 0.95rem;">4. 3,600+ Mulberry AAC Symbol &amp; Photo Library</h4>
+              <p style="margin: 0 0 4px 0;">Search the full library of 3,436 official Mulberry AAC vector pictograms and starter icons with instant keyword filtering (Core, Food, Drinks, Feelings, Actions, Places, Health, People).</p>
+              <p style="margin: 0;">You can also take live pictures with the camera or upload photos from your computer or iPad.</p>
+            </div>
+
+            <!-- Section 5 -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+              <h4 style="margin: 0 0 6px 0; color: #008369; font-size: 0.95rem;">5. Express Sentence Builder &amp; Phonics</h4>
+              <p style="margin: 0 0 4px 0;"><b>Express Bar:</b> When enabled in Page Options, tapping buttons dynamically appends word chips to the top sentence bar. Tapping the white bar speaks the entire assembled sentence in sequence.</p>
+              <p style="margin: 0;"><b>Sound It Out:</b> Phonetic syllable segmentation that highlights each syllable on screen with animated voice playback.</p>
+            </div>
           </div>
         `;
       } else if (title === 'Feedback') {
@@ -4229,11 +4470,71 @@
       }
     }
 
-    /* --- Scene Page Rendering & Hotspot Resizing --- */
+    /* --- Built-in SVG Visual Scene Presets --- */
+    const SCENE_PRESETS = {
+      'living-room': {
+        title: 'Living Room',
+        bg: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 640" width="1024" height="640"><defs><linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%23dbeafe"/><stop offset="100%" stop-color="%23bfdbfe"/></linearGradient><linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%23b45309"/><stop offset="100%" stop-color="%2378350f"/></linearGradient></defs><rect width="1024" height="460" fill="url(%23wall)"/><rect y="460" width="1024" height="180" fill="url(%23floor)"/><rect x="220" y="80" width="300" height="200" rx="8" fill="%2393c5fd" stroke="%23ffffff" stroke-width="12"/><line x1="370" y1="80" x2="370" y2="280" stroke="%23ffffff" stroke-width="8"/><line x1="220" y1="180" x2="520" y2="180" stroke="%23ffffff" stroke-width="8"/><circle cx="450" cy="130" r="30" fill="%23fef08a"/><rect x="680" y="140" width="260" height="180" rx="10" fill="%231e293b" stroke="%23475569" stroke-width="8"/><rect x="700" y="160" width="220" height="140" rx="4" fill="%2338bdf8"/><polygon points="760,200 860,230 760,260" fill="%23ffffff" opacity="0.8"/><rect x="800" y="320" width="20" height="50" fill="%23334155"/><rect x="750" y="370" width="120" height="16" rx="4" fill="%231e293b"/><rect x="60" y="240" width="100" height="70" rx="8" fill="%23fef08a" stroke="%23f59e0b" stroke-width="4"/><line x1="110" y1="310" x2="110" y2="520" stroke="%23d97706" stroke-width="8"/><ellipse cx="110" cy="520" rx="40" ry="12" fill="%23b45309"/><rect x="180" y="340" width="460" height="180" rx="24" fill="%233b82f6" stroke="%231d4ed8" stroke-width="8"/><rect x="220" y="310" width="180" height="100" rx="20" fill="%2360a5fa"/><rect x="420" y="310" width="180" height="100" rx="20" fill="%2360a5fa"/><ellipse cx="320" cy="460" rx="45" ry="25" fill="%23fb923c"/><ellipse cx="350" cy="445" rx="18" ry="16" fill="%23fb923c"/><polygon points="340,432 346,442 334,442" fill="%23ea580c"/><polygon points="358,432 364,442 352,442" fill="%23ea580c"/><text x="512" y="60" font-family="sans-serif" font-size="28" font-weight="bold" fill="%231e3a8a" text-anchor="middle">Living Room Visual Scene</text></svg>`,
+        hotspots: [
+          { id: 1, x: 18, y: 50, w: 46, h: 36, label: 'Sofa / Couch', tts: 'I want to sit on the couch and relax.', style: 'invisible' },
+          { id: 2, x: 66, y: 20, w: 28, h: 35, label: 'Television', tts: 'Can we turn on the TV to watch a show?', style: 'invisible' },
+          { id: 3, x: 28, y: 64, w: 18, h: 18, label: 'Sleeping Cat', tts: 'Look at the cute orange cat sleeping!', style: 'invisible' },
+          { id: 4, x: 5, y: 35, w: 14, h: 50, label: 'Lamp Light', tts: 'Please turn on the lamp light.', style: 'invisible' },
+          { id: 5, x: 21, y: 12, w: 31, h: 35, label: 'Window', tts: 'Look out the window, it is nice outside.', style: 'invisible' }
+        ]
+      },
+      'classroom': {
+        title: 'Classroom',
+        bg: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 640" width="1024" height="640"><rect width="1024" height="460" fill="%23fef3c7"/><rect y="460" width="1024" height="180" fill="%2378716c"/><rect x="160" y="70" width="520" height="240" rx="12" fill="%23065f46" stroke="%2378350f" stroke-width="14"/><text x="420" y="160" font-family="sans-serif" font-size="34" font-weight="bold" fill="%23ffffff" text-anchor="middle">Welcome to Class! 🍎</text><text x="420" y="220" font-family="sans-serif" font-size="24" fill="%23a7f3d0" text-anchor="middle">Today: Reading &amp; Art</text><circle cx="820" cy="140" r="60" fill="%23ffffff" stroke="%23334155" stroke-width="8"/><line x1="820" y1="140" x2="820" y2="105" stroke="%230f172a" stroke-width="6"/><line x1="820" y1="140" x2="850" y2="140" stroke="%230f172a" stroke-width="6"/><rect x="660" y="340" width="280" height="180" rx="12" fill="%2392400e" stroke="%2378350f" stroke-width="6"/><rect x="200" y="380" width="280" height="140" rx="10" fill="%233b82f6"/><polygon points="220,380 280,340 380,340 320,380" fill="%231d4ed8"/><rect x="240" y="350" width="50" height="24" rx="4" fill="%23ef4444"/><rect x="300" y="345" width="50" height="24" rx="4" fill="%2310b981"/><rect x="520" y="440" width="90" height="120" rx="16" fill="%23f97316" stroke="%23c2410c" stroke-width="4"/><text x="512" y="45" font-family="sans-serif" font-size="28" font-weight="bold" fill="%2378350f" text-anchor="middle">School Classroom Visual Scene</text></svg>`,
+        hotspots: [
+          { id: 1, x: 15, y: 10, w: 53, h: 42, label: 'Blackboard', tts: 'Look at the lesson on the board.', style: 'invisible' },
+          { id: 2, x: 64, y: 50, w: 30, h: 36, label: 'Teacher Desk', tts: 'I need help from the teacher please.', style: 'invisible' },
+          { id: 3, x: 18, y: 52, w: 32, h: 34, label: 'Books & Desk', tts: 'Time to read our story book.', style: 'invisible' },
+          { id: 4, x: 50, y: 66, w: 12, h: 22, label: 'School Backpack', tts: 'Let us pack my backpack.', style: 'invisible' },
+          { id: 5, x: 74, y: 12, w: 18, h: 26, label: 'Class Clock', tts: 'What time is it on the clock?', style: 'invisible' }
+        ]
+      },
+      'playground': {
+        title: 'Playground',
+        bg: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 640" width="1024" height="640"><rect width="1024" height="380" fill="%23bae6fd"/><circle cx="120" cy="100" r="55" fill="%23facc15"/><rect y="380" width="1024" height="260" fill="%234ade80"/><polygon points="80,480 260,220 340,480" fill="%23ef4444"/><polygon points="120,480 260,260 300,480" fill="%23fca5a5"/><polygon points="260,260 480,480 440,500 240,290" fill="%233b82f6"/><line x1="560" y1="200" x2="880" y2="200" stroke="%23475569" stroke-width="12"/><line x1="560" y1="200" x2="520" y2="520" stroke="%23475569" stroke-width="10"/><line x1="880" y1="200" x2="920" y2="520" stroke="%23475569" stroke-width="10"/><line x1="640" y1="200" x2="640" y2="380" stroke="%2364748b" stroke-width="4"/><line x1="720" y1="200" x2="720" y2="380" stroke="%2364748b" stroke-width="4"/><rect x="620" y="380" width="120" height="24" rx="6" fill="%23e11d48"/><circle cx="780" cy="540" r="32" fill="%23ffffff" stroke="%230f172a" stroke-width="4"/><polygon points="780,515 795,528 790,548 770,548 765,528" fill="%230f172a"/><text x="512" y="50" font-family="sans-serif" font-size="28" font-weight="bold" fill="%230369a1" text-anchor="middle">Outdoor Playground Visual Scene</text></svg>`,
+        hotspots: [
+          { id: 1, x: 8, y: 32, w: 42, h: 50, label: 'Slide', tts: 'I want to climb up and slide down!', style: 'invisible' },
+          { id: 2, x: 52, y: 28, w: 40, h: 56, label: 'Swings', tts: 'Push me on the swing high please!', style: 'invisible' },
+          { id: 3, x: 74, y: 76, w: 14, h: 18, label: 'Soccer Ball', tts: 'Let us kick the ball together.', style: 'invisible' }
+        ]
+      },
+      'kitchen': {
+        title: 'Kitchen & Dining',
+        bg: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 640" width="1024" height="640"><rect width="1024" height="440" fill="%23fed7aa"/><rect y="440" width="1024" height="200" fill="%23cbd5e1"/><rect x="60" y="100" width="180" height="420" rx="16" fill="%23f8fafc" stroke="%2394a3b8" stroke-width="8"/><line x1="60" y1="280" x2="240" y2="280" stroke="%2394a3b8" stroke-width="6"/><rect x="210" y="200" width="14" height="50" rx="4" fill="%2364748b"/><rect x="210" y="320" width="14" height="50" rx="4" fill="%2364748b"/><rect x="340" y="360" width="480" height="180" rx="20" fill="%23b45309" stroke="%2378350f" stroke-width="8"/><ellipse cx="500" cy="420" rx="55" ry="30" fill="%23ffffff" stroke="%23cbd5e1" stroke-width="4"/><ellipse cx="500" cy="420" rx="25" ry="14" fill="%23ef4444"/><rect x="640" y="380" width="45" height="70" rx="6" fill="%23fb923c" stroke="%23ea580c" stroke-width="3"/><line x1="662" y1="360" x2="675" y2="380" stroke="%23ffffff" stroke-width="6"/><text x="512" y="60" font-family="sans-serif" font-size="28" font-weight="bold" fill="%239a3412" text-anchor="middle">Kitchen &amp; Dining Visual Scene</text></svg>`,
+        hotspots: [
+          { id: 1, x: 5, y: 15, w: 22, h: 72, label: 'Refrigerator', tts: 'Open the fridge for a drink or snack.', style: 'invisible' },
+          { id: 2, x: 33, y: 54, w: 48, h: 36, label: 'Dining Table', tts: 'Time to eat at the dining table.', style: 'invisible' },
+          { id: 3, x: 44, y: 58, w: 16, h: 16, label: 'Fruit Plate', tts: 'I would like some fresh apple slices.', style: 'invisible' },
+          { id: 4, x: 61, y: 56, w: 10, h: 18, label: 'Juice Box', tts: 'Apple juice to drink please.', style: 'invisible' }
+        ]
+      }
+    };
+
+    /* --- Scene Page Rendering & Hotspots --- */
+    let hotspotDragMoved = false;
+
+    let currentEditingHotspot = null;
+    let hotspotVoiceBlob = null;
+    let hotspotActionMode = 'tts';
+    let hotspotStyleMode = 'invisible';
+
     function renderScenePage(page) {
       const imgEl = document.getElementById('scene-image');
-      imgEl.src = page.sceneBg || '';
-      imgEl.style.display = page.sceneBg ? 'block' : 'none';
+      const placeholderEl = document.getElementById('scene-empty-placeholder');
+
+      if (page.sceneBg) {
+        imgEl.src = page.sceneBg;
+        imgEl.style.display = 'block';
+        if (placeholderEl) placeholderEl.style.display = 'none';
+      } else {
+        imgEl.style.display = 'none';
+        if (placeholderEl) placeholderEl.style.display = 'flex';
+      }
 
       const container = document.getElementById('scene-hotspots-container');
       container.innerHTML = '';
@@ -4247,8 +4548,13 @@
         spotEl.style.width = `${spot.w}%`;
         spotEl.style.height = `${spot.h}%`;
 
+        if (spot.style && spot.style !== 'invisible') {
+          spotEl.classList.add(`style-${spot.style}`);
+        }
+
         if (isEditMode) {
           spotEl.innerHTML = `
+            <div class="hotspot-label-pill">${spot.label || `Hotspot ${spot.id}`}</div>
             <div class="hotspot-handle handle-nw" data-handle="nw"></div>
             <div class="hotspot-handle handle-n" data-handle="n"></div>
             <div class="hotspot-handle handle-ne" data-handle="ne"></div>
@@ -4259,61 +4565,48 @@
             <div class="hotspot-handle handle-w" data-handle="w"></div>
           `;
           spotEl.addEventListener('pointerdown', (e) => initHotspotDrag(e, spot));
-        } else {
-          spotEl.onclick = () => {
-            spotEl.classList.add('tap-active');
-            speakText(spot.tts || spot.label);
-            setTimeout(() => spotEl.classList.remove('tap-active'), 500);
+          spotEl.onclick = (e) => {
+            if (!hotspotDragMoved) {
+              openHotspotEditor(spot);
+            }
           };
+        } else {
+          spotEl.onclick = () => playHotspot(spot, spotEl, page);
         }
         container.appendChild(spotEl);
       });
     }
 
-    function triggerSceneBgInput() {
-      const input = document.getElementById('scene-bg-file-input');
-      input.value = '';
-      input.click();
-    }
+    function playHotspot(spot, spotEl, page) {
+      if (spotEl) {
+        spotEl.classList.add('tap-active');
+        setTimeout(() => spotEl.classList.remove('tap-active'), 550);
+      }
 
-    function handleSceneBgSelected(e) {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        const p = pages[currentPageIndex];
-        if (p) {
-          p.sceneBg = evt.target.result;
-          savePagesToStorage();
+      if (page && page.express && (spot.label || spot.tts)) {
+        addExpressChip({ label: spot.label || spot.tts });
+      }
+
+      if (spot.action === 'jump' && spot.jumpPageId) {
+        const targetIdx = pages.findIndex(p => p.id === spot.jumpPageId);
+        if (targetIdx !== -1) {
+          currentPageIndex = targetIdx;
           renderCurrentPage();
-          showCompleteHUD();
+          return;
         }
-      };
-      reader.readAsDataURL(file);
-    }
+      }
 
-    function addSceneHotspot() {
-      const p = pages[currentPageIndex];
-      if (!p) return;
-      p.hotspots = p.hotspots || [];
-      const newId = p.hotspots.length + 1;
-      p.hotspots.push({
-        id: newId,
-        x: 35,
-        y: 35,
-        w: 25,
-        h: 25,
-        label: `Hotspot ${newId}`,
-        tts: `Hotspot ${newId}`
-      });
-      savePagesToStorage();
-      renderCurrentPage();
-      showCompleteHUD();
+      if (spot.audio || (spot.action === 'recorded' && spot.audio)) {
+        playTileAudio(`hotspot-${spot.id}`, spot.audio);
+      } else {
+        speakText(spot.tts || spot.label || 'Hotspot');
+      }
     }
 
     function initHotspotDrag(e, spot) {
       e.stopPropagation();
       activeDragHotspot = spot;
+      hotspotDragMoved = false;
       const handle = e.target.dataset.handle;
       dragMode = handle || 'move';
       dragStartX = e.clientX;
@@ -4326,10 +4619,14 @@
 
     function onHotspotDragMove(e) {
       if (!activeDragHotspot || !initialHotspotPos) return;
+      const dxPx = e.clientX - dragStartX;
+      const dyPx = e.clientY - dragStartY;
+      if (Math.abs(dxPx) > 3 || Math.abs(dyPx) > 3) hotspotDragMoved = true;
+
       const container = document.getElementById('board-content');
       const rect = container.getBoundingClientRect();
-      const dx = ((e.clientX - dragStartX) / rect.width) * 100;
-      const dy = ((e.clientY - dragStartY) / rect.height) * 100;
+      const dx = (dxPx / rect.width) * 100;
+      const dy = (dyPx / rect.height) * 100;
 
       if (dragMode === 'move') {
         activeDragHotspot.x = Math.max(0, Math.min(100 - activeDragHotspot.w, initialHotspotPos.x + dx));
@@ -4352,6 +4649,239 @@
       savePagesToStorage();
       window.removeEventListener('pointermove', onHotspotDragMove);
       window.removeEventListener('pointerup', onHotspotDragEnd);
+    }
+
+    function addSceneHotspot() {
+      const p = pages[currentPageIndex];
+      if (!p) return;
+      p.hotspots = p.hotspots || [];
+      const newId = p.hotspots.length + 1;
+      const newSpot = {
+        id: newId,
+        x: 35,
+        y: 35,
+        w: 25,
+        h: 25,
+        label: `Hotspot ${newId}`,
+        tts: `Hotspot ${newId}`,
+        style: 'invisible'
+      };
+      p.hotspots.push(newSpot);
+      savePagesToStorage();
+      renderCurrentPage();
+      openHotspotEditor(newSpot);
+      showCompleteHUD();
+    }
+
+    /* --- Hotspot Editor Modal Functions --- */
+    function openHotspotEditor(spot) {
+      currentEditingHotspot = spot;
+      hotspotVoiceBlob = spot.audio || null;
+      hotspotActionMode = spot.action || (spot.audio ? 'recorded' : 'tts');
+      hotspotStyleMode = spot.style || 'invisible';
+
+      document.getElementById('hotspot-modal-title').textContent = `Edit Hotspot (${spot.label || 'Zone'})`;
+      document.getElementById('hotspot-label-input').value = spot.label || '';
+      document.getElementById('hotspot-tts-input').value = spot.tts || spot.label || '';
+
+      const jumpSel = document.getElementById('hotspot-jump-select');
+      jumpSel.innerHTML = '';
+      pages.forEach((p, idx) => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `Page ${p.id}: ${p.title || 'Untitled'}`;
+        if (spot.jumpPageId === p.id) opt.selected = true;
+        jumpSel.appendChild(opt);
+      });
+
+      setHotspotActionMode(hotspotActionMode);
+      setHotspotStyle(hotspotStyleMode);
+
+      const statusEl = document.getElementById('hs-rec-status');
+      if (statusEl) {
+        statusEl.textContent = hotspotVoiceBlob ? '✓ Audio recording attached' : 'No recorded audio yet';
+      }
+
+      document.getElementById('modal-hotspot-editor').classList.add('open');
+    }
+
+    function closeHotspotEditor() {
+      document.getElementById('modal-hotspot-editor').classList.remove('open');
+      currentEditingHotspot = null;
+    }
+
+    function setHotspotActionMode(mode) {
+      hotspotActionMode = mode;
+      document.getElementById('hs-tab-tts').classList.toggle('active', mode === 'tts');
+      document.getElementById('hs-tab-recorded').classList.toggle('active', mode === 'recorded');
+      document.getElementById('hs-tab-jump').classList.toggle('active', mode === 'jump');
+
+      document.getElementById('hs-action-tts-wrap').style.display = (mode === 'tts') ? 'block' : 'none';
+      document.getElementById('hs-action-recorded-wrap').style.display = (mode === 'recorded') ? 'flex' : 'none';
+      document.getElementById('hs-action-jump-wrap').style.display = (mode === 'jump') ? 'block' : 'none';
+    }
+
+    function setHotspotStyle(style) {
+      hotspotStyleMode = style;
+      document.getElementById('hs-style-invisible').classList.toggle('active', style === 'invisible');
+      document.getElementById('hs-style-highlight').classList.toggle('active', style === 'highlight');
+      document.getElementById('hs-style-outline').classList.toggle('active', style === 'outline');
+    }
+
+    function saveHotspotEditor() {
+      if (!currentEditingHotspot) return;
+      const label = document.getElementById('hotspot-label-input').value.trim() || 'Hotspot';
+      const tts = document.getElementById('hotspot-tts-input').value.trim() || label;
+      const jumpId = parseInt(document.getElementById('hotspot-jump-select').value);
+
+      currentEditingHotspot.label = label;
+      currentEditingHotspot.tts = tts;
+      currentEditingHotspot.action = hotspotActionMode;
+      currentEditingHotspot.audio = (hotspotActionMode === 'recorded') ? hotspotVoiceBlob : null;
+      currentEditingHotspot.jumpPageId = (hotspotActionMode === 'jump') ? jumpId : null;
+      currentEditingHotspot.style = hotspotStyleMode;
+
+      savePagesToStorage();
+      closeHotspotEditor();
+      renderCurrentPage();
+      showToast(`Saved hotspot "${label}"`);
+      showCompleteHUD();
+    }
+
+    function deleteCurrentHotspot() {
+      if (!currentEditingHotspot) return;
+      const p = pages[currentPageIndex];
+      if (p && p.hotspots) {
+        p.hotspots = p.hotspots.filter(h => h.id !== currentEditingHotspot.id);
+        savePagesToStorage();
+      }
+      closeHotspotEditor();
+      renderCurrentPage();
+      showToast('Hotspot deleted');
+      showCompleteHUD();
+    }
+
+    function previewHotspotSpeech() {
+      if (hotspotActionMode === 'recorded' && hotspotVoiceBlob) {
+        playHotspotRecordedAudio();
+      } else {
+        const tts = document.getElementById('hotspot-tts-input').value.trim() || document.getElementById('hotspot-label-input').value.trim();
+        speakText(tts || 'Hotspot');
+      }
+    }
+
+    function toggleHotspotVoiceRecord() {
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        document.getElementById('btn-hs-record').textContent = '🎙 Record Audio';
+      } else {
+        startHotspotAudioRecord();
+      }
+    }
+
+    async function startHotspotAudioRecord() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioStream = stream;
+        const chunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
+        mediaRecorder.onstop = () => {
+          hotspotVoiceBlob = new Blob(chunks, { type: 'audio/webm' });
+          stopAudioStream();
+          const statusEl = document.getElementById('hs-rec-status');
+          if (statusEl) statusEl.textContent = '✓ Audio recording saved!';
+          showToast('Audio recorded!');
+        };
+        mediaRecorder.start();
+        document.getElementById('btn-hs-record').textContent = '⏹ Stop Recording';
+        const statusEl = document.getElementById('hs-rec-status');
+        if (statusEl) statusEl.textContent = '🔴 Recording... speak now';
+      } catch (err) {
+        showToast('Microphone not available');
+      }
+    }
+
+    function playHotspotRecordedAudio() {
+      if (!hotspotVoiceBlob) {
+        showToast('No audio recorded yet');
+        return;
+      }
+      const audioUrl = (typeof hotspotVoiceBlob === 'string') ? hotspotVoiceBlob : URL.createObjectURL(hotspotVoiceBlob);
+      const audio = new Audio(audioUrl);
+      audio.play();
+    }
+
+    /* --- Visual Scene Picker --- */
+    function openScenePicker() {
+      const grid = document.getElementById('scene-presets-grid');
+      if (grid) {
+        grid.innerHTML = '';
+        Object.entries(SCENE_PRESETS).forEach(([key, scene]) => {
+          const card = document.createElement('div');
+          card.className = 'gallery-card';
+          card.style.cursor = 'pointer';
+          card.innerHTML = `
+            <div style="height: 120px; background: #e2e8f0; overflow: hidden; border-radius: 8px 8px 0 0;">
+              <img src="${scene.bg}" style="width: 100%; height: 100%; object-fit: cover;" alt="${scene.title}">
+            </div>
+            <div style="padding: 10px;">
+              <div style="font-weight: 800; font-size: 0.95rem; color: #1e293b;">${scene.title}</div>
+              <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">${scene.hotspots.length} interactive hotspots</div>
+              <button class="btn btn-primary" style="width: 100%; margin-top: 8px; font-weight: 700; font-size: 0.85rem;" onclick="selectScenePreset('${key}')">Use This Scene</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+      document.getElementById('modal-scene-picker').classList.add('open');
+    }
+
+    function closeScenePicker() {
+      document.getElementById('modal-scene-picker').classList.remove('open');
+    }
+
+    function selectScenePreset(key) {
+      const preset = SCENE_PRESETS[key];
+      if (!preset) return;
+      const p = pages[currentPageIndex];
+      if (p) {
+        p.sceneBg = preset.bg;
+        p.hotspots = JSON.parse(JSON.stringify(preset.hotspots));
+        savePagesToStorage();
+        closeScenePicker();
+        renderCurrentPage();
+        showToast(`Loaded ${preset.title} scene with ${preset.hotspots.length} hotspots!`);
+        showCompleteHUD();
+      }
+    }
+
+    function triggerSceneBgInput() {
+      closeScenePicker();
+      const input = document.getElementById('scene-bg-file-input');
+      input.value = '';
+      input.click();
+    }
+
+    function triggerSceneCamera() {
+      closeScenePicker();
+      startCamera();
+    }
+
+    function handleSceneBgSelected(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const p = pages[currentPageIndex];
+        if (p) {
+          p.sceneBg = evt.target.result;
+          savePagesToStorage();
+          renderCurrentPage();
+          showCompleteHUD();
+        }
+      };
+      reader.readAsDataURL(file);
     }
 
     /* --- Tile Actions & Audio Playback --- */
