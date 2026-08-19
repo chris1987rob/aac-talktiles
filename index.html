@@ -1602,6 +1602,13 @@
             </svg>
           </button>
 
+          <!-- Next Page button -->
+          <button id="btn-bar-next" class="btn-bar" onclick="nextPage()" title="Next Page">
+            <svg viewBox="0 0 24 24" style="width: 32px; height: 32px; fill: #ffffff;">
+              <path d="M9.5 5.5l6.5 6.5-6.5 6.5V5.5z"/>
+            </svg>
+          </button>
+
           <!-- Orange Home square button -->
           <button id="btn-bar-home" class="btn-bar btn-bar-home" onclick="switchToHomeView()" title="Home Screen">
             <svg viewBox="0 0 24 24" style="width: 28px; height: 28px; fill: #ffffff;">
@@ -1624,9 +1631,10 @@
           </button>
         </div>
 
-        <!-- Center: Page label or Page Title -->
-        <div id="bottom-bar-center" class="bottom-bar-center">
+        <!-- Center: Page label or Page Title (Clickable to open all pages) -->
+        <div id="bottom-bar-center" class="bottom-bar-center" onclick="openPagesDrawer()" title="Click to view all pages in book" style="cursor: pointer;">
           <span id="bar-page-label">Page 1</span>
+          <span style="font-size: 0.8rem; margin-left: 4px; opacity: 0.85;">▾</span>
         </div>
 
         <!-- Right buttons -->
@@ -4829,6 +4837,43 @@
       }
 
       renderCurrentPage();
+    }
+
+    // Keyboard navigation: Left/Right arrows change pages
+    window.addEventListener('keydown', (e) => {
+      const anyModalOpen = document.querySelector('.modal-backdrop.open, .popover-backdrop.open');
+      if (anyModalOpen) return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if (e.key === 'ArrowLeft') {
+        prevPage();
+      } else if (e.key === 'ArrowRight') {
+        nextPage();
+      }
+    });
+
+    // Touch swipe gesture navigation on the communication board
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const boardEl = document.getElementById('board-content');
+    if (boardEl) {
+      boardEl.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches[0]) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      boardEl.addEventListener('touchend', (e) => {
+        if (e.changedTouches && e.changedTouches[0]) {
+          const deltaX = e.changedTouches[0].clientX - touchStartX;
+          const deltaY = e.changedTouches[0].clientY - touchStartY;
+          if (Math.abs(deltaX) > 65 && Math.abs(deltaY) < 55) {
+            if (deltaX < 0) nextPage();
+            else prevPage();
+          }
+        }
+      }, { passive: true });
     }
 
     window.addEventListener('resize', fitAllLabels);
