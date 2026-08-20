@@ -6,6 +6,54 @@ an older one.
 
 ---
 
+## v2.5 — 2026-08-20 (versionCode 8)
+
+**Persistence rebuilt & real controls.** Fixes the P0 data loss bug where saving a
+photo serialized a Blob to `{}` in localStorage and bricked board rendering on the
+next launch. All placeholder and decoration-only controls are now fully functional.
+
+- **Safe multi-page persistence (P0-1 & P0-2)**:
+  - Blobs (photos & audio recordings) live exclusively in IndexedDB (`tiles_v2`).
+  - Page records in localStorage carry lightweight `hasPhoto`/`hasAudio` boolean
+    flags; `hydratePagesFromCache()` re-attaches blobs on startup.
+  - IndexedDB is keyed by `pageId:slot` (was slot alone), preventing slot 4 on
+    page 1 from overwriting slot 4 on page 2.
+  - Non-destructive migration (`talk_tiles_tilestore_migrated`) automatically
+    adopts legacy v1 slot-keyed records onto page 1 while leaving legacy stores in place.
+  - Object URLs are safely cached per Blob via `WeakMap` in `tilePhotoUrl()`,
+    preventing race conditions and `ERR_FILE_NOT_FOUND` errors.
+  - Monotonic `nextPageId()` (`(Math.max(...ids) || 0) + 1`) prevents page ID collisions
+    when pages are deleted and added.
+
+- **Gallery & wizard templates painted (P1-1)**:
+  - Normalized `color` → `bgColor` and `wordSize` → `labelSize` across all 5 Online
+    Gallery boards and Page Wizard presets.
+  - Resolved bare-word symbol names to real Mulberry SVG paths (`symbols/en/*.svg`)
+    or standard emojis (remapping tokens without exact Mulberry matches like `angry`
+    and `wave`). All 94 template tiles now paint backgrounds and icons cleanly.
+
+- **Controls made real (P1-4, P1-5, P2-4)**:
+  - **Voice / Use Second Voice**: Opens a system voice picker modal and configures
+    real `SpeechSynthesisVoice` objects that `speakText()` applies.
+  - **Page-specific scanning**: Implemented a step scanning cursor engine that
+    highlights candidate buttons/hotspots on interval and selects via tap or Space/Enter.
+  - **Auditory cues**: Plays TTS or recorded auditory cue upon navigating to a page
+    (once per visit, never on silent pages, suppressed in editor).
+  - **Share button**: Exports the active page as JSON.
+  - **Grid size 12**: Added a `12` (4×3) segmented control to the Page Options selector.
+  - Dead hidden Jump button removed.
+
+- **Tests: 100/100 across 8 suites** (was 85/85 across 7 suites):
+  - Added `test_persistence.js` (15/15 checks) covering Blob storage survival across
+    reloads, multi-page store keying, defensive unreadable record skips, monotonic IDs,
+    gallery/wizard rendering, scanning cursor lifecycle, voice selection, JSON export,
+    and legacy v1 migration.
+  - `test_buttons.js` presses 240/240 declared buttons with onclick handlers.
+
+APK: `AAC-Board-v2.5.apk`, 24,862,415 bytes.
+
+---
+
 ## v2.4.1 — 2026-08-20 (versionCode 7)
 
 **The symbol library is now inside the tile editor.** Editing a button used to

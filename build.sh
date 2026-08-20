@@ -7,9 +7,9 @@
 set -euo pipefail
 
 # --- release knobs ---------------------------------------------------------
-VERSION_CODE=7
-VERSION_NAME="2.4.1"
-APK_NAME="AAC-Board-v2.4.1.apk"
+VERSION_CODE=8
+VERSION_NAME="2.5"
+APK_NAME="AAC-Board-v2.5.apk"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # The signing key is shared by every version and lives in the project root.

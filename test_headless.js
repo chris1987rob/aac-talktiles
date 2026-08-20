@@ -107,7 +107,7 @@ const puppeteer = require('/home/mike/browser-automation/node_modules/puppeteer'
     saveCapturedToTile();                 // deliberately not awaited
     await saveEditorTile();               // must still store the NEW photo
 
-    const stored = cachedTiles.get(2);
+    const stored = getTileRecord(pages[currentPageIndex], 2);
     return {
       previewW: canvas.width, previewH: canvas.height,
       fsOpen: shown.open,
@@ -159,7 +159,7 @@ const puppeteer = require('/home/mike/browser-automation/node_modules/puppeteer'
     await saveEditorTile();
     await new Promise(r => setTimeout(r, 200));
 
-    const stored = cachedTiles.get(3);
+    const stored = getTileRecord(pages[currentPageIndex], 3);
     const tileLabel = document.querySelector('#tile-slot-3 .tile-label');
     if (!tileLabel) return { missingLabel: true };
 

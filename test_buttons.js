@@ -201,9 +201,8 @@ const fs = require('fs');
     document.getElementById('btn-bar-undo').click();
     out.undoEmptyToast = window.__toasts.slice(-1)[0];
 
-    window.__toasts = [];
-    document.getElementById('btn-bar-jump').click();
-    out.jumpToast = window.__toasts.slice(-1)[0];
+    // btn-bar-jump was a hidden, toast-only control; removed in v2.5.
+    out.jumpGone = !document.getElementById('btn-bar-jump');
 
     document.getElementById('btn-bar-auditory').click();
     out.cueModal = document.getElementById('modal-auditory-cue').classList.contains('open');
@@ -230,7 +229,7 @@ const fs = require('fs');
       c2.drawerFromLabel && c2.drawerFromLayers &&
       c2.played.length === 1 && c2.played[0] === 'apple, ball' &&
       c2.chipsBeforeUndo === 2 && c2.chipsAfterUndo === 1 && c2.undoEmptyToast === 'Back action' &&
-      c2.jumpToast === 'Jump Action' && c2.cueModal && c2.optionsOpen && c2.newPageOpen && c2.home,
+      c2.jumpGone && c2.cueModal && c2.optionsOpen && c2.newPageOpen && c2.home,
     JSON.stringify(c2)
   );
 
@@ -298,10 +297,10 @@ const fs = require('fs');
     return out;
   });
 
-  const expectedSegs = [1, 2, 4, 9, 16, 25, 36, 48];
+  const expectedSegs = [1, 2, 4, 9, 12, 16, 25, 36, 48];   // 12 added in v2.5
   check(
-    '3. Page Options: share stub, Background row, all 8 grid segments re-render, auditory row, Enabled/Express/Scanning toggles, backdrop close',
-    c3.shareToast === 'Share Page' && c3.colorPickerOpen &&
+    '3. Page Options: Share exports the page, Background row, all 9 grid segments re-render, auditory row, Enabled/Express/Scanning toggles, backdrop close',
+    c3.shareToast === 'Exported page JSON' && c3.colorPickerOpen &&
       c3.sizes.length === expectedSegs.length &&
       c3.sizes.every((s, i) => s.want === expectedSegs[i] && s.got === s.want && s.tiles === s.want && s.active) &&
       c3.cueFromOptions &&
@@ -629,10 +628,18 @@ const fs = require('fs');
     });
     document.getElementById('tab-cue-tts').click();
 
+    // Voice / Use Second Voice are real controls as of v2.5: the first opens a
+    // voice picker, the second switches the board onto the second voice.
     window.__toasts = [];
-    document.querySelector('#modal-auditory-cue [onclick*="Voice selected"]').click();
-    document.querySelector('#modal-auditory-cue [onclick*="Second voice"]').click();
-    out.stubToasts = window.__toasts.slice();
+    document.querySelector('#modal-auditory-cue [onclick*="openVoicePicker"]').click();
+    out.voicePickerOpen = document.getElementById('modal-voice-picker').classList.contains('open');
+    out.voiceRows = document.querySelectorAll('#voice-picker-list .voice-row').length;
+    out.voiceEmptyNote = !!document.querySelector('#voice-picker-list div');
+    document.querySelector('#modal-voice-picker .modal-close-btn').click();
+    out.voicePickerClosed = !document.getElementById('modal-voice-picker').classList.contains('open');
+    document.querySelector('#modal-auditory-cue [onclick*="useSecondVoice"]').click();
+    out.secondVoiceOpened = document.getElementById('modal-voice-picker').classList.contains('open');
+    document.querySelector('#modal-voice-picker .modal-footer .btn').click();
 
     document.getElementById('cue-text-input').value = 'Pick a colour';
     window.__spoken = [];
@@ -651,9 +658,9 @@ const fs = require('fs');
   });
 
   check(
-    '9. Auditory Cue modal: Recorded / TTS / None tabs, Voice + Second Voice stubs, Preview speaks, Save persists on the page, Close',
+    '9. Auditory Cue modal: Recorded / TTS / None tabs, Voice picker opens/closes, Second Voice, Preview speaks, Save persists on the page, Close',
     c9.modes.every(m => m.mode === m.m && m.active) &&
-      JSON.stringify(c9.stubToasts) === JSON.stringify(['Voice selected', 'Second voice set']) &&
+      c9.voicePickerOpen && c9.voiceEmptyNote && c9.voicePickerClosed && c9.secondVoiceOpened &&
       JSON.stringify(c9.previewed) === JSON.stringify(['Pick a colour']) &&
       c9.saved.cue === 'Pick a colour' && c9.saved.mode === 'tts' && c9.saved.closed &&
       c9.reopenedValue === 'Pick a colour' && c9.closedByX,
@@ -1142,6 +1149,7 @@ const fs = require('fs');
       'modal-stub': () => openStubModal('Settings'),
       'modal-symbol-library': () => openSymbolLibrary(),
       'modal-auditory-cue': () => openAuditoryCueModal(),
+      'modal-voice-picker': () => openVoicePicker('primary'),
       'modal-page-wizard': () => openPageWizard(),
       'modal-online-gallery': () => openOnlineGallery(),
       'modal-import-book': () => openImportModal(),

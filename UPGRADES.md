@@ -60,89 +60,47 @@ file-chooser wired through `onShowFileChooser`.
 
 ## 2. What is broken, missing, or inconsistent
 
-### 2.1 Saving a photo to a tile destroys the board on next launch — CONFIRMED
+### 2.1 Saving a photo to a tile destroys the board on next launch — FIXED IN v2.5
 
-`saveTileToDB` (2761) writes the tile object — including the photo `Blob` and
-audio `Blob` — into `pages[i].tiles[slot]`, then calls `savePagesToStorage`
-(2714), which is `JSON.stringify(pages)`. A `Blob` stringifies to `{}`. So
-localStorage ends up holding `"photo": {}`.
+Blobs no longer go to `localStorage`. Tile photos and audio live exclusively in
+IndexedDB (`tiles_v2`), while pages carry lightweight `hasPhoto`/`hasAudio`
+flags. On app load, `hydratePagesFromCache()` re-attaches blobs to page records,
+and `tilePhotoUrl` caches blob URLs in a `WeakMap` with defensive handling if a
+blob is unreadable.
 
-On the next load, `loadPagesFromStorage` restores that tile, `photo` is a truthy
-empty object, and `createTileElement` (4187) takes the non-string branch:
-`URL.createObjectURL(data.photo)` throws, `renderGridPage` dies mid-loop, and
-**the grid renders zero tiles**.
+### 2.2 IndexedDB is keyed by slot number, not by page — FIXED IN v2.5
 
-Reproduced headless: save a 185-byte PNG blob to slot 1, reload →
-`pageerror: Failed to execute 'createObjectURL' on 'URL': Overload resolution
-failed`, `#tiles-grid .tile` count `0`. Every page in the book is gone until
-localStorage is cleared.
+The IndexedDB tile store is now re-keyed by `pageId:slot` (`tiles_v2`), so
+slot 4 on page 1 and slot 4 on page 7 have completely independent records and
+blobs. Includes a non-destructive migration (`talk_tiles_tilestore_migrated`)
+that adopts an existing v1 board onto page 1 while leaving legacy records in place.
 
-Two things hide it from the suites: no test saves a real photo and then reloads,
-and the tile-editor suites all run within one page load.
+### 2.3 Online Gallery and Page Wizard write tile keys nothing reads — FIXED IN v2.5
 
-The IndexedDB copy is intact, but `renderGridPage` (4159) only consults
-`cachedTiles` when `p.tiles[slot]` is falsy **and** `currentPageIndex === 0`, so
-the good copy is never reached.
+All 5 gallery boards and wizard presets have been normalized: `color` → `bgColor`,
+`wordSize` → `labelSize`, and bare-word symbols resolved to real Mulberry SVG
+paths (`symbols/en/*.svg`) or emoji. All 94 template tiles now paint correctly
+with background colours and real pictures.
 
-### 2.2 IndexedDB is keyed by slot number, not by page
+### 2.4 Page ids collide after a delete — FIXED IN v2.5
 
-`saveTileToDB` / `deleteTileFromDB` use `store.put(tile)` with `keyPath: 'id'`,
-and `id` is the slot (1…48). Slot 4 on page 1 and slot 4 on page 7 are the same
-IndexedDB record. Commit 72d45d6 fixed the *visible* symptom by also writing into
-`page.tiles`, but the blob store underneath is still global — so a photo taken
-for one page's slot 4 silently overwrites another page's.
+All page creation paths now use monotonic `nextPageId()` (`(Math.max(...ids) || 0) + 1`),
+ensuring page IDs never collide even after intermediate pages are deleted.
 
-### 2.3 Online Gallery and Page Wizard write tile keys nothing reads — CONFIRMED
+### 2.5 Buttons that only produce a toast — FIXED IN v2.5
 
-`ONLINE_GALLERY_TEMPLATES` (3589) and `AAC_PRESETS` (3478) give every tile
-`color:` and `wordSize:`. `createTileElement` reads `bgColor` and `labelSize`.
-Result: all 5 gallery boards and every wizard preset page come out as plain white
-tiles at default text size. Confirmed — installing `gal-core-16` yields
-`tiles[1] = {label:"I", color:"#fff9c4", symbol:"me"}` and a rendered
-`background-color` of `""`.
+- `Voice` & `Use Second Voice`: Opens a SpeechSynthesis voice picker modal and
+  selects real system speech voices applied by `speakText()`.
+- Share icon: Exports the current page JSON.
+- Dead hidden `btn-bar-jump` button removed.
 
-Same tiles set `symbol:` to bare words (`'me'`, `'take'`, `'more'`, `'close'`).
-Those match neither a `.svg` path nor a case in `getSymbolSvg` (4243), so the
-default branch renders the literal string — the "symbol" on the gallery's "I"
-tile is the text **me**.
+### 2.6 Features that persist a flag and stop there — FIXED IN v2.5
 
-`test_buttons.js` check 11 now installs all five gallery boards and check 10
-drives the whole wizard, so the paths are exercised -- but they assert page
-creation, not tile colour, so the `color:`/`wordSize:` mismatch is still live.
-
-Separately **FIXED IN v2.4**: six of the gallery boards' tiles pointed at
-Mulberry files that are not in the set (`calm`, `doctor`, `ear_protectors`,
-`napkin`, `receipt`, `teacher`), so those boards shipped with broken images.
-They now point at ids that exist (`relax_,_to`, `doctor_1a`, `ear_muffs`,
-`serviette`, `money`, `teacher_1a`), and `test_buttons.js` check 19 fails on any
-`ERR_FILE_NOT_FOUND`.
-
-### 2.4 Page ids collide after a delete — CONFIRMED
-
-Every creation path uses `const newPageId = pages.length + 1` (`useCustomTemplate`
-4024, `installGalleryTemplate` 3735, `addNewButtonPage` 3090, and the wizard).
-Delete a page and add one and two pages share an id: confirmed sequence
-`[1, 3, 4, 5, 5]`. In editor mode the bottom bar shows `Page ${p.id}` (3228), so
-the label is wrong too. Import (`handleBookFileImport` 4076) does the same.
-
-### 2.5 Buttons that only produce a toast
-
-- 2009 `Voice` → `showToast('Voice selected')`
-- 2011 `Use Second Voice` → `showToast('Second voice set')`
-- 1800 share icon → `showToast('Share Page')`
-- 1763 `btn-bar-jump` → `showToast('Jump Action')` (hidden, `display: none`)
-
-BEHAVIOR-SPEC B10 lists Voice and Use Second Voice as real controls. They are
-labels over nothing.
-
-### 2.6 Features that persist a flag and stop there
-
-- **Page-specific scanning.** `togglePageScanning` (3213) stores `p.scanning`.
-  There is no scanning engine anywhere — no timer, no highlight cursor, no
-  switch input. UI-SPEC and BEHAVIOR-SPEC B5 both list it.
-- **Auditory cues.** `saveAuditoryCueModal` (4822) stores `p.auditoryCue` and
-  `p.auditoryMode`. Nothing ever reads them back to play a cue on page entry.
-  The "Recorded Audio" tab records nothing.
+- **Page-specific scanning**: Implemented a real step scanning cursor engine
+  (`startScanning`, `scanStep`, `stopScanning`) that highlights tiles/hotspots,
+  advances on interval, and can be activated via tap or Space/Enter (`selectScannedTarget`).
+- **Auditory cues**: `playPageAuditoryCue()` plays TTS or recorded audio cue
+  upon arrival on a page (only once, never on silent pages or in editor).
 
 ### 2.7 Open Board Format import is a label, not an implementation
 
@@ -175,11 +133,9 @@ that ships.
 `renderBoard` (3221) is a one-line alias for `renderCurrentPage`, dead in the
 app, called only by `test_headless.js` (178, 207).
 
-### 2.9 Grid size 12 exists but cannot be chosen
+### 2.9 Grid size 12 exists but cannot be chosen — FIXED IN v2.5
 
-`getGridDimensions` handles `12` (4×3) and `setLayout` (2998) maps legacy layout
-3 to it, but Page Options has no `12` segment. A book imported or migrated with
-a 12-button page renders fine and then cannot be edited back to 12.
+Added a `12` (4×3) segmented button to the Page Options grid selector.
 
 ### 2.10 Templates lost scene backgrounds and page flags — FIXED IN v2.4
 
@@ -273,37 +229,37 @@ anywhere in the app or repo. The only mention of the word "Mulberry" in
 
 ### P0 — data loss or crash
 
-| # | Item | Why |
-|---|---|---|
-| P0-1 | Stop putting `Blob`s in `localStorage`; keep photo/audio in IndexedDB and store only a reference on the page tile, and make `createTileElement` defensive about a non-Blob `photo` | §2.1: one photo tile bricks the whole board on next launch |
-| P0-2 | Key the IndexedDB tile store by `pageId + slot` and migrate existing records | §2.2: photos silently overwrite each other across pages |
-| P0-3 | Add a reload-persistence check for a real photo blob (save → reload → assert tiles render) | The bug above survived what are now seven green suites; `test_buttons.js` check 16 deliberately drops the staged photo rather than saving it, so it does not trip over P0-1 |
+| # | Item | Status | Why |
+|---|---|---|---|
+| P0-1 | Stop putting `Blob`s in `localStorage`; keep photo/audio in IndexedDB and store only a reference on the page tile, and make `createTileElement` defensive about a non-Blob `photo` | **FIXED IN v2.5** | §2.1: one photo tile bricks the whole board on next launch |
+| P0-2 | Key the IndexedDB tile store by `pageId + slot` and migrate existing records | **FIXED IN v2.5** | §2.2: photos silently overwrite each other across pages |
+| P0-3 | Add a reload-persistence check for a real photo blob (save → reload → assert tiles render) | **FIXED IN v2.5** (`test_persistence.js`) | The bug above survived what are now seven green suites; `test_buttons.js` check 16 deliberately drops the staged photo rather than saving it, so it does not trip over P0-1 |
 
 ### P1 — advertised but not working
 
-| # | Item | Why |
-|---|---|---|
-| P1-1 | Map `color`→`bgColor` and `wordSize`→`labelSize` in the gallery and wizard tile literals, and give their `symbol` values real Mulberry paths | §2.3: all 5 gallery boards and every wizard page ship colourless with a word where the picture should be |
-| P1-2 | Give pages a monotonic id (`Math.max(...ids) + 1` or a counter) | §2.4: duplicate ids, wrong "Page N" label, unstable book order |
-| P1-3 | Tile→page navigation (`action: {type:'goto', pageId}`) | The single biggest gap vs the reference board — its whole right-hand teal column is category folders, and "jump back" is a navigation button. Also unblocks a faithful Core Words board |
-| P1-4 | Either implement scanning + auditory-cue playback, or remove the controls | §2.6: toggles that persist a flag and do nothing are worse than absent ones |
-| P1-5 | Delete or implement the four toast-only buttons | §2.5: a "Voice" button that does nothing is a trap for a parent setting the board up |
-| P1-6 | Point the remaining `selectSymbol` calls in `test_button_editor.js` and `test_behavior.js` at a real path — **partly done in v2.4.1**, which added four checks driving the inline picker | §2.8: the covered path is not the shipped path |
-| P1-7 | Add `LICENSE` / `NOTICE` crediting Mulberry (CC BY-SA 4.0) and surface it in the app's help panel | §2.13: licence compliance, not polish |
+| # | Item | Status | Why |
+|---|---|---|---|
+| P1-1 | Map `color`→`bgColor` and `wordSize`→`labelSize` in the gallery and wizard tile literals, and give their `symbol` values real Mulberry paths | **FIXED IN v2.5** | §2.3: all 5 gallery boards and every wizard page ship colourless with a word where the picture should be |
+| P1-2 | Give pages a monotonic id (`Math.max(...ids) + 1` or a counter) | **FIXED IN v2.5** | §2.4: duplicate ids, wrong "Page N" label, unstable book order |
+| P1-3 | Tile→page navigation (`action: {type:'goto', pageId}`) | Open | The single biggest gap vs the reference board — its whole right-hand teal column is category folders, and "jump back" is a navigation button. Also unblocks a faithful Core Words board |
+| P1-4 | Either implement scanning + auditory-cue playback, or remove the controls | **FIXED IN v2.5** | §2.6: toggles that persist a flag and do nothing are worse than absent ones |
+| P1-5 | Delete or implement the four toast-only buttons | **FIXED IN v2.5** | §2.5: a "Voice" button that does nothing is a trap for a parent setting the board up |
+| P1-6 | Point the remaining `selectSymbol` calls in `test_button_editor.js` and `test_behavior.js` at a real path — **partly done in v2.4.1**, which added four checks driving the inline picker | Partially addressed | §2.8: the covered path is not the shipped path |
+| P1-7 | Add `LICENSE` / `NOTICE` crediting Mulberry (CC BY-SA 4.0) and surface it in the app's help panel | Open | §2.13: licence compliance, not polish |
 
 ### P2 — correctness, hygiene, reach
 
-| # | Item | Why |
-|---|---|---|
-| P2-1 | Either implement OBF/OBZ import properly or drop the claim from the modal | §2.7: currently promises interop with every other AAC app and delivers none |
-| P2-2 | ~~Carry `sceneBg`, `express`, `enabled` through save/use template~~ **done in v2.4**; `auditoryCue` and `scanning` still do not travel | §2.10 |
-| P2-3 | Escape interpolated titles, or build rows with `textContent` | §2.11 |
-| P2-4 | Add a `12` segment to Page Options | §2.9: a supported size the UI cannot select |
-| P2-5 | Rewrite `README.md`; fold the real v2.3 content into `CHANGELOG.md`; delete `SPEC.md`, the three finished task briefs, `generate_html.py`, `compare_sheets.py` and `comparisons/` (or move them to `versions/`) | §2.12: the docs currently describe a different app |
-| P2-6 | Drop `toggleSymbolPicker`; inline `renderBoard` and fix `test_headless.js` | §2.8: dead code that only exists because a test calls it |
-| P2-7 | Surface localStorage quota failures as a toast | §2.14: silent stop-saving is the worst failure mode for a comms aid |
-| P2-8 | Stop appending/stripping `" Template"` — keep the title, mark the kind separately | §2.14 |
-| P2-9 | Guard the Keyboard Page template against creating a second keyboard page, or give each keyboard page its own text buffer | §2.14 |
-| P2-11 | Build the keyboard key rows from one data table instead of three copies of the markup | §2.14: three copies that drift |
-| P2-12 | Drop the dead `sceneImage` key from `createPageFromWizard()` | §2.14 |
-| P2-10 | On-device pass on the Pixel 8 Pro for the v2.4 grid: 48 buttons at phone width is the densest layout shipped and has only been checked at 1280×800 headless | Legibility risk for the primary user |
+| # | Item | Status | Why |
+|---|---|---|---|
+| P2-1 | Either implement OBF/OBZ import properly or drop the claim from the modal | Open | §2.7: currently promises interop with every other AAC app and delivers none |
+| P2-2 | ~~Carry `sceneBg`, `express`, `enabled` through save/use template~~ **done in v2.4**; `auditoryCue` and `scanning` still do not travel | Open | §2.10 |
+| P2-3 | Escape interpolated titles, or build rows with `textContent` | Open | §2.11 |
+| P2-4 | Add a `12` segment to Page Options | **FIXED IN v2.5** | §2.9: a supported size the UI cannot select |
+| P2-5 | Rewrite `README.md`; fold the real v2.3 content into `CHANGELOG.md`; delete `SPEC.md`, the three finished task briefs, `generate_html.py`, `compare_sheets.py` and `comparisons/` (or move them to `versions/`) | Open | §2.12: the docs currently describe a different app |
+| P2-6 | Drop `toggleSymbolPicker`; inline `renderBoard` and fix `test_headless.js` | Open | §2.8: dead code that only exists because a test calls it |
+| P2-7 | Surface localStorage quota failures as a toast | Open | §2.14: silent stop-saving is the worst failure mode for a comms aid |
+| P2-8 | Stop appending/stripping `" Template"` — keep the title, mark the kind separately | Open | §2.14 |
+| P2-9 | Guard the Keyboard Page template against creating a second keyboard page, or give each keyboard page its own text buffer | Open | §2.14 |
+| P2-11 | Build the keyboard key rows from one data table instead of three copies of the markup | Open | §2.14: three copies that drift |
+| P2-12 | Drop the dead `sceneImage` key from `createPageFromWizard()` | Open | §2.14 |
+| P2-10 | On-device pass on the Pixel 8 Pro for the v2.4 grid: 48 buttons at phone width is the densest layout shipped and has only been checked at 1280×800 headless | Open (No device connected) | Legibility risk for the primary user |

@@ -1612,6 +1612,17 @@
       fill: currentColor;
       flex-shrink: 0;
     }
+
+    /* Scan cursor: the highlight that walks the buttons when page-specific
+       scanning is on. Deliberately loud -- it is the only thing a switch user
+       has to track. */
+    .scan-active {
+      outline: 6px solid #f59e0b !important;
+      outline-offset: -3px;
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.35), 0 0 18px rgba(245, 158, 11, 0.6) !important;
+      z-index: 5;
+    }
+    .scene-hotspot.scan-active { background: rgba(245, 158, 11, 0.25) !important; }
   </style>
   <script src="symbols_data.js"></script>
 </head>
@@ -1858,11 +1869,6 @@
           </button>
 
           <!-- User Mode: Action / Jump icon -->
-          <button id="btn-bar-jump" class="btn-bar" onclick="showToast('Jump Action')" title="Action Jump" style="display: none;">
-            <svg viewBox="0 0 24 24" style="width: 28px; height: 28px; fill: #ffffff;">
-              <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/>
-            </svg>
-          </button>
 
           <!-- Speech bubble with ! -->
           <button id="btn-bar-auditory" class="btn-bar" onclick="openAuditoryCueModal()" title="Auditory Cues">
@@ -1895,7 +1901,7 @@
       <div class="popover-card" onclick="event.stopPropagation()">
         <div class="popover-header">
           <span class="popover-title">Page Options</span>
-          <svg class="icon" viewBox="0 0 24 24" style="cursor: pointer; width: 22px; height: 22px;" onclick="showToast('Share Page')">
+          <svg class="icon" viewBox="0 0 24 24" style="cursor: pointer; width: 22px; height: 22px;" onclick="sharePage()">
             <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
           </svg>
         </div>
@@ -1915,6 +1921,7 @@
             <button class="segment-btn" data-grid="2" onclick="setGridSize(2)">2</button>
             <button class="segment-btn active" data-grid="4" onclick="setGridSize(4)">4</button>
             <button class="segment-btn" data-grid="9" onclick="setGridSize(9)">9</button>
+            <button class="segment-btn" data-grid="12" onclick="setGridSize(12)">12</button>
             <button class="segment-btn" data-grid="16" onclick="setGridSize(16)">16</button>
             <button class="segment-btn" data-grid="25" onclick="setGridSize(25)">25</button>
             <button class="segment-btn" data-grid="36" onclick="setGridSize(36)">36</button>
@@ -2104,14 +2111,32 @@
           </div>
 
           <div style="display: flex; gap: 8px; justify-content: space-between;">
-            <button class="btn btn-primary" onclick="showToast('Voice selected')">Voice</button>
+            <button class="btn btn-primary" onclick="openVoicePicker('primary')">Voice</button>
             <button id="btn-preview-cue" class="btn" style="background: #006853; color: #fff;" onclick="previewAuditoryCue()">Preview</button>
-            <button class="btn" style="background: #006853; color: #fff;" onclick="showToast('Second voice set')">Use Second Voice</button>
+            <button class="btn" style="background: #006853; color: #fff;" onclick="useSecondVoice()">Use Second Voice</button>
           </div>
         </div>
         <div class="modal-footer">
           <button class="btn" onclick="closeAuditoryCueModal()">Cancel</button>
           <button class="btn btn-primary" onclick="saveAuditoryCueModal()">Save Cue</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-voice-picker" class="modal-backdrop" onclick="if(event.target===this) closeVoicePicker()">
+      <div class="modal-card" style="max-width: 440px;" onclick="event.stopPropagation()">
+        <div class="modal-header dark">
+          <button class="modal-close-btn" onclick="closeVoicePicker()">
+            <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: #ffffff;"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+          </button>
+          <span class="modal-title" id="voice-picker-title">Choose Voice</span>
+          <div style="width: 32px;"></div>
+        </div>
+        <div class="modal-body" style="max-height: 50vh; overflow-y: auto;">
+          <div id="voice-picker-list"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeVoicePicker()">Close</button>
         </div>
       </div>
     </div>
@@ -2690,13 +2715,23 @@
        ========================================================================== */
 
     const DB_NAME = 'aac-board';
-    const DB_VERSION = 1;
-    const STORE_NAME = 'tiles';
+    const DB_VERSION = 2;
+    const STORE_NAME = 'tiles_v2';        // keyed by `pageId:slot`
+    const LEGACY_STORE_NAME = 'tiles';    // v1 store, keyed by slot alone
     const STORAGE_PAGES_KEY = 'talk_tiles_pages_v2';
+    const MIGRATION_FLAG = 'talk_tiles_tilestore_migrated';
+
+    // Page ids must be unique for the lifetime of the book: they key the tile
+    // store (`pageId:slot`), so a reused id makes two pages share their photos.
+    // `pages.length + 1` collided the moment a page was deleted.
+    function nextPageId() {
+      const ids = pages.map(p => Number(p && p.id)).filter(n => Number.isFinite(n));
+      return (ids.length ? Math.max(...ids) : 0) + 1;
+    }
 
     let dbInstance = null;
-    let cachedTiles = new Map(); // id -> tile record
-    let activeObjectURLs = new Map();
+    let cachedTiles = new Map(); // `pageId:slot` -> tile record
+    let blobUrlMap = new WeakMap();
 
     const DEFAULT_PAGES = [
       {
@@ -2807,6 +2842,34 @@
     window.__spokenHistory = [];
     window.__lastSpoken = "";
 
+    // Two selectable voices, as on the reference app: a primary voice and a
+    // second one an adult can switch to. These used to be buttons that raised a
+    // toast and changed nothing.
+    const VOICE_PRIMARY_KEY = 'talk_tiles_voice_primary';
+    const VOICE_SECOND_KEY = 'talk_tiles_voice_second';
+    let activeVoiceSlot = 'primary';
+
+    function availableVoices() {
+      if (!window.speechSynthesis || !window.speechSynthesis.getVoices) return [];
+      return window.speechSynthesis.getVoices() || [];
+    }
+
+    function getVoiceName(slot) {
+      try { return localStorage.getItem(slot === 'second' ? VOICE_SECOND_KEY : VOICE_PRIMARY_KEY) || ''; }
+      catch (e) { return ''; }
+    }
+
+    function setVoiceName(slot, name) {
+      try { localStorage.setItem(slot === 'second' ? VOICE_SECOND_KEY : VOICE_PRIMARY_KEY, name || ''); }
+      catch (e) {}
+    }
+
+    function resolveVoice() {
+      const name = getVoiceName(activeVoiceSlot);
+      if (!name) return null;
+      return availableVoices().find(v => v.name === name) || null;
+    }
+
     function speakText(text) {
       if (!text) return;
       const clean = String(text).trim();
@@ -2817,15 +2880,69 @@
         window.speechSynthesis.cancel();
         const utter = new SpeechSynthesisUtterance(clean);
         utter.rate = 0.95;
+        const v = resolveVoice();
+        // A stored voice name can resolve to something the engine will not
+        // accept (a stale voice after a system update). Fall back to the
+        // default rather than letting the board go silent.
+        if (v) {
+          try { utter.voice = v; if (v.lang) utter.lang = v.lang; }
+          catch (e) { console.warn('Voice not usable, using default', e); }
+        }
+        window.__lastVoice = v ? v.name : '(default)';
         window.speechSynthesis.speak(utter);
       }
     }
 
     /* --- Storage Helpers --- */
+
+    // Photos and voice recordings are Blobs. `JSON.stringify` turns a Blob into
+    // `{}`, so writing a page straight to localStorage used to store `"photo":{}`
+    // and the next launch died in `URL.createObjectURL({})` mid-render, taking
+    // every tile after it with it. localStorage now carries only the tile's
+    // plain fields plus `hasPhoto` / `hasAudio`; the Blobs themselves live in
+    // IndexedDB and are re-attached by `hydratePagesFromCache()` after load.
+    const BLOB_TILE_FIELDS = ['photo', 'audio'];
+
+    function isBlobLike(v) {
+      return v && typeof v === 'object' && typeof v.size === 'number' && typeof v.type === 'string';
+    }
+
+    function stripTileBlobs(tile) {
+      if (!tile || typeof tile !== 'object') return tile;
+      const out = {};
+      for (const k of Object.keys(tile)) {
+        if (BLOB_TILE_FIELDS.includes(k)) continue;
+        out[k] = tile[k];
+      }
+      // A data: URL is a string and survives JSON, so keep it on the page.
+      for (const k of BLOB_TILE_FIELDS) {
+        const v = tile[k];
+        if (typeof v === 'string' && v) out[k] = v;
+        else if (isBlobLike(v)) out[k === 'photo' ? 'hasPhoto' : 'hasAudio'] = true;
+      }
+      return out;
+    }
+
+    function pagesForStorage() {
+      return pages.map(p => {
+        if (!p || !p.tiles) return p;
+        const tiles = {};
+        for (const slot of Object.keys(p.tiles)) tiles[slot] = stripTileBlobs(p.tiles[slot]);
+        return Object.assign({}, p, { tiles });
+      });
+    }
+
     function savePagesToStorage() {
       try {
-        localStorage.setItem(STORAGE_PAGES_KEY, JSON.stringify(pages));
-      } catch (e) { console.error('Save pages error', e); }
+        localStorage.setItem(STORAGE_PAGES_KEY, JSON.stringify(pagesForStorage()));
+      } catch (e) {
+        console.error('Save pages error', e);
+        // A comms board that silently stops saving is the worst failure mode
+        // there is -- say so out loud.
+        if (e && (e.name === 'QuotaExceededError' || e.code === 22)) {
+          showToast('Storage is full — changes may not be saved', 'danger');
+        }
+      }
     }
 
     function loadPagesFromStorage() {
@@ -2837,13 +2954,28 @@
       } catch (e) { console.error('Load pages error', e); }
     }
 
+    // The tile store is keyed by page *and* slot. Keying it by slot alone made
+    // slot 4 on page 1 and slot 4 on page 7 the same record, so a photo taken
+    // for one page overwrote the other's.
+    function tileKey(pageId, slot) { return `${pageId}:${slot}`; }
+
+    function currentPageId() {
+      const p = pages[currentPageIndex];
+      return p && p.id != null ? p.id : 1;
+    }
+
     function openDatabase() {
       return new Promise((resolve, reject) => {
         const req = indexedDB.open(DB_NAME, DB_VERSION);
         req.onupgradeneeded = (e) => {
           const db = e.target.result;
+          // Legacy slot-keyed store. Left in place on purpose: it is the only
+          // copy of an existing board's photos until migration has copied them.
+          if (!db.objectStoreNames.contains(LEGACY_STORE_NAME)) {
+            db.createObjectStore(LEGACY_STORE_NAME, { keyPath: 'id' });
+          }
           if (!db.objectStoreNames.contains(STORE_NAME)) {
-            db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+            db.createObjectStore(STORE_NAME, { keyPath: 'key' });
           }
         };
         req.onsuccess = () => resolve(req.result);
@@ -2851,8 +2983,42 @@
       });
     }
 
+    // One-time copy of slot-keyed records onto the first page. Copies rather
+    // than moves: if anything here is wrong, the original records are still
+    // sitting in the legacy store.
+    function migrateLegacyTiles(db) {
+      return new Promise((resolve) => {
+        if (!db.objectStoreNames.contains(LEGACY_STORE_NAME)) return resolve(0);
+        if (localStorage.getItem(MIGRATION_FLAG) === 'done') return resolve(0);
+        let tx;
+        try { tx = db.transaction([LEGACY_STORE_NAME, STORE_NAME], 'readwrite'); }
+        catch (e) { return resolve(0); }
+        const legacy = tx.objectStore(LEGACY_STORE_NAME);
+        const target = tx.objectStore(STORE_NAME);
+        const req = legacy.getAll();
+        req.onsuccess = () => {
+          const items = req.result || [];
+          const homeId = (pages[0] && pages[0].id != null) ? pages[0].id : 1;
+          let n = 0;
+          for (const item of items) {
+            if (!item || item.id == null) continue;
+            const key = tileKey(homeId, item.id);
+            target.put(Object.assign({}, item, { key, pageId: homeId, id: item.id }));
+            n++;
+          }
+          tx.oncomplete = () => {
+            try { localStorage.setItem(MIGRATION_FLAG, 'done'); } catch (e) {}
+            resolve(n);
+          };
+        };
+        req.onerror = () => resolve(0);
+        tx.onerror = () => resolve(0);
+      });
+    }
+
     async function loadAllTilesFromDB() {
       if (!dbInstance) dbInstance = await openDatabase();
+      await migrateLegacyTiles(dbInstance);
       return new Promise((resolve, reject) => {
         const tx = dbInstance.transaction(STORE_NAME, 'readonly');
         const store = tx.objectStore(STORE_NAME);
@@ -2861,31 +3027,58 @@
           cachedTiles.clear();
           const items = req.result || [];
           for (const item of items) {
-            cachedTiles.set(item.id, item);
+            if (item && item.key) cachedTiles.set(item.key, item);
           }
+          hydratePagesFromCache();
           resolve(cachedTiles);
         };
         req.onerror = () => reject(req.error);
       });
     }
 
+    // Put the Blobs back onto the page tiles that localStorage could not carry.
+    function hydratePagesFromCache() {
+      for (const p of pages) {
+        if (!p || !p.tiles) continue;
+        for (const slot of Object.keys(p.tiles)) {
+          const tile = p.tiles[slot];
+          if (!tile || typeof tile !== 'object') continue;
+          const rec = cachedTiles.get(tileKey(p.id, Number(slot)));
+          for (const k of BLOB_TILE_FIELDS) {
+            if (typeof tile[k] === 'string' && tile[k]) continue;
+            if (rec && isBlobLike(rec[k])) tile[k] = rec[k];
+            else if (!isBlobLike(tile[k])) delete tile[k];
+          }
+          delete tile.hasPhoto;
+          delete tile.hasAudio;
+        }
+      }
+    }
+
+    function getTileRecord(page, slot) {
+      if (!page) return null;
+      const onPage = page.tiles && page.tiles[slot];
+      if (onPage) return onPage;
+      return cachedTiles.get(tileKey(page.id, slot)) || null;
+    }
+
     async function saveTileToDB(tile) {
       if (!dbInstance) dbInstance = await openDatabase();
+      const pageId = currentPageId();
+      const record = Object.assign({}, tile, { key: tileKey(pageId, tile.id), pageId });
       return new Promise((resolve, reject) => {
         const tx = dbInstance.transaction(STORE_NAME, 'readwrite');
         const store = tx.objectStore(STORE_NAME);
-        const req = store.put(tile);
+        const req = store.put(record);
         req.onsuccess = () => {
-          if (currentPageIndex === 0) {
-            cachedTiles.set(tile.id, tile);
-          }
+          cachedTiles.set(record.key, record);
           const p = pages[currentPageIndex];
           if (p) {
             if (!p.tiles) p.tiles = {};
-            p.tiles[tile.id] = tile;
+            p.tiles[tile.id] = record;
             savePagesToStorage();
           }
-          resolve(tile);
+          resolve(record);
         };
         req.onerror = () => reject(req.error);
       });
@@ -2893,14 +3086,14 @@
 
     async function deleteTileFromDB(id) {
       if (!dbInstance) dbInstance = await openDatabase();
+      const pageId = currentPageId();
+      const key = tileKey(pageId, id);
       return new Promise((resolve, reject) => {
         const tx = dbInstance.transaction(STORE_NAME, 'readwrite');
         const store = tx.objectStore(STORE_NAME);
-        const req = store.delete(id);
+        const req = store.delete(key);
         req.onsuccess = () => {
-          if (currentPageIndex === 0) {
-            cachedTiles.delete(id);
-          }
+          cachedTiles.delete(key);
           const p = pages[currentPageIndex];
           if (p && p.tiles) {
             delete p.tiles[id];
@@ -2910,6 +3103,14 @@
         };
         req.onerror = () => reject(req.error);
       });
+    }
+
+    // Titles and voice names are user/system supplied and get interpolated
+    // into innerHTML in a few places; escape them.
+    function escapeHtmlText(v) {
+      return String(v == null ? '' : v)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
     /* --- Toast Notification --- */
@@ -3055,7 +3256,6 @@
       document.getElementById('btn-bar-sliders').style.display = isEditMode ? 'inline-flex' : 'none';
       document.getElementById('btn-bar-undo').style.display = isEditMode ? 'none' : 'inline-flex';
       document.getElementById('btn-bar-layers').style.display = isEditMode ? 'inline-flex' : 'none';
-      document.getElementById('btn-bar-jump').style.display = isEditMode ? 'none' : 'inline-flex';
       document.getElementById('btn-bar-add').style.display = isEditMode ? 'inline-flex' : 'none';
       document.getElementById('btn-bar-play').style.display = isEditMode ? 'none' : 'inline-flex';
 
@@ -3199,7 +3399,7 @@
     }
 
     function addNewButtonPage() {
-      const newId = pages.length + 1;
+      const newId = nextPageId();
       pages.push({
         id: newId,
         title: `Page ${newId}`,
@@ -3218,7 +3418,7 @@
     }
 
     function addNewScenePage() {
-      const newId = pages.length + 1;
+      const newId = nextPageId();
       pages.push({
         id: newId,
         title: `Page ${newId}`,
@@ -3239,7 +3439,7 @@
 
     function duplicateCurrentPage() {
       const current = pages[currentPageIndex];
-      const newId = pages.length + 1;
+      const newId = nextPageId();
       const dup = JSON.parse(JSON.stringify(current));
       dup.id = newId;
       dup.title = `${current.title} (Copy)`;
@@ -3325,6 +3525,7 @@
       const p = pages[currentPageIndex];
       if (p) p.scanning = enable;
       savePagesToStorage();
+      syncScanningState();
       showCompleteHUD();
     }
 
@@ -3333,10 +3534,101 @@
       renderCurrentPage();
     }
 
+    // A page's auditory cue announces the page when a user lands on it. It was
+    // being saved to `p.auditoryCue` and never read back by anything.
+    let lastCuedPageId = null;
+
+    function playPageAuditoryCue(p) {
+      if (!p || isEditMode) { lastCuedPageId = null; return; }
+      if (p.id === lastCuedPageId) return;      // only on arrival, not re-render
+      lastCuedPageId = p.id;
+      if (!p.auditoryCue || p.auditoryMode === 'none') return;
+      if (p.auditoryMode === 'recorded' && p.auditoryAudio) {
+        playAuditoryCueRecording(p);
+        return;
+      }
+      speakText(p.auditoryCue);
+    }
+
+    function playAuditoryCueRecording(p) {
+      try {
+        const url = URL.createObjectURL(p.auditoryAudio);
+        const a = new Audio(url);
+        a.onended = () => URL.revokeObjectURL(url);
+        a.play().catch(() => { URL.revokeObjectURL(url); speakText(p.auditoryCue); });
+      } catch (e) { speakText(p.auditoryCue); }
+    }
+
+    /* --- Page-specific scanning ------------------------------------------
+       The Page Options toggle used to store `p.scanning` and stop there: no
+       timer, no cursor, no way to select. It now runs a real step scan --
+       a highlight walks the page's buttons and any tap (or Space/Enter)
+       activates the highlighted one, which is how a switch user drives an
+       AAC board. */
+    const SCAN_INTERVAL_MS = 1200;
+    let scanTimer = null;
+    let scanIndex = -1;
+    let scanTargets = [];
+
+    function scanCandidates() {
+      const p = pages[currentPageIndex];
+      if (!p) return [];
+      if (p.type === 'scene') return [...document.querySelectorAll('#scene-hotspots-container .scene-hotspot')];
+      return [...document.querySelectorAll('#tiles-grid .tile')];
+    }
+
+    function clearScanHighlight() {
+      document.querySelectorAll('.scan-active').forEach(el => el.classList.remove('scan-active'));
+    }
+
+    function stopScanning() {
+      if (scanTimer) { clearInterval(scanTimer); scanTimer = null; }
+      scanIndex = -1;
+      scanTargets = [];
+      clearScanHighlight();
+      document.body.classList.remove('scanning-on');
+    }
+
+    function scanStep() {
+      clearScanHighlight();
+      if (!scanTargets.length) { stopScanning(); return; }
+      scanIndex = (scanIndex + 1) % scanTargets.length;
+      const el = scanTargets[scanIndex];
+      if (el) el.classList.add('scan-active');
+    }
+
+    function startScanning() {
+      stopScanning();
+      const p = pages[currentPageIndex];
+      if (!p || !p.scanning || isEditMode) return;
+      scanTargets = scanCandidates();
+      if (!scanTargets.length) return;
+      document.body.classList.add('scanning-on');
+      scanStep();
+      scanTimer = setInterval(scanStep, SCAN_INTERVAL_MS);
+    }
+
+    function selectScannedTarget() {
+      if (!scanTimer || scanIndex < 0) return false;
+      const el = scanTargets[scanIndex];
+      if (!el) return false;
+      el.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+      el.click();
+      return true;
+    }
+
+    function syncScanningState() {
+      const p = pages[currentPageIndex];
+      if (p && p.scanning && !isEditMode) startScanning();
+      else stopScanning();
+    }
+
     function renderCurrentPage() {
       const p = pages[currentPageIndex] || pages[0];
       const barLabel = document.getElementById('bar-page-label');
       barLabel.textContent = isEditMode ? `Page ${p.id}` : p.title;
+
+      playPageAuditoryCue(p);
 
       const expressContainer = document.getElementById('express-bar-container');
       expressContainer.classList.toggle('open', !!p.express);
@@ -3367,6 +3659,8 @@
         gridView.style.display = 'grid';
         renderGridPage(p);
       }
+
+      syncScanningState();
     }
 
     /* --- Feature 1: Keyboard Communication Page --- */
@@ -3381,7 +3675,7 @@
         showToast('Switched to Keyboard Page');
         return;
       }
-      const newPageId = pages.length + 1;
+      const newPageId = nextPageId();
       const newPage = {
         id: newPageId,
         title: 'Keyboard',
@@ -3614,7 +3908,7 @@
       feelings: [
         { label: 'Happy', tts: 'I feel happy', color: '#fff59d', symbol: 'happy' },
         { label: 'Sad', tts: 'I feel sad', color: '#90caf9', symbol: 'sad' },
-        { label: 'Mad', tts: 'I am angry', color: '#ef9a9a', symbol: 'angry' },
+        { label: 'Mad', tts: 'I am angry', color: '#ef9a9a', symbol: 'angry_man' },
         { label: 'Tired', tts: 'I am tired', color: '#ce93d8', symbol: 'tired' },
         { label: 'Scared', tts: 'I am scared', color: '#b39ddb', symbol: 'scared' },
         { label: 'Sick', tts: 'I feel sick', color: '#a5d6a7', symbol: 'sick' },
@@ -3623,8 +3917,8 @@
         { label: 'Need Break', tts: 'I need a break', color: '#b0bec5', symbol: 'sleep' }
       ],
       social: [
-        { label: 'Hello', tts: 'Hello, how are you?', color: '#ffeb3b', symbol: 'wave' },
-        { label: 'Goodbye', tts: 'Goodbye, see you later', color: '#ffcc80', symbol: 'wave' },
+        { label: 'Hello', tts: 'Hello, how are you?', color: '#ffeb3b', symbol: 'hello' },
+        { label: 'Goodbye', tts: 'Goodbye, see you later', color: '#ffcc80', symbol: 'hello' },
         { label: 'Please', tts: 'Please', color: '#81c784', symbol: 'please' },
         { label: 'Thank you', tts: 'Thank you very much', color: '#81c784', symbol: 'give' },
         { label: 'My Turn', tts: 'It is my turn', color: '#90caf9', symbol: 'me' },
@@ -3645,7 +3939,7 @@
 
     function createPageFromWizard() {
       const title = document.getElementById('wiz-page-name').value.trim() || `Page ${pages.length + 1}`;
-      const newPageId = pages.length + 1;
+      const newPageId = nextPageId();
 
       if (wizardPageType === 'scene') {
         const newPage = {
@@ -3676,7 +3970,7 @@
           const slot = i + 1;
           if (presetItems[i]) {
             const item = presetItems[i];
-            newPage.tiles[slot] = {
+            newPage.tiles[slot] = normalizeTemplateTile({
               id: slot,
               label: item.label,
               tts: item.tts,
@@ -3684,7 +3978,7 @@
               symbol: item.symbol,
               wordSize: 1.0,
               labelPosition: 'bottom'
-            };
+            });
           }
         }
         pages.push(newPage);
@@ -3699,6 +3993,57 @@
     }
 
     /* --- Feature 3: Online Gallery --- */
+    // Gallery and wizard tile literals were written against key names the
+    // renderer does not read: `color` (it reads `bgColor`) and `wordSize` (it
+    // reads `labelSize`), so every downloaded board came out plain white at
+    // default text size. Their `symbol` values are also bare words like 'me'
+    // or 'take', which match neither an .svg path nor a case in getSymbolSvg,
+    // so the default branch printed the word itself where the picture belongs.
+    // Every template tile goes through here on the way onto a page.
+    const EMOJI_SYMBOL_CASES = ['smile','frown','eat','water','yes','no','help','home','bus','book','heart','star'];
+    let symbolIdIndex = null;
+
+    function resolveSymbolToken(sym) {
+      if (!sym || typeof sym !== 'string') return sym || null;
+      if (sym.endsWith('.svg') || sym.includes('/')) return sym;      // already a path
+      if (EMOJI_SYMBOL_CASES.includes(sym)) return sym;               // handled by getSymbolSvg
+      if (!/^[\w-]+$/.test(sym)) return sym;                          // an actual emoji glyph
+      if (!symbolIdIndex) {
+        symbolIdIndex = new Map();
+        for (const e of AAC_SYMBOL_LIBRARY) {
+          if (e.svgPath) {
+            symbolIdIndex.set(e.id.toLowerCase(), e.svgPath);
+            const lbl = String(e.label || '').toLowerCase();
+            if (lbl && !symbolIdIndex.has(lbl)) symbolIdIndex.set(lbl, e.svgPath);
+          } else if (e.emoji && !symbolIdIndex.has(e.id.toLowerCase())) {
+            symbolIdIndex.set(e.id.toLowerCase(), e.emoji);
+          }
+        }
+      }
+      const k = sym.toLowerCase();
+      return symbolIdIndex.get(k) || symbolIdIndex.get(k.replace(/_/g, ' ')) || null;
+    }
+
+    function normalizeTemplateTile(tile) {
+      if (!tile || typeof tile !== 'object') return tile;
+      const t = Object.assign({}, tile);
+      if (t.color && !t.bgColor) t.bgColor = t.color;
+      if (t.wordSize && !t.labelSize) t.labelSize = t.wordSize;
+      delete t.color; delete t.wordSize;
+      if ('symbol' in t) {
+        const resolved = resolveSymbolToken(t.symbol);
+        if (resolved) t.symbol = resolved; else delete t.symbol;
+      }
+      return t;
+    }
+
+    function normalizeTemplateTiles(tiles) {
+      if (!tiles || typeof tiles !== 'object') return tiles;
+      const out = {};
+      for (const slot of Object.keys(tiles)) out[slot] = normalizeTemplateTile(tiles[slot]);
+      return out;
+    }
+
     const ONLINE_GALLERY_TEMPLATES = [
       {
         id: 'gal-core-16',
@@ -3755,7 +4100,7 @@
         tiles: {
           1: { label: 'Happy', tts: 'I feel happy today', color: '#fff59d', symbol: 'happy' },
           2: { label: 'Sad', tts: 'I am feeling sad', color: '#90caf9', symbol: 'sad' },
-          3: { label: 'Angry', tts: 'I am angry', color: '#ef9a9a', symbol: 'angry' },
+          3: { label: 'Angry', tts: 'I am angry', color: '#ef9a9a', symbol: 'angry_man' },
           4: { label: 'Tired', tts: 'I am very tired', color: '#d1c4e9', symbol: 'tired' },
           5: { label: 'Scared', tts: 'I feel scared', color: '#b39ddb', symbol: 'scared' },
           6: { label: 'Silly', tts: 'I feel silly', color: '#ffcc80', symbol: 'silly' },
@@ -3849,7 +4194,7 @@
       const tpl = ONLINE_GALLERY_TEMPLATES.find(t => t.id === templateId);
       if (!tpl) return;
 
-      const newPageId = pages.length + 1;
+      const newPageId = nextPageId();
       const newPage = {
         id: newPageId,
         title: tpl.title.replace(/\s*\([^)]*\)/, ''),
@@ -3858,7 +4203,7 @@
         bg: '#ffffff',
         enabled: true,
         express: true,
-        tiles: JSON.parse(JSON.stringify(tpl.tiles))
+        tiles: normalizeTemplateTiles(JSON.parse(JSON.stringify(tpl.tiles)))
       };
 
       pages.push(newPage);
@@ -4147,7 +4492,7 @@
       const tpl = templates[idx];
       if (!tpl) return;
 
-      const newPageId = pages.length + 1;
+      const newPageId = nextPageId();
       const newPage = {
         id: newPageId,
         title: tpl.title.replace(/\s*Template$/, ''),
@@ -4160,7 +4505,7 @@
         enabled: tpl.enabled !== false,
         express: !!tpl.express,
         sceneBg: tpl.sceneBg || null,
-        tiles: JSON.parse(JSON.stringify(tpl.tiles || {})),
+        tiles: normalizeTemplateTiles(JSON.parse(JSON.stringify(tpl.tiles || {}))),
         hotspots: JSON.parse(JSON.stringify(tpl.hotspots || []))
       };
 
@@ -4209,7 +4554,7 @@
           if (Array.isArray(data.pages)) {
             // Full Book import
             data.pages.forEach(p => {
-              p.id = pages.length + 1;
+              p.id = nextPageId();
               pages.push(p);
             });
             savePagesToStorage();
@@ -4217,7 +4562,7 @@
             showToast(`Imported ${data.pages.length} pages from book`);
           } else if (data.tiles || data.type) {
             // Single page import
-            data.id = pages.length + 1;
+            data.id = nextPageId();
             pages.push(data);
             savePagesToStorage();
             currentPageIndex = pages.length - 1;
@@ -4239,7 +4584,7 @@
     }
 
     function exportCurrentPageJSON() {
-      const p = pages[currentPageIndex] || pages[0];
+      const p = pagesForStorage()[currentPageIndex] || pagesForStorage()[0];
       const json = JSON.stringify(p, null, 2);
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -4247,7 +4592,7 @@
       a.href = url;
       a.download = `talk_tiles_page_${p.id}_${(p.title || 'page').toLowerCase().replace(/\s+/g, '_')}.json`;
       a.click();
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
       showToast('Exported page JSON');
     }
 
@@ -4256,7 +4601,7 @@
         title: 'Talk Tiles Communication Book',
         version: '2.3',
         exportDate: new Date().toISOString(),
-        pages: pages
+        pages: pagesForStorage()
       };
       const json = JSON.stringify(bookData, null, 2);
       const blob = new Blob([json], { type: 'application/json' });
@@ -4265,7 +4610,7 @@
       a.href = url;
       a.download = `talk_tiles_full_book_${new Date().toISOString().slice(0, 10)}.json`;
       a.click();
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
       showToast('Exported entire communication book JSON');
     }
 
@@ -4278,12 +4623,14 @@
       grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
       grid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
 
-      activeObjectURLs.forEach(url => URL.revokeObjectURL(url));
-      activeObjectURLs.clear();
-
       for (let slotId = 1; slotId <= count; slotId++) {
-        const tileData = (page.tiles && page.tiles[slotId]) || (currentPageIndex === 0 ? cachedTiles.get(slotId) : null) || null;
-        const tileEl = createTileElement(slotId, tileData);
+        let tileEl;
+        try {
+          tileEl = createTileElement(slotId, getTileRecord(page, slotId));
+        } catch (e) {
+          console.error('Tile ' + slotId + ' failed to render', e);
+          tileEl = createTileElement(slotId, null);
+        }
         grid.appendChild(tileEl);
       }
 
@@ -4306,6 +4653,22 @@
         // densest grid that still leaves a readable tile on a phone.
         case 48: return { cols: 8, rows: 6 };
         default: return { cols: 2, rows: 2 };
+      }
+    }
+
+    function tilePhotoUrl(data, slotId) {
+      const photo = data && data.photo;
+      if (!photo) return null;
+      if (typeof photo === 'string') return photo;
+      if (!isBlobLike(photo)) return null;
+      try {
+        if (blobUrlMap.has(photo)) return blobUrlMap.get(photo);
+        const url = URL.createObjectURL(photo);
+        blobUrlMap.set(photo, url);
+        return url;
+      } catch (e) {
+        console.error('Unreadable tile photo on slot ' + slotId, e);
+        return null;
       }
     }
 
@@ -4332,12 +4695,14 @@
       const imgWrap = document.createElement('div');
       imgWrap.className = 'tile-image-wrap';
 
-      if (data && data.photo) {
+      // A tile whose photo is neither a URL string nor a real Blob is skipped
+      // rather than thrown on: one unreadable record used to abort
+      // `renderGridPage` mid-loop and blank every tile after it.
+      const photoUrl = tilePhotoUrl(data, slotId);
+      if (photoUrl) {
         const img = document.createElement('img');
         img.className = 'tile-image';
         img.alt = data.label || `Tile ${slotId}`;
-        const photoUrl = (typeof data.photo === 'string') ? data.photo : URL.createObjectURL(data.photo);
-        if (typeof data.photo !== 'string') activeObjectURLs.set(slotId, photoUrl);
         img.src = photoUrl;
         imgWrap.appendChild(img);
       } else if (data && data.symbol) {
@@ -4978,6 +5343,76 @@
       document.getElementById('tab-cue-none').classList.toggle('active', mode === 'none');
     }
 
+    // "Voice" and "Use Second Voice" used to be `showToast(...)` and nothing
+    // else. They now pick a real SpeechSynthesis voice, which `speakText()`
+    // applies to every utterance the board makes.
+    function openVoicePicker(slot) {
+      activeVoiceSlot = slot;
+      const voices = availableVoices();
+      const host = document.getElementById('voice-picker-list');
+      const modal = document.getElementById('modal-voice-picker');
+      const title = document.getElementById('voice-picker-title');
+      title.textContent = slot === 'second' ? 'Choose Second Voice' : 'Choose Voice';
+      host.innerHTML = '';
+
+      if (!voices.length) {
+        host.innerHTML = '<div style="padding:16px; color:#64748b;">No speech voices are installed on this device. The board will use the system default.</div>';
+      } else {
+        const current = getVoiceName(slot);
+        voices.forEach(v => {
+          const row = document.createElement('button');
+          row.className = 'btn voice-row' + (v.name === current ? ' btn-primary' : '');
+          row.style.cssText = 'display:flex; justify-content:space-between; width:100%; margin-bottom:6px; text-align:left;';
+          row.innerHTML = `<span>${escapeHtmlText(v.name)}</span><span style="opacity:.65;">${escapeHtmlText(v.lang || '')}</span>`;
+          row.onclick = () => chooseVoice(slot, v.name);
+          host.appendChild(row);
+        });
+      }
+      modal.classList.add('open');
+    }
+
+    function chooseVoice(slot, name) {
+      setVoiceName(slot, name);
+      activeVoiceSlot = slot;
+      closeVoicePicker();
+      showToast((slot === 'second' ? 'Second voice: ' : 'Voice: ') + name);
+      speakText('This is the ' + (slot === 'second' ? 'second' : 'main') + ' voice');
+    }
+
+    function closeVoicePicker() {
+      document.getElementById('modal-voice-picker').classList.remove('open');
+    }
+
+    // Switch the board onto the second voice (and back) without reopening the list.
+    function useSecondVoice() {
+      if (!getVoiceName('second')) { openVoicePicker('second'); return; }
+      activeVoiceSlot = activeVoiceSlot === 'second' ? 'primary' : 'second';
+      showToast(activeVoiceSlot === 'second' ? 'Using second voice' : 'Using main voice');
+      speakText('This is the ' + (activeVoiceSlot === 'second' ? 'second' : 'main') + ' voice');
+    }
+
+    // The share icon raised a "Share Page" toast and did nothing. It now hands
+    // the page to the OS share sheet where there is one, and falls back to the
+    // export that already exists.
+    async function sharePage() {
+      const p = pagesForStorage()[currentPageIndex] || pagesForStorage()[0];
+      const json = JSON.stringify(p, null, 2);
+      const filename = `talk_tiles_page_${p.id}_${(p.title || 'page').toLowerCase().replace(/\s+/g, '_')}.json`;
+      try {
+        if (navigator.canShare && navigator.share) {
+          const file = new File([json], filename, { type: 'application/json' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: p.title || 'Talk Tiles page' });
+            showToast('Page shared');
+            return;
+          }
+        }
+      } catch (e) {
+        if (e && e.name === 'AbortError') return;   // user dismissed the sheet
+      }
+      exportCurrentPageJSON();
+    }
+
     function previewAuditoryCue() {
       const text = document.getElementById('cue-text-input').value.trim();
       speakText(text || "Preview Auditory Cue");
@@ -5005,7 +5440,7 @@
       currentEditingSlot = slotId;
 
       const p = pages[currentPageIndex];
-      const existingData = (p && p.tiles && p.tiles[slotId]) || (currentPageIndex === 0 ? cachedTiles.get(slotId) : null) || null;
+      const existingData = getTileRecord(p, slotId);
 
       pendingPhotoBlob = (existingData && existingData.photo) || null;
       pendingAudioBlob = (existingData && existingData.audio) || null;
@@ -5692,7 +6127,7 @@
       const removeBtn = document.getElementById('btn-remove-photo');
 
       if (pendingPhotoBlob) {
-        imgEl.src = (typeof pendingPhotoBlob === 'string') ? pendingPhotoBlob : URL.createObjectURL(pendingPhotoBlob);
+        imgEl.src = (typeof pendingPhotoBlob === 'string') ? pendingPhotoBlob : (tilePhotoUrl({ photo: pendingPhotoBlob }, 'preview') || '');
         imgEl.style.display = 'block';
         symEl.style.display = 'none';
         placeholder.style.display = 'none';
@@ -5935,6 +6370,14 @@
 
       renderCurrentPage();
     }
+
+    // Switch input: Space or Enter picks whatever the scan cursor is on.
+    window.addEventListener('keydown', (e) => {
+      if (e.key !== ' ' && e.key !== 'Enter') return;
+      if (document.querySelector('.modal-backdrop.open, .popover-backdrop.open')) return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (selectScannedTarget()) e.preventDefault();
+    });
 
     // Keyboard navigation: Left/Right arrows change pages
     window.addEventListener('keydown', (e) => {
