@@ -6,6 +6,67 @@ an older one.
 
 ---
 
+## v2.4 — 2026-08-20 (versionCode 6)
+
+**Built-in page templates.** "New Page → My Templates" now opens with eleven
+templates already in it, ahead of anything the user has saved. They are code,
+not storage: they cannot be deleted, they cost nothing to restore, and clearing
+the app's data does not lose them.
+
+- **Core Words (Classic)** — the board from Chris's reference video, rebuilt as
+  a 48-button page: navy control row across the top (back, go, stop, yes, no,
+  help, more, all done), a lavender pronoun column down the left, four green
+  verb columns, blue describers, white function words, and a teal social column
+  on the right. 27 of the 48 tiles carry a real Mulberry pictogram; the abstract
+  words are text-only, as they are on the reference board.
+- **Yes/No Board** — the two-button teal board, mirroring the one in the
+  default book.
+- **Blank 1 / 2 / 4 / 9 / 16 / 25 / 36** — an empty page at every grid size.
+- **Visual Scene (Blank)** and **Keyboard Page**.
+
+Built-ins are listed first, tagged "Built-in" and shown without a delete button;
+`deleteCustomTemplate()` refuses a built-in index outright rather than relying on
+the missing button. The user's own templates follow, still saved, used and
+deleted exactly as before.
+
+**New grid size: 48 (8 × 6).** Added to `getGridDimensions()` with a matching
+segment in Page Options. The reference board is roughly 10 columns × 8 rows and
+runs off the edge of the video frame; 8 × 6 is the densest grid Talk Tiles can
+render with a label that is still readable.
+
+**Fixed while in there:** the My Templates rows were inheriting
+`flex-direction: column` from `.editor-section`, so every row stacked its title
+above its button instead of putting the button on the right. Also "1 Buttons" →
+"1 Button".
+
+**`versions/v2.3/` now exists.** v2.3 shipped on 2026-08-20 and was never
+archived; the snapshot was cut from the live tree before any of the above was
+written, so its `index.html` is exactly what produced `AAC-Board-v2.3.apk`. Its
+`symbols/` is a symlink to the project copy — the 3,436 Mulberry files have not
+changed since v2.3, and `build.sh` now copies them with `cp -rL` so a rebuild
+from an archive still gets real files.
+
+**`UPGRADES.md`** — a full audit of the prototype: feature inventory, what is
+broken or only pretending to work, and a P0/P1/P2 upgrade list. The headline is
+a **P0 confirmed in headless Chrome: saving a photo to a tile takes the whole
+board down on the next launch.** `saveTileToDB()` puts the photo `Blob` into
+`pages[i].tiles[slot]` and `savePagesToStorage()` JSON-stringifies it to `{}`;
+on reload `URL.createObjectURL({})` throws inside `renderGridPage()` and the
+grid renders zero tiles. Not fixed in this release — it needs the persistence
+layer reworked, and v2.4 was scoped to templates. It is P0-1 in `UPGRADES.md`.
+
+**Tests: 51/51 across five suites.** New `test_templates.js` (9 checks) covers
+the built-in list, the Built-in badge, the absent delete button, the refusal in
+`deleteCustomTemplate()`, the 48-button Core Words page and its colours, the
+blank/scene/keyboard shapes, the user save→use→delete round trip, and the 48
+segment button. Existing suites unchanged and green: `test_headless.js` 22/22,
+`test_behavior.js` 8/8, `test_button_editor.js` 6/6, `test_photo_library.js` 6/6.
+
+APK: `AAC-Board-v2.4.apk`, 25,416,182 bytes (24.2 MB) — 4 KB larger than v2.3.
+Not installed on a device: the phone was not connected for this release.
+
+---
+
 ## v2.3 — 2026-08-17 (versionCode 5)
 
 **Automatic background removal is gone.** Chris's call: ship without it. The

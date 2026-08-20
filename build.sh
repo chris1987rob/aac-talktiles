@@ -7,9 +7,9 @@
 set -euo pipefail
 
 # --- release knobs ---------------------------------------------------------
-VERSION_CODE=5
-VERSION_NAME="2.3"
-APK_NAME="AAC-Board-v2.3.apk"
+VERSION_CODE=6
+VERSION_NAME="2.4"
+APK_NAME="AAC-Board-v2.4.apk"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # The signing key is shared by every version and lives in the project root.
@@ -53,7 +53,9 @@ if [ -f "$ROOT/symbols_data.js" ]; then
   cp "$ROOT/symbols_data.js" "$APP/assets/symbols_data.js"
 fi
 if [ -d "$ROOT/symbols" ]; then
-  cp -r "$ROOT/symbols" "$APP/assets/symbols"
+  # -L: version archives symlink `symbols` back at the project copy (same 3,436
+  # Mulberry files since v2.3); dereference so the APK gets real files.
+  cp -rL "$ROOT/symbols" "$APP/assets/symbols"
 fi
 # v2.2 also shipped an ONNX segmentation model here for automatic background
 # removal. That feature was dropped in v2.3; the runtime and model are archived

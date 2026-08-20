@@ -1820,6 +1820,7 @@
             <button class="segment-btn" data-grid="16" onclick="setGridSize(16)">16</button>
             <button class="segment-btn" data-grid="25" onclick="setGridSize(25)">25</button>
             <button class="segment-btn" data-grid="36" onclick="setGridSize(36)">36</button>
+            <button class="segment-btn" data-grid="48" onclick="setGridSize(48)">48</button>
           </div>
         </div>
 
@@ -2357,7 +2358,7 @@
           <button class="btn btn-primary" onclick="saveCurrentPageAsTemplate()" style="padding: 12px; font-weight: 700; width: 100%;">
             💾 Save Current Page as New Template
           </button>
-          <div style="font-weight: 700; font-size: 0.95rem; color: #334155; margin-top: 6px;">Saved Custom Templates:</div>
+          <div style="font-weight: 700; font-size: 0.95rem; color: #334155; margin-top: 6px;">Built-in &amp; Saved Templates:</div>
           <div id="my-templates-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto;"></div>
         </div>
 
@@ -3759,6 +3760,180 @@
     /* --- Feature 4: My Templates --- */
     const STORAGE_TEMPLATES_KEY = 'talk_tiles_custom_templates';
 
+    /* --- Built-in templates (v2.4) -------------------------------------------
+       "Core Words (Classic)" reproduces the board in Chris's reference video
+       (TEMPLATE-REF.png / TEMPLATE-REF-ZOOM.png): a navy control row across the
+       top, a lavender pronoun column down the left, green verb columns through
+       the middle, blue describers, white function words, and a teal social
+       column on the right. The filmed board is roughly 10 columns x 8 rows and
+       is clipped by the video frame; 8 x 6 (gridSize 48) is the densest grid
+       Talk Tiles can render with a legible label. The colours below are the
+       Fitzgerald-key families sampled off the crop and white-balanced.
+
+       Built-ins are code, not storage: they are never written to
+       localStorage, and renderMyTemplatesList() shows them ahead of the user's
+       own saved templates with no delete button.
+    ------------------------------------------------------------------------ */
+    const CORE_WORD_COLORS = {
+      navy:     { bgColor: '#1a237e', labelColor: '#ffffff' }, // control row
+      lavender: { bgColor: '#9fa8da', labelColor: '#1a1a2e' }, // pronouns
+      green:    { bgColor: '#4caf50', labelColor: '#ffffff' }, // verbs
+      blue:     { bgColor: '#64b5f6', labelColor: '#0d1b2a' }, // describers
+      white:    { bgColor: '#f5f5f7', labelColor: '#212121' }, // function words
+      teal:     { bgColor: '#00897b', labelColor: '#ffffff' }  // social words
+    };
+
+    // [label, colour family, symbol] in slot order: 8 across, 6 down.
+    // A null symbol is deliberate -- abstract words are text-only on the
+    // reference board too ("to", "be", "the", "and" all read as plain text).
+    const CORE_WORDS_LAYOUT = [
+      // row 1 - navy control row
+      ['back', 'navy', '⬅️'],
+      ['go', 'navy', '➡️'],
+      ['stop', 'navy', '✋'],
+      ['yes', 'navy', '👍'],
+      ['no', 'navy', '👎'],
+      ['help', 'navy', 'symbols/en/help_,_to.svg'],
+      ['more', 'navy', '➕'],
+      ['all done', 'navy', '🏁'],
+      // row 2
+      ['I', 'lavender', 'symbols/en/I.svg'],
+      ['want', 'green', 'symbols/en/want_,_to.svg'],
+      ['eat', 'green', 'symbols/en/eat_,_to.svg'],
+      ['drink', 'green', 'symbols/en/drink_,_to.svg'],
+      ['play', 'green', 'symbols/en/play_,_to.svg'],
+      ['good', 'blue', 'symbols/en/good.svg'],
+      ['my', 'white', null],
+      ['please', 'teal', '🙏'],
+      // row 3
+      ['you', 'lavender', null],
+      ['need', 'green', null],
+      ['come', 'green', 'symbols/en/come_,_to.svg'],
+      ['get', 'green', 'symbols/en/get_,_to.svg'],
+      ['look', 'green', 'symbols/en/look_,_to.svg'],
+      ['bad', 'blue', 'symbols/en/bad.svg'],
+      ['in', 'white', 'symbols/en/in.svg'],
+      ['thank you', 'teal', '🤝'],
+      // row 4
+      ['it', 'lavender', null],
+      ['like', 'green', null],
+      ['make', 'green', 'symbols/en/make_,_to.svg'],
+      ['put', 'green', 'symbols/en/put_,_to.svg'],
+      ['open', 'green', 'symbols/en/open_,_to.svg'],
+      ['little', 'blue', 'symbols/en/little.svg'],
+      ['on', 'white', 'symbols/en/on.svg'],
+      ['hello', 'teal', 'symbols/en/hello.svg'],
+      // row 5
+      ['we', 'lavender', null],
+      ['have', 'green', null],
+      ['read', 'green', 'symbols/en/read_,_to.svg'],
+      ['sing', 'green', 'symbols/en/sing_,_to.svg'],
+      ['turn', 'green', 'symbols/en/turn_,_to.svg'],
+      ['big', 'blue', null],
+      ['up', 'white', 'symbols/en/up.svg'],
+      ['bye', 'teal', '👋'],
+      // row 6
+      ['they', 'lavender', null],
+      ['feel', 'green', null],
+      ['give', 'green', 'symbols/en/give_,_to.svg'],
+      ['do', 'green', null],
+      ['finished', 'green', 'symbols/en/finish.svg'],
+      ['different', 'blue', null],
+      ['not', 'white', null],
+      ['again', 'teal', '🔁']
+    ];
+
+    function buildCoreWordsTiles() {
+      const tiles = {};
+      CORE_WORDS_LAYOUT.forEach((entry, i) => {
+        const slot = i + 1;
+        const tile = Object.assign(
+          { id: slot, label: entry[0], tts: entry[0], labelSize: 0.9 },
+          CORE_WORD_COLORS[entry[1]]
+        );
+        if (entry[2]) tile.symbol = entry[2];
+        tiles[slot] = tile;
+      });
+      return tiles;
+    }
+
+    function blankGridTemplate(count) {
+      return {
+        title: 'Blank ' + count,
+        type: 'grid',
+        gridSize: count,
+        bg: '#ffffff',
+        tiles: {},
+        hotspots: [],
+        builtin: true,
+        date: 'Built-in'
+      };
+    }
+
+    const BUILTIN_TEMPLATES = [
+      {
+        title: 'Core Words (Classic)',
+        type: 'grid',
+        gridSize: 48,
+        bg: '#ffffff',
+        tiles: buildCoreWordsTiles(),
+        hotspots: [],
+        builtin: true,
+        date: 'Built-in'
+      },
+      {
+        // Mirrors DEFAULT_PAGES entry 2 so the classic two-choice board can be
+        // added to any book without hunting for the original page.
+        title: 'Yes/No Board',
+        type: 'grid',
+        gridSize: 2,
+        bg: '#004838',
+        tiles: {
+          1: { id: 1, label: 'yes', tts: 'yes', bgColor: '#ffffff', labelColor: '#111111', symbol: 'smile', labelSize: 1.5 },
+          2: { id: 2, label: 'no', tts: 'no', bgColor: '#ffffff', labelColor: '#111111', symbol: 'frown', labelSize: 1.5 }
+        },
+        hotspots: [],
+        builtin: true,
+        date: 'Built-in'
+      },
+      blankGridTemplate(1),
+      blankGridTemplate(2),
+      blankGridTemplate(4),
+      blankGridTemplate(9),
+      blankGridTemplate(16),
+      blankGridTemplate(25),
+      blankGridTemplate(36),
+      {
+        title: 'Visual Scene (Blank)',
+        type: 'scene',
+        gridSize: 4,
+        bg: '#00a699',
+        tiles: {},
+        hotspots: [],
+        builtin: true,
+        date: 'Built-in'
+      },
+      {
+        // addNewKeyboardPage() builds {id,title,type,bg,enabled,express} and
+        // renderCurrentPage() dispatches on type alone, so the keyboard page
+        // shape survives the template round trip unchanged.
+        title: 'Keyboard Page',
+        type: 'keyboard',
+        gridSize: 4,
+        bg: '#f1f5f9',
+        tiles: {},
+        hotspots: [],
+        builtin: true,
+        date: 'Built-in'
+      }
+    ];
+
+    // Built-ins first, then the user's saved templates. Indices into this
+    // merged array are what the +Use / delete buttons pass back.
+    function getAllTemplates() {
+      return BUILTIN_TEMPLATES.concat(getCustomTemplates());
+    }
+
     function getCustomTemplates() {
       try {
         const stored = localStorage.getItem(STORAGE_TEMPLATES_KEY);
@@ -3781,38 +3956,51 @@
       document.getElementById('modal-my-templates').classList.remove('open');
     }
 
+    function templateSubtitle(tpl) {
+      if (tpl.type === 'scene') return 'Visual Scene';
+      if (tpl.type === 'keyboard') return 'Keyboard Page';
+      return tpl.gridSize + (tpl.gridSize === 1 ? ' Button' : ' Buttons');
+    }
+
     function renderMyTemplatesList() {
       const listEl = document.getElementById('my-templates-list');
-      const templates = getCustomTemplates();
+      const templates = getAllTemplates();
       listEl.innerHTML = '';
 
-      if (templates.length === 0) {
-        listEl.innerHTML = `
-          <div style="padding: 20px; text-align: center; color: #64748b; font-size: 0.9rem; background: #f8fafc; border-radius: 8px;">
-            No saved templates yet. Click above to save the current page as your first template!
-          </div>
-        `;
-        return;
-      }
-
       templates.forEach((tpl, idx) => {
+        const isBuiltin = !!tpl.builtin;
         const row = document.createElement('div');
         row.className = 'editor-section';
+        row.dataset.templateIndex = idx;
+        if (isBuiltin) row.dataset.builtin = 'true';
         row.style.display = 'flex';
+        // .editor-section is flex-direction: column; these rows want a row.
+        row.style.flexDirection = 'row';
         row.style.justifyContent = 'space-between';
         row.style.alignItems = 'center';
         row.innerHTML = `
           <div>
-            <div style="font-weight: 700; font-size: 1rem; color: #0f172a;">${tpl.title}</div>
-            <div style="font-size: 0.8rem; color: #64748b;">${tpl.type === 'scene' ? 'Visual Scene' : tpl.gridSize + ' Buttons'} • Saved on ${tpl.date || 'Recent'}</div>
+            <div class="template-title" style="font-weight: 700; font-size: 1rem; color: #0f172a;">
+              ${tpl.title}
+              ${isBuiltin ? '<span class="template-builtin-badge" style="margin-left: 6px; padding: 2px 7px; border-radius: 999px; background: #e0f2f1; color: #00695c; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; vertical-align: middle;">Built-in</span>' : ''}
+            </div>
+            <div class="template-subtitle" style="font-size: 0.8rem; color: #64748b;">${templateSubtitle(tpl)} • ${isBuiltin ? 'Built-in' : 'Saved on ' + (tpl.date || 'Recent')}</div>
           </div>
           <div style="display: flex; gap: 8px;">
             <button class="btn btn-primary" onclick="useCustomTemplate(${idx})" style="padding: 6px 12px; font-size: 0.85rem; font-weight: 700;">+ Use</button>
-            <button class="btn btn-danger" onclick="deleteCustomTemplate(${idx})" style="padding: 6px 10px; font-size: 0.85rem;">🗑</button>
+            ${isBuiltin ? '' : `<button class="btn btn-danger" onclick="deleteCustomTemplate(${idx})" style="padding: 6px 10px; font-size: 0.85rem;">🗑</button>`}
           </div>
         `;
         listEl.appendChild(row);
       });
+
+      if (getCustomTemplates().length === 0) {
+        const hint = document.createElement('div');
+        hint.id = 'my-templates-empty-hint';
+        hint.style.cssText = 'padding: 16px; text-align: center; color: #64748b; font-size: 0.9rem; background: #f8fafc; border-radius: 8px;';
+        hint.textContent = 'No templates of your own yet. Click above to save the current page as your first one.';
+        listEl.appendChild(hint);
+      }
     }
 
     function saveCurrentPageAsTemplate() {
@@ -3834,7 +4022,7 @@
     }
 
     function useCustomTemplate(idx) {
-      const templates = getCustomTemplates();
+      const templates = getAllTemplates();
       const tpl = templates[idx];
       if (!tpl) return;
 
@@ -3861,8 +4049,16 @@
     }
 
     function deleteCustomTemplate(idx) {
+      // idx indexes the merged list; only the user's own templates are stored,
+      // so shift past the built-ins and refuse anything that lands on one.
+      const customIdx = idx - BUILTIN_TEMPLATES.length;
+      if (customIdx < 0) {
+        showToast('Built-in templates cannot be deleted');
+        return;
+      }
       const templates = getCustomTemplates();
-      templates.splice(idx, 1);
+      if (customIdx >= templates.length) return;
+      templates.splice(customIdx, 1);
       saveCustomTemplates(templates);
       renderMyTemplatesList();
       showToast('Template removed');
@@ -3980,6 +4176,10 @@
         case 16: return { cols: 4, rows: 4 };
         case 25: return { cols: 5, rows: 5 };
         case 36: return { cols: 6, rows: 6 };
+        // Dense landscape core board, added in v2.4 for "Core Words (Classic)".
+        // The reference board it is modelled on is roughly 10 x 8; 8 x 6 is the
+        // densest grid that still leaves a readable tile on a phone.
+        case 48: return { cols: 8, rows: 6 };
         default: return { cols: 2, rows: 2 };
       }
     }
