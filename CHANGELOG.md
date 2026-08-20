@@ -6,6 +6,57 @@ an older one.
 
 ---
 
+## v2.4.1 — 2026-08-20 (versionCode 7)
+
+**The symbol library is now inside the tile editor.** Editing a button used to
+mean tapping "Search Symbols & Photos", waiting for a full-screen modal on top
+of the editor, searching, picking, and being dropped back. The 3,609-symbol
+catalogue is the best thing the app has and it was hidden behind a door. It is
+now a scrolling strip of cards in the editor itself:
+
+- **Seeded from the tile's own label.** Open the editor on a button labelled
+  "apple" and the strip already shows apple symbols. With no label it leads with
+  the 173 starter icons rather than an alphabetical slice of 3,600.
+- **Filters as you type the label.** `#modal-label-input` now runs
+  `onEditorLabelInput()`, which refreshes the strip alongside the size preview.
+- **Its own search box** for when the label and the picture differ ("juice" on a
+  button labelled "drink"). A search the adult typed wins over the label; the ✕
+  clears it and the strip falls back to the label.
+- **Picking never interrupts the edit.** `selectInlineEditorSymbol()` sets the
+  symbol, drops any staged photo, fills a blank label/TTS (and leaves a written
+  one alone), updates the preview and highlights the card. No modal closes, no
+  modal opens.
+- **The strip always states what is set.** The symbol already on the button is
+  pinned first and shown selected, even under a search that cannot match it —
+  so the strip answers "what is on this button?" as well as "what could be?".
+- The full-screen library is still there, one tap away, relabelled **Browse All
+  Symbols**.
+
+Sized for a 7–8" tablet: 96px cards, horizontal scroll, and the editor modal
+widened from 480px to 640px so six cards are visible at once instead of three.
+The old and new pickers share one matcher (`searchSymbolLibrary()`), so a query
+behaves identically in both.
+
+No schema change: `tile.symbol` already accepted an SVG path, an emoji or a
+glyph, and `saveEditorTile()` already persisted `pendingSymbol`.
+
+**Tests: 85/85 across seven suites** (was 81/81). `test_button_editor.js` grew
+from 6 checks to 10: the strip is seeded from the tile label with no second
+modal open; it re-filters live as the label is retyped; a symbol search
+overrides the label and clearing it falls back; a dud query explains itself; a
+tap sets the symbol in place with exactly one card highlighted, a staged photo
+dropped, a blank label filled and a written TTS cue preserved; Save persists it
+and reopening highlights it even under a query that cannot match it.
+`test_buttons.js` covers the new ✕ and now presses 236/236 declared buttons.
+Everything else unchanged and green: `test_headless.js` 22, `test_behavior.js`
+8, `test_photo_library.js` 6, `test_templates.js` 11, `test_scenes.js` 9,
+`test_buttons.js` 19.
+
+APK: `AAC-Board-v2.4.1.apk`, 25,420,278 bytes — 4 KB over v2.4. Not installed:
+no device connected, so the strip has only been used at 1024×768 headless.
+
+---
+
 ## v2.4 — 2026-08-20 (versionCode 6)
 
 **Built-in page templates.** "New Page → My Templates" now opens with eleven

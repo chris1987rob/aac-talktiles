@@ -467,6 +467,19 @@ const fs = require('fs');
     document.querySelector('#editor-modal [onclick="triggerFileInput()"]').click();
     out.fileInputExists = !!document.getElementById('photo-file-input');
 
+    // inline symbol strip: search, pick a card, clear the search
+    const symSearch = document.getElementById('editor-symbol-search');
+    symSearch.value = 'apple';
+    symSearch.dispatchEvent(new Event('input', { bubbles: true }));
+    const strip = document.getElementById('editor-symbol-strip');
+    out.inline = { cards: strip.querySelectorAll('.sym-card').length, src: strip.dataset.querySource };
+    strip.querySelector('.sym-card').click();
+    out.inlinePicked = { symbol: pendingSymbol, selected: strip.querySelectorAll('.sym-card.selected').length,
+                         stillOpen: document.getElementById('editor-modal').classList.contains('open') };
+    document.getElementById('btn-editor-sym-clear').click();
+    out.inlineCleared = { value: symSearch.value, src: strip.dataset.querySource,
+                          clearBtn: document.getElementById('btn-editor-sym-clear').style.display };
+
     // stage a symbol so Remove has something to remove
     pendingSymbol = 'symbols/en/eat_,_to.svg';
     updateModalPhotoPreview();
@@ -519,10 +532,13 @@ const fs = require('fs');
   });
 
   check(
-    '7. Tile editor: opens on a slot, label position top/bottom, symbol library, upload, remove photo, record/stop/preview/remove audio, Save, Clear, close',
+    '7. Tile editor: opens on a slot, label position top/bottom, inline symbol strip (search / pick / clear), full library, upload, remove photo, record/stop/preview/remove audio, Save, Clear, close',
     c7.opened && c7.title === 'Edit Button #1' &&
       c7.posTop === 'top' && c7.posBottom === 'bottom' &&
       c7.libraryOpen && c7.fileInputExists && c7.symbolCleared === null &&
+      c7.inline.cards > 0 && c7.inline.src === 'search' &&
+      !!c7.inlinePicked.symbol && c7.inlinePicked.selected === 1 && c7.inlinePicked.stillOpen &&
+      c7.inlineCleared.value === '' && c7.inlineCleared.clearBtn === 'none' &&
       c7.recording && c7.hasAudio && c7.audioCleared === null &&
       c7.savedLabel === 'eat' && c7.savedBg === 'rgb(76, 175, 80)' && c7.editorClosed &&
       JSON.stringify(c7.spoke) === JSON.stringify(['I want to eat']) &&

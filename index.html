@@ -1046,6 +1046,104 @@
       padding: 0 2px;
     }
 
+    /* The editor now carries a symbol strip; give it more room so more than
+       three or four cards are visible at once on a 7-8" tablet. */
+    #editor-modal .modal-card {
+      max-width: 640px;
+    }
+
+    /* --- Inline symbol picker inside the tile editor ---------------------
+       A horizontally scrolling strip rather than a grid: the editor modal is
+       already tall, and on a 7-8" tablet a single row of big cards costs one
+       row of height instead of four. Cards are 96px so they stay a comfortable
+       thumb target. --------------------------------------------------------- */
+    .editor-symbol-picker {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .editor-symbol-searchrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .editor-symbol-searchrow .text-input {
+      flex: 1;
+      padding-left: 34px;
+    }
+
+    .editor-symbol-searchrow .editor-sym-search-icon {
+      position: absolute;
+      left: 9px;
+      width: 18px;
+      height: 18px;
+      fill: #94a3b8;
+      pointer-events: none;
+    }
+
+    #btn-editor-sym-clear {
+      position: absolute;
+      right: 8px;
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #475569;
+      font-weight: 800;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .editor-symbol-strip {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 4px 2px 8px;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      min-height: 108px;
+    }
+
+    .editor-symbol-strip .sym-card {
+      flex: 0 0 96px;
+      width: 96px;
+      scroll-snap-align: start;
+    }
+
+    .editor-symbol-strip .sym-card.selected {
+      border-color: #008369;
+      background: #e6f4ea;
+      box-shadow: 0 0 0 2px rgba(0, 131, 105, 0.35);
+    }
+
+    .editor-symbol-empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 96px;
+      color: #64748b;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: center;
+      padding: 0 12px;
+    }
+
+    .editor-symbol-hint {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
     .quick-words-bar {
       display: flex;
       gap: 5px;
@@ -2039,7 +2137,7 @@
               <svg class="icon" viewBox="0 0 24 24"><path d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z"/></svg>
               <span>Tile Label &amp; Text</span>
             </div>
-            <input type="text" id="modal-label-input" class="text-input" placeholder="e.g. eat, water, yes, help..." oninput="onLabelSizeInput()">
+            <input type="text" id="modal-label-input" class="text-input" placeholder="e.g. eat, water, yes, help..." oninput="onEditorLabelInput()">
             
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <span style="font-size: 0.85rem; font-weight: 600; color: #475569;">Text Position:</span>
@@ -2096,10 +2194,23 @@
               </div>
             </div>
 
+            <!-- Inline symbol picker: the library, in the editor. Typing a
+                 label filters it live; tapping a card sets the symbol without
+                 leaving the editor. -->
+            <div id="editor-symbol-picker" class="editor-symbol-picker">
+              <div class="editor-symbol-searchrow">
+                <svg class="editor-sym-search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" id="editor-symbol-search" class="text-input" placeholder="Search 3,600+ symbols — eat, water, happy, dog..." oninput="filterEditorSymbolStrip()">
+                <button id="btn-editor-sym-clear" type="button" onclick="clearEditorSymbolSearch()" title="Clear symbol search">&times;</button>
+              </div>
+              <div id="editor-symbol-strip" class="editor-symbol-strip"></div>
+              <div id="editor-symbol-hint" class="editor-symbol-hint"></div>
+            </div>
+
             <div id="photo-controls-default" style="display: flex; gap: 8px; flex-wrap: wrap;">
               <button class="btn btn-primary" type="button" onclick="openSymbolLibrary()" style="background: #008369; color: #ffffff; font-weight: 700; border-color: #006853;">
                 <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                <span>Search Symbols &amp; Photos</span>
+                <span>Browse All Symbols</span>
               </button>
               <button class="btn" type="button" onclick="startCamera()">Take Photo</button>
               <button class="btn" type="button" onclick="triggerFileInput()">Upload Image</button>
@@ -2844,7 +2955,7 @@
               <span>High Contrast Borders:</span>
               <input type="checkbox" checked>
             </label>
-            <p style="font-size: 0.85rem; color: #64748b;">talk tiles AAC Communication Book v2.4 &copy; 2026</p>
+            <p style="font-size: 0.85rem; color: #64748b;">talk tiles AAC Communication Book v2.4.1 &copy; 2026</p>
           </div>
         `;
       } else if (title === 'Downloads') {
@@ -4909,8 +5020,12 @@
       document.getElementById('modal-tile-textcolor').value = (existingData && existingData.labelColor) || '#111111';
       document.getElementById('modal-label-size').value = String(normalizeLabelSize(existingData && existingData.labelSize));
       
+      const symSearch = document.getElementById('editor-symbol-search');
+      if (symSearch) symSearch.value = '';
+
       setLabelPosition(pendingLabelPosition);
       onLabelSizeInput();
+      refreshEditorSymbolStrip();
       updateModalPhotoPreview();
       updateModalAudioPreview();
 
@@ -5249,26 +5364,175 @@
       showToast(`Selected "${symbolObj.label}"`);
     }
 
-    function filterSymbolLibrary() {
-      const q = document.getElementById('sym-search-input').value.trim().toLowerCase();
-      document.getElementById('btn-sym-clear-search').style.display = q ? 'flex' : 'none';
+    /* --- Inline symbol picker (tile editor) ---------------------------------
+       The library, showcased inside the editor. It seeds from the tile's own
+       label, re-filters as the label is typed, and sets the symbol in place --
+       no second modal on top of the editor. -------------------------------- */
+    const EDITOR_STRIP_LIMIT = 40;
 
+    function editorSymbolQuery() {
+      const own = document.getElementById('editor-symbol-search');
+      if (own && own.value.trim()) return { text: own.value.trim(), from: 'search' };
+      const label = document.getElementById('modal-label-input');
+      if (label && label.value.trim()) return { text: label.value.trim(), from: 'label' };
+      return { text: '', from: 'default' };
+    }
+
+    function refreshEditorSymbolStrip() {
+      const strip = document.getElementById('editor-symbol-strip');
+      const hint = document.getElementById('editor-symbol-hint');
+      if (!strip) return;
+      if (!AAC_SYMBOL_LIBRARY.length) initSymbolLibrary();
+
+      const clearBtn = document.getElementById('btn-editor-sym-clear');
+      const ownSearch = document.getElementById('editor-symbol-search');
+      if (clearBtn) clearBtn.style.display = (ownSearch && ownSearch.value.trim()) ? 'flex' : 'none';
+
+      const q = editorSymbolQuery();
+      // With nothing to go on, lead with the starter set: the friendly, widely
+      // recognised core icons rather than an alphabetical slice of 3,600.
+      const matches = q.text
+        ? searchSymbolLibrary(q.text, 'all')
+        : AAC_SYMBOL_LIBRARY.filter(sym => !sym.svgPath);
+
+      strip.innerHTML = '';
+      strip.dataset.matchCount = String(matches.length);
+      strip.dataset.query = q.text;
+      strip.dataset.querySource = q.from;
+
+      const currentInCatalog = pendingSymbol
+        ? AAC_SYMBOL_LIBRARY.find(sym => symbolValueOf(sym) === pendingSymbol)
+        : null;
+
+      if (!matches.length && !currentInCatalog) {
+        const empty = document.createElement('div');
+        empty.className = 'editor-symbol-empty';
+        empty.id = 'editor-symbol-empty';
+        empty.textContent = `No symbol matches "${q.text}". Try a simpler word, or Browse All Symbols.`;
+        strip.appendChild(empty);
+        if (hint) hint.textContent = '';
+        return;
+      }
+
+      let shown = matches.slice(0, EDITOR_STRIP_LIMIT);
+
+      // Always show the symbol already on the tile, first, so the strip states
+      // what is set rather than only what was searched for.
+      if (pendingSymbol && !shown.some(sym => symbolValueOf(sym) === pendingSymbol)) {
+        const current = AAC_SYMBOL_LIBRARY.find(sym => symbolValueOf(sym) === pendingSymbol);
+        if (current) shown = [current].concat(shown.slice(0, EDITOR_STRIP_LIMIT - 1));
+      }
+
+      const frag = document.createDocumentFragment();
+      shown.forEach(sym => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'sym-card';
+        card.dataset.symbolId = sym.id;
+        card.dataset.symbolValue = symbolValueOf(sym);
+        card.setAttribute('aria-label', sym.label);
+        const icon = sym.svgPath
+          ? `<img src="${sym.svgPath}" loading="lazy" class="sym-svg-icon" alt="${sym.label}" style="width: 44px; height: 44px; object-fit: contain; pointer-events: none;" />`
+          : sym.emoji;
+        card.innerHTML = `
+          <div class="sym-icon">${icon}</div>
+          <div class="sym-name" title="${sym.label}">${sym.label}</div>
+        `;
+        card.onclick = () => selectInlineEditorSymbol(sym);
+        frag.appendChild(card);
+      });
+      strip.appendChild(frag);
+      strip.scrollLeft = 0;
+
+      if (hint) {
+        if (q.from === 'default') {
+          hint.textContent = `${AAC_SYMBOL_LIBRARY.length.toLocaleString()} symbols available — type a label above, or search here.`;
+        } else {
+          const src = q.from === 'label' ? 'from the label' : 'from your search';
+          if (!matches.length) {
+            hint.textContent = `No matches for "${q.text}" ${src} — showing the symbol already on this button.`;
+          } else {
+            const more = matches.length > EDITOR_STRIP_LIMIT ? ` (showing first ${EDITOR_STRIP_LIMIT})` : '';
+            hint.textContent = `${matches.length.toLocaleString()} match${matches.length === 1 ? '' : 'es'} for "${q.text}" ${src}${more}.`;
+          }
+        }
+      }
+
+      highlightEditorSymbolSelection();
+    }
+
+    function highlightEditorSymbolSelection() {
+      const strip = document.getElementById('editor-symbol-strip');
+      if (!strip) return;
+      strip.querySelectorAll('.sym-card').forEach(card => {
+        card.classList.toggle('selected', !!pendingSymbol && card.dataset.symbolValue === pendingSymbol);
+      });
+    }
+
+    function selectInlineEditorSymbol(symbolObj) {
+      pendingSymbol = symbolValueOf(symbolObj);
+      pendingPhotoBlob = null;
+
+      const ttsInp = document.getElementById('modal-tts-input');
+      const labelInp = document.getElementById('modal-label-input');
+      if (labelInp && !labelInp.value.trim()) {
+        labelInp.value = symbolObj.label;
+        onLabelSizeInput();
+      }
+      if (ttsInp && !ttsInp.value.trim()) ttsInp.value = symbolObj.label;
+
+      // Deliberately no closeEditor()/close-anything here: picking a symbol
+      // must not interrupt the edit.
+      updateModalPhotoPreview();
+    }
+
+    function filterEditorSymbolStrip() {
+      refreshEditorSymbolStrip();
+    }
+
+    function clearEditorSymbolSearch() {
+      const inp = document.getElementById('editor-symbol-search');
+      if (!inp) return;
+      inp.value = '';
+      refreshEditorSymbolStrip();
+      inp.focus();
+    }
+
+    // The label field drives both the size preview and the symbol suggestions.
+    function onEditorLabelInput() {
+      onLabelSizeInput();
+      const own = document.getElementById('editor-symbol-search');
+      // A search the user typed themselves wins over the label.
+      if (!own || !own.value.trim()) refreshEditorSymbolStrip();
+    }
+
+    // One matcher for both the full-screen library and the editor's inline
+    // strip, so a search that works in one works the same in the other.
+    function searchSymbolLibrary(query, category) {
+      const q = (query || '').trim().toLowerCase();
       let filtered = AAC_SYMBOL_LIBRARY;
-      if (currentSymbolCategory !== 'all') {
-        filtered = filtered.filter(s => s.category === currentSymbolCategory);
+      if (category && category !== 'all') {
+        filtered = filtered.filter(s => s.category === category);
       }
+      if (!q) return filtered;
+      return filtered.filter(s => {
+        if (s.label.toLowerCase().includes(q)) return true;
+        if (s.id && s.id.toLowerCase().includes(q)) return true;
+        if (s.category && s.category.toLowerCase().includes(q)) return true;
+        if (s.rawCat && s.rawCat.toLowerCase().includes(q)) return true;
+        return (s.keywords || []).some(k => k.toLowerCase().includes(q));
+      });
+    }
 
-      if (q) {
-        filtered = filtered.filter(s => {
-          if (s.label.toLowerCase().includes(q)) return true;
-          if (s.id && s.id.toLowerCase().includes(q)) return true;
-          if (s.category && s.category.toLowerCase().includes(q)) return true;
-          if (s.rawCat && s.rawCat.toLowerCase().includes(q)) return true;
-          return (s.keywords || []).some(k => k.toLowerCase().includes(q));
-        });
-      }
+    // The catalogue entry's value as it is stored on a tile.
+    function symbolValueOf(symbolObj) {
+      return symbolObj.svgPath ? symbolObj.svgPath : (symbolObj.emoji || symbolObj.id);
+    }
 
-      renderSymbolLibrary(filtered, true);
+    function filterSymbolLibrary() {
+      const q = document.getElementById('sym-search-input').value.trim();
+      document.getElementById('btn-sym-clear-search').style.display = q ? 'flex' : 'none';
+      renderSymbolLibrary(searchSymbolLibrary(q, currentSymbolCategory), true);
     }
 
     function clearSymbolSearch() {
@@ -5446,6 +5710,8 @@
         placeholder.style.display = 'flex';
         removeBtn.style.display = 'none';
       }
+
+      highlightEditorSymbolSelection();
     }
 
     function startCamera() {

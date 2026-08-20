@@ -24,8 +24,10 @@ Grid pages come in 1 / 2 / 4 / 9 / 12 / 16 / 25 / 36 / 48 buttons
 or emoji), background/border/label colour, label size (0.6×–3×) and label
 position. Labels shrink to fit (`fitTextToBox`).
 
-**Symbol library.** 3,436 Mulberry AAC pictograms + ~170 starter emoji, searchable
-by keyword/tag with 11 category chips and infinite scroll.
+**Symbol library.** 3,436 Mulberry AAC pictograms + 173 starter emoji (3,609
+total), searchable by keyword/tag with 11 category chips and infinite scroll,
+reachable two ways: a full-screen library, and (since v2.4.1) an inline strip in
+the tile editor that seeds from the tile's label and filters as it is typed.
 
 **Page authoring.** Page Options popover (background colour picker, button-count
 segments, Enabled / Express / Page-Specific-Scanning toggles, auditory cue).
@@ -48,8 +50,8 @@ SVG scene presets (living room, classroom, playground, kitchen).
 **Android.** Self-pinning Lock (`startLockTask()`), no FLAG_SECURE, camera and
 file-chooser wired through `onShowFileChooser`.
 
-**Tests.** 7 puppeteer suites, 81 checks, all green:
-`test_headless.js` 22, `test_behavior.js` 8, `test_button_editor.js` 6,
+**Tests.** 7 puppeteer suites, 85 checks, all green:
+`test_headless.js` 22, `test_behavior.js` 8, `test_button_editor.js` 10,
 `test_photo_library.js` 6, `test_templates.js` 11, `test_scenes.js` 9,
 `test_buttons.js` 19. `test_buttons.js` presses all 235 elements that carry an
 `onclick` in `index.html` and fails if any of them was never pressed.
@@ -163,7 +165,13 @@ selection path could break outright and those checks would stay green.
 recorded value is `"🍎"` — it asserts non-empty, not a path, so it does not test
 what its name claims.
 
-`toggleSymbolPicker` (5253) is dead in both app and tests.
+**Partly addressed in v2.4.1:** `test_button_editor.js` checks 6-9 now drive the
+inline editor picker (`selectInlineEditorSymbol`), which is a real shipped path
+and shares its matcher (`searchSymbolLibrary`) with the full-screen library. The
+`selectSymbol` calls in checks 2 and 4 are still there and still test nothing
+that ships.
+
+`toggleSymbolPicker` is dead in both app and tests.
 `renderBoard` (3221) is a one-line alias for `renderCurrentPage`, dead in the
 app, called only by `test_headless.js` (178, 207).
 
@@ -280,7 +288,7 @@ anywhere in the app or repo. The only mention of the word "Mulberry" in
 | P1-3 | Tile→page navigation (`action: {type:'goto', pageId}`) | The single biggest gap vs the reference board — its whole right-hand teal column is category folders, and "jump back" is a navigation button. Also unblocks a faithful Core Words board |
 | P1-4 | Either implement scanning + auditory-cue playback, or remove the controls | §2.6: toggles that persist a flag and do nothing are worse than absent ones |
 | P1-5 | Delete or implement the four toast-only buttons | §2.5: a "Voice" button that does nothing is a trap for a parent setting the board up |
-| P1-6 | Point `test_button_editor.js` and `test_behavior.js` at the real symbol-library path instead of `selectSymbol` | §2.8: the covered path is not the shipped path |
+| P1-6 | Point the remaining `selectSymbol` calls in `test_button_editor.js` and `test_behavior.js` at a real path — **partly done in v2.4.1**, which added four checks driving the inline picker | §2.8: the covered path is not the shipped path |
 | P1-7 | Add `LICENSE` / `NOTICE` crediting Mulberry (CC BY-SA 4.0) and surface it in the app's help panel | §2.13: licence compliance, not polish |
 
 ### P2 — correctness, hygiene, reach
