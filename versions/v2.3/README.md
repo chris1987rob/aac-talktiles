@@ -14,7 +14,7 @@ What v2.3 is:
 - **All 8 "New Page" options** working: Online Gallery, My Templates,
   Import/Export book & pages, Duplicate Page, 3-step Page Wizard, Keyboard
   Page, Blank Scene Page, Blank Button Page.
-- **Visual Scenes with hotspots**, five built-in SVG scene presets.
+- **Visual Scenes with hotspots**, four built-in SVG scene presets.
 - **Classic Button Editor** (reverted from the Quick Edit experiment in
   commit 72d45d6) plus multi-page slot storage.
 - **Photo library**, camera capture, MediaRecorder voice, TTS.

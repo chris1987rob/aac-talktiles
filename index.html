@@ -2844,7 +2844,7 @@
               <span>High Contrast Borders:</span>
               <input type="checkbox" checked>
             </label>
-            <p style="font-size: 0.85rem; color: #64748b;">talk tiles AAC Communication Book v2.3 &copy; 2026</p>
+            <p style="font-size: 0.85rem; color: #64748b;">talk tiles AAC Communication Book v2.4 &copy; 2026</p>
           </div>
         `;
       } else if (title === 'Downloads') {
@@ -3244,12 +3244,14 @@
       } else if (p.type === 'keyboard') {
         gridView.style.display = 'none';
         sceneView.classList.remove('active');
+        clearSceneView();
         if (keyboardView) {
           keyboardView.style.display = 'flex';
           renderKeyboardPage(p);
         }
       } else {
         sceneView.classList.remove('active');
+        clearSceneView();
         if (keyboardView) keyboardView.style.display = 'none';
         gridView.style.display = 'grid';
         renderGridPage(p);
@@ -3623,11 +3625,11 @@
         tiles: {
           1: { label: 'Hurt', tts: 'It hurts here', color: '#ef9a9a', symbol: 'hurt' },
           2: { label: 'Sick', tts: 'I feel sick', color: '#ffcdd2', symbol: 'sick' },
-          3: { label: 'Doctor', tts: 'I need the doctor', color: '#b3e5fc', symbol: 'symbols/en/doctor.svg' },
+          3: { label: 'Doctor', tts: 'I need the doctor', color: '#b3e5fc', symbol: 'symbols/en/doctor_1a.svg' },
           4: { label: 'Medicine', tts: 'I need my medicine', color: '#fff9c4', symbol: 'medicine' },
           5: { label: 'Headache', tts: 'My head hurts', color: '#ffcc80', symbol: 'symbols/en/headache.svg' },
           6: { label: 'Tummy Ache', tts: 'My stomach hurts', color: '#ffcc80', symbol: 'symbols/en/stomach_ache.svg' },
-          7: { label: 'Too Loud', tts: 'It is too loud', color: '#e1bee7', symbol: 'symbols/en/ear_protectors.svg' },
+          7: { label: 'Too Loud', tts: 'It is too loud', color: '#e1bee7', symbol: 'symbols/en/ear_muffs.svg' },
           8: { label: 'Rest', tts: 'I need to lie down and rest', color: '#c8e6c9', symbol: 'sleep' },
           9: { label: 'Emergency', tts: 'Emergency! Please help me right now', color: '#e57373', symbol: 'symbols/en/ambulance.svg' }
         }
@@ -3647,7 +3649,7 @@
           5: { label: 'Scared', tts: 'I feel scared', color: '#b39ddb', symbol: 'scared' },
           6: { label: 'Silly', tts: 'I feel silly', color: '#ffcc80', symbol: 'silly' },
           7: { label: 'Excited', tts: 'I am so excited!', color: '#ffe082', symbol: 'excited' },
-          8: { label: 'Calm', tts: 'I feel calm and ready', color: '#c8e6c9', symbol: 'symbols/en/calm.svg' },
+          8: { label: 'Calm', tts: 'I feel calm and ready', color: '#c8e6c9', symbol: 'symbols/en/relax_,_to.svg' },
           9: { label: 'Need a Break', tts: 'I need a sensory break please', color: '#cfd8dc', symbol: 'sleep' }
         }
       },
@@ -3664,10 +3666,10 @@
           3: { label: 'Fries', tts: 'French fries please', color: '#fff9c4', symbol: 'symbols/en/chips.svg' },
           4: { label: 'Water', tts: 'Water with ice please', color: '#b3e5fc', symbol: 'water' },
           5: { label: 'Juice', tts: 'Apple juice please', color: '#ffcc80', symbol: 'juice' },
-          6: { label: 'Napkin', tts: 'I need a napkin', color: '#ffffff', symbol: 'symbols/en/napkin.svg' },
+          6: { label: 'Napkin', tts: 'I need a napkin', color: '#ffffff', symbol: 'symbols/en/serviette.svg' },
           7: { label: 'More', tts: 'Can I have more please?', color: '#c8e6c9', symbol: 'more' },
           8: { label: 'Delicious', tts: 'This food is delicious', color: '#f8bbd0', symbol: 'smile' },
-          9: { label: 'Check Please', tts: 'Can we have the bill please?', color: '#cfd8dc', symbol: 'symbols/en/receipt.svg' }
+          9: { label: 'Check Please', tts: 'Can we have the bill please?', color: '#cfd8dc', symbol: 'symbols/en/money.svg' }
         }
       },
       {
@@ -3685,7 +3687,7 @@
           5: { label: 'Recess', tts: 'Time for recess and playground', color: '#a5d6a7', symbol: 'play_act' },
           6: { label: 'Lunch', tts: 'Time for lunch', color: '#ffe082', symbol: 'eat' },
           7: { label: 'Quiet', tts: 'Quiet listening time', color: '#e1bee7', symbol: 'listen' },
-          8: { label: 'Teacher', tts: 'Teacher, can you help me?', color: '#ffcc80', symbol: 'symbols/en/teacher.svg' },
+          8: { label: 'Teacher', tts: 'Teacher, can you help me?', color: '#ffcc80', symbol: 'symbols/en/teacher_1a.svg' },
           9: { label: 'Finished', tts: 'I am finished with my school work', color: '#cfd8dc', symbol: 'close' }
         }
       }
@@ -3876,6 +3878,9 @@
         type: 'grid',
         gridSize: 48,
         bg: '#ffffff',
+        // The reference board has a message window across the top; that is what
+        // an express page is.
+        express: true,
         tiles: buildCoreWordsTiles(),
         hotspots: [],
         builtin: true,
@@ -3908,6 +3913,7 @@
         type: 'scene',
         gridSize: 4,
         bg: '#00a699',
+        sceneBg: null,
         tiles: {},
         hotspots: [],
         builtin: true,
@@ -4013,6 +4019,10 @@
         bg: curPage.bg || '#ffffff',
         tiles: JSON.parse(JSON.stringify(curPage.tiles || {})),
         hotspots: JSON.parse(JSON.stringify(curPage.hotspots || [])),
+        // A scene template without its photo is not a template.
+        sceneBg: curPage.sceneBg || null,
+        express: !!curPage.express,
+        enabled: curPage.enabled !== false,
         date: new Date().toLocaleDateString()
       };
       templates.push(newTemplate);
@@ -4033,8 +4043,12 @@
         type: tpl.type || 'grid',
         gridSize: tpl.gridSize || 4,
         bg: tpl.bg || '#ffffff',
-        enabled: true,
-        express: true,
+        // Carry the template's own flags instead of forcing every page it makes
+        // into an express page, and keep the sceneBg key present even when null
+        // so a template scene page has the same shape as addNewScenePage()'s.
+        enabled: tpl.enabled !== false,
+        express: !!tpl.express,
+        sceneBg: tpl.sceneBg || null,
         tiles: JSON.parse(JSON.stringify(tpl.tiles || {})),
         hotspots: JSON.parse(JSON.stringify(tpl.hotspots || []))
       };
@@ -4316,6 +4330,21 @@
     let hotspotActionMode = 'tts';
     let hotspotStyleMode = 'invisible';
 
+    // The scene <img> and the hotspot container are singletons shared by every
+    // scene page, so anything left in them outlives the page that put it there:
+    // hidden but still in the DOM, still id-addressable, still clickable. Wipe
+    // them whenever a non-scene page renders, and whenever a scene has no
+    // background of its own.
+    function clearSceneView() {
+      const imgEl = document.getElementById('scene-image');
+      if (imgEl) {
+        imgEl.removeAttribute('src');
+        imgEl.style.display = 'none';
+      }
+      const container = document.getElementById('scene-hotspots-container');
+      if (container) container.innerHTML = '';
+    }
+
     function renderScenePage(page) {
       const imgEl = document.getElementById('scene-image');
       const placeholderEl = document.getElementById('scene-empty-placeholder');
@@ -4325,6 +4354,7 @@
         imgEl.style.display = 'block';
         if (placeholderEl) placeholderEl.style.display = 'none';
       } else {
+        imgEl.removeAttribute('src');
         imgEl.style.display = 'none';
         if (placeholderEl) placeholderEl.style.display = 'flex';
       }
@@ -4602,7 +4632,9 @@
       }
       const audioUrl = (typeof hotspotVoiceBlob === 'string') ? hotspotVoiceBlob : URL.createObjectURL(hotspotVoiceBlob);
       const audio = new Audio(audioUrl);
-      audio.play();
+      // A preview that is cut short by pause()/navigation rejects; swallow it so
+      // it does not surface as an unhandled rejection.
+      audio.play().catch(() => {});
     }
 
     /* --- Visual Scene Picker --- */
@@ -4768,14 +4800,35 @@
       expressCollectedChips.forEach((item, idx) => {
         const chip = document.createElement('div');
         chip.className = 'express-chip';
-        if (item.symbol) {
-          chip.innerHTML = `${item.symbol === 'smile' ? '😊' : item.symbol === 'frown' ? '☹️' : '⭐'} <span>${item.label}</span>`;
+        // BEHAVIOR-SPEC B7 wants label + thumbnail. Every symbol that was not
+        // 'smile' or 'frown' used to collapse to a star, which on a 48-button
+        // core board meant 48 identical stars.
+        const thumb = expressChipThumb(item);
+        if (thumb) {
+          chip.innerHTML = thumb;
+          const label = document.createElement('span');
+          label.textContent = item.label;
+          chip.appendChild(label);
         } else {
           chip.textContent = item.label;
         }
         container.appendChild(chip);
       });
       container.scrollLeft = container.scrollWidth;
+    }
+
+    function expressChipThumb(item) {
+      if (item.photo && typeof item.photo === 'string') {
+        return `<img class="express-chip-thumb" src="${item.photo}" alt="">`;
+      }
+      const sym = item.symbol;
+      if (!sym) return '';
+      if (typeof sym === 'string' && (sym.endsWith('.svg') || sym.includes('/'))) {
+        return `<img class="express-chip-thumb" src="${sym}" alt="">`;
+      }
+      if (sym === 'smile') return '<span>😊</span>';
+      if (sym === 'frown') return '<span>☹️</span>';
+      return `<span>${sym}</span>`;
     }
 
     function clearExpressChips() {
@@ -5574,7 +5627,7 @@
       const audio = new Audio(audioUrl);
       previewAudioPlayer = audio;
       audio.onended = () => { previewAudioPlayer = null; };
-      audio.play();
+      audio.play().catch(() => { previewAudioPlayer = null; });
     }
 
     function stopAudioPreview() {

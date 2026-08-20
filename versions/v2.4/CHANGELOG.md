@@ -55,15 +55,72 @@ on reload `URL.createObjectURL({})` throws inside `renderGridPage()` and the
 grid renders zero tiles. Not fixed in this release — it needs the persistence
 layer reworked, and v2.4 was scoped to templates. It is P0-1 in `UPGRADES.md`.
 
-**Tests: 51/51 across five suites.** New `test_templates.js` (9 checks) covers
-the built-in list, the Built-in badge, the absent delete button, the refusal in
-`deleteCustomTemplate()`, the 48-button Core Words page and its colours, the
-blank/scene/keyboard shapes, the user save→use→delete round trip, and the 48
-segment button. Existing suites unchanged and green: `test_headless.js` 22/22,
-`test_behavior.js` 8/8, `test_button_editor.js` 6/6, `test_photo_library.js` 6/6.
+### Scenes across a mixed book
+
+Chris asked for scene pages to be proven to work alongside standard and express
+pages. Three real defects came out of it, all fixed:
+
+- **Scene pages leaked into every page after them.** `#scene-image` and
+  `#scene-hotspots-container` are singletons shared by every scene page, and
+  only the scene branch of `renderCurrentPage()` ever touched them. A scene's
+  photo stayed in the `<img>` and its hotspot `<div>`s stayed in the DOM while a
+  standard page was on screen — hidden, but still id-addressable and still
+  clickable — and a scene with no photo of its own showed the previous scene's.
+  New `clearSceneView()` wipes both whenever a non-scene page renders.
+- **Saving a scene page as a template threw away its photo.**
+  `saveCurrentPageAsTemplate()` copied the hotspots but not `sceneBg`.
+- **Every page made from a template was silently an express page.**
+  `useCustomTemplate()` hardcoded `express: true`. It now carries the template's
+  own `express`, `enabled` and `sceneBg`, so a scene page from a template has
+  the same shape as one from `addNewScenePage()`.
+
+Core Words (Classic) is now an express page on purpose — the reference board has
+a message window across the top, and that is what the express speech bar is.
+
+### Other fixes found by pressing every button
+
+- Six Online Gallery tiles pointed at Mulberry files that are not in the set
+  (`calm`, `doctor`, `ear_protectors`, `napkin`, `receipt`, `teacher`), so the
+  Medical / Feelings / Dining / School boards shipped with broken images. They
+  now point at ids that exist.
+- The express speech bar rendered every symbol that was not `smile` or `frown`
+  as a star — 48 identical stars on a core board. Chips now show the tile's own
+  Mulberry SVG or emoji, which is what BEHAVIOR-SPEC B7 asked for.
+- `playHotspotRecordedAudio()` and `togglePlayAudioPreview()` called
+  `audio.play()` with no `.catch`, so a preview cut short surfaced as an
+  unhandled `AbortError`.
+- The Settings dialog still said "v2.3".
+
+**Tests: 81/81 across seven suites.**
+
+- `test_templates.js` (11) — the built-in list, the Built-in badge, the absent
+  delete button, the refusal in `deleteCustomTemplate()`, the 48-button Core
+  Words page and its colours, the blank/scene/keyboard shapes, the user
+  save→use→delete round trip, the 48 segment button, **a tap on each of the 48
+  Core Words tiles asserting the exact word spoken**, and the express bar
+  playing all 48 back in sequence.
+- `test_scenes.js` (9, new) — a six-page book of every page type; each scene
+  keeps its own background and hotspots across page switches; every scene's
+  hotspots fire their own cue and none survive onto another page; an express
+  scene chips its hotspots and plays them in sequence; a template scene page is
+  shape-identical to a manual one; a saved scene template round-trips its photo;
+  the whole mixed book survives a reload.
+- `test_buttons.js` (19, new) — **presses all 235 elements in `index.html` that
+  carry an `onclick`, as real DOM clicks, and fails if any was never pressed.**
+  Home screen, bottom toolbar in both modes, Page Options, all 16 colour
+  swatches, the New Page menu, the pages navigator, the tile editor (including
+  record/stop/preview via a fake mic), the symbol library's 12 chips, the
+  auditory-cue modal, the page wizard, the online gallery, import/export, the
+  templates modal, the scene picker and hotspot editor, all 29 keyboard keys and
+  9 quick phrases, the express bar, and the full-screen camera through a fake
+  camera device. Zero JS errors and zero failed resource loads are themselves
+  assertions.
+- Unchanged and green: `test_headless.js` 22/22, `test_behavior.js` 8/8,
+  `test_button_editor.js` 6/6, `test_photo_library.js` 6/6.
 
 APK: `AAC-Board-v2.4.apk`, 25,416,182 bytes (24.2 MB) — 4 KB larger than v2.3.
-Not installed on a device: the phone was not connected for this release.
+Not installed on a device: the phone was not connected for this release, so the
+48-button grid has only ever been looked at headless at 1280x800.
 
 ---
 

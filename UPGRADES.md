@@ -1,6 +1,8 @@
 # Talk Tiles — audit & upgrade list
 
-Written 2026-08-20 against the v2.4 tree (`index.html`, 5,660 lines).
+Written 2026-08-20 against the v2.4 tree. Revised the same day after the scene
+and button-coverage work, which fixed six of the findings below -- those are
+kept, marked FIXED IN v2.4, so the history stays readable.
 Line references are to `index.html` unless stated otherwise. Everything called
 "confirmed" below was reproduced in headless Chrome, not read off the source.
 
@@ -36,7 +38,8 @@ Blank grids, Visual Scene (Blank), Keyboard Page — merged ahead of the user's 
 saved templates in the My Templates modal.
 
 **Visual scenes.** Photo or one of 5 built-in SVG scene presets as a background,
-with draggable/resizable hotspots (8 handles) that speak on tap.
+with draggable/resizable hotspots (8 handles) that speak on tap. Four built-in
+SVG scene presets (living room, classroom, playground, kitchen).
 
 **Express bar.** Chip-based sentence builder that speaks the chips in order.
 
@@ -45,9 +48,11 @@ with draggable/resizable hotspots (8 handles) that speak on tap.
 **Android.** Self-pinning Lock (`startLockTask()`), no FLAG_SECURE, camera and
 file-chooser wired through `onShowFileChooser`.
 
-**Tests.** 5 puppeteer suites, 51 checks, all green:
+**Tests.** 7 puppeteer suites, 81 checks, all green:
 `test_headless.js` 22, `test_behavior.js` 8, `test_button_editor.js` 6,
-`test_photo_library.js` 6, `test_templates.js` 9.
+`test_photo_library.js` 6, `test_templates.js` 11, `test_scenes.js` 9,
+`test_buttons.js` 19. `test_buttons.js` presses all 235 elements that carry an
+`onclick` in `index.html` and fails if any of them was never pressed.
 
 ---
 
@@ -99,7 +104,16 @@ Those match neither a `.svg` path nor a case in `getSymbolSvg` (4243), so the
 default branch renders the literal string — the "symbol" on the gallery's "I"
 tile is the text **me**.
 
-Nothing in any suite opens the Online Gallery or the Page Wizard.
+`test_buttons.js` check 11 now installs all five gallery boards and check 10
+drives the whole wizard, so the paths are exercised -- but they assert page
+creation, not tile colour, so the `color:`/`wordSize:` mismatch is still live.
+
+Separately **FIXED IN v2.4**: six of the gallery boards' tiles pointed at
+Mulberry files that are not in the set (`calm`, `doctor`, `ear_protectors`,
+`napkin`, `receipt`, `teacher`), so those boards shipped with broken images.
+They now point at ids that exist (`relax_,_to`, `doctor_1a`, `ear_muffs`,
+`serviette`, `money`, `teacher_1a`), and `test_buttons.js` check 19 fails on any
+`ERR_FILE_NOT_FOUND`.
 
 ### 2.4 Page ids collide after a delete — CONFIRMED
 
@@ -159,14 +173,29 @@ app, called only by `test_headless.js` (178, 207).
 3 to it, but Page Options has no `12` segment. A book imported or migrated with
 a 12-button page renders fine and then cannot be edited back to 12.
 
-### 2.10 Templates lose scene backgrounds and page flags
+### 2.10 Templates lost scene backgrounds and page flags — FIXED IN v2.4
 
-`saveCurrentPageAsTemplate` (4006) copies `type`, `gridSize`, `bg`, `tiles`,
-`hotspots` — not `sceneBg`, `express`, `enabled`, `auditoryCue` or `scanning`.
-`useCustomTemplate` (4024) hardcodes `express: true, enabled: true`. Saving a
-scene page as a template and using it gives an empty scene: the hotspots are
-there, the photo is not. (Left alone in v2.4 deliberately — the brief said the
-save-as-template behaviour stays unchanged.)
+`saveCurrentPageAsTemplate` copied `type`, `gridSize`, `bg`, `tiles` and
+`hotspots` but not `sceneBg`, and `useCustomTemplate` hardcoded
+`express: true, enabled: true`. Saving a scene page as a template and using it
+gave an empty scene: the hotspots were there, the photo was not. Every page made
+from any template was also silently an express page.
+
+Both now carry `sceneBg`, `express` and `enabled`, and `useCustomTemplate`
+writes `sceneBg: null` even when there is none so a template scene page has the
+same shape as `addNewScenePage()`'s. `test_scenes.js` checks 5-7 assert the
+shapes match and that a saved scene template round-trips its photo.
+
+### 2.10a Scene pages leaked into every page after them — FIXED IN v2.4
+
+`#scene-image` and `#scene-hotspots-container` are singletons shared by every
+scene page, and `renderCurrentPage()` only touched them on the scene branch. So
+a scene's photo stayed in the `<img>` (hidden) and its hotspot `<div>`s stayed
+in the DOM while a *standard* page was on screen -- still id-addressable, still
+clickable. Walking scene A -> scene B (no photo of its own) left scene A's
+photo sitting in the element. A new `clearSceneView()` runs on the non-scene
+branches and when a scene has no background; `test_scenes.js` checks 2 and 3
+assert nothing is left behind.
 
 ### 2.11 Template titles are interpolated into `innerHTML`
 
@@ -209,6 +238,22 @@ anywhere in the app or repo. The only mention of the word "Mulberry" in
   the template path does not.
 - `savePagesToStorage` swallows quota errors into `console.error`. Once
   localStorage fills, edits stop persisting silently.
+- **FIXED IN v2.4:** the express speech bar rendered every symbol that was not
+  `smile` or `frown` as a star, so a 48-button core board produced 48 identical
+  stars -- against BEHAVIOR-SPEC B7's "label + thumbnail". Chips now render the
+  tile's own Mulberry SVG or emoji (`expressChipThumb`).
+- **FIXED IN v2.4:** `playHotspotRecordedAudio()` and `togglePlayAudioPreview()`
+  called `audio.play()` with no `.catch`, so a preview cut short by a pause
+  surfaced as an unhandled `AbortError` on the page.
+- `kbToggleNumbers()` rebuilds `#kb-keys-layout` from an innerHTML string, so
+  the keyboard markup exists three times over (once in the document, twice in
+  template literals) and drifts independently.
+- `createPageFromWizard()` writes `sceneImage: null` on a wizard scene page;
+  the renderer reads `sceneBg`. The key is dead -- the page works only because
+  the scene picker sets `sceneBg` later.
+- `#editor-modal` and `#modal-auditory-cue` have no backdrop `onclick`, unlike
+  every other dialog. That is the right call for a form, but it is undocumented
+  and reads as an oversight; `test_buttons.js` check 17 now pins it down.
 - The reference board in `TEMPLATE-REF.png` is ~10 columns × 8 rows (~80
   buttons) and is clipped by the video frame. "Core Words (Classic)" is 8 × 6;
   the extra two columns of category folders on the real board would need
@@ -224,7 +269,7 @@ anywhere in the app or repo. The only mention of the word "Mulberry" in
 |---|---|---|
 | P0-1 | Stop putting `Blob`s in `localStorage`; keep photo/audio in IndexedDB and store only a reference on the page tile, and make `createTileElement` defensive about a non-Blob `photo` | §2.1: one photo tile bricks the whole board on next launch |
 | P0-2 | Key the IndexedDB tile store by `pageId + slot` and migrate existing records | §2.2: photos silently overwrite each other across pages |
-| P0-3 | Add a reload-persistence check to `test_behavior.js` (save a real blob → reload → assert tiles render) | The bug above survived five green suites |
+| P0-3 | Add a reload-persistence check for a real photo blob (save → reload → assert tiles render) | The bug above survived what are now seven green suites; `test_buttons.js` check 16 deliberately drops the staged photo rather than saving it, so it does not trip over P0-1 |
 
 ### P1 — advertised but not working
 
@@ -243,7 +288,7 @@ anywhere in the app or repo. The only mention of the word "Mulberry" in
 | # | Item | Why |
 |---|---|---|
 | P2-1 | Either implement OBF/OBZ import properly or drop the claim from the modal | §2.7: currently promises interop with every other AAC app and delivers none |
-| P2-2 | Carry `sceneBg`, `express`, `enabled`, `auditoryCue` through save/use template | §2.10: a scene template that loses its photo is not a template |
+| P2-2 | ~~Carry `sceneBg`, `express`, `enabled` through save/use template~~ **done in v2.4**; `auditoryCue` and `scanning` still do not travel | §2.10 |
 | P2-3 | Escape interpolated titles, or build rows with `textContent` | §2.11 |
 | P2-4 | Add a `12` segment to Page Options | §2.9: a supported size the UI cannot select |
 | P2-5 | Rewrite `README.md`; fold the real v2.3 content into `CHANGELOG.md`; delete `SPEC.md`, the three finished task briefs, `generate_html.py`, `compare_sheets.py` and `comparisons/` (or move them to `versions/`) | §2.12: the docs currently describe a different app |
@@ -251,4 +296,6 @@ anywhere in the app or repo. The only mention of the word "Mulberry" in
 | P2-7 | Surface localStorage quota failures as a toast | §2.14: silent stop-saving is the worst failure mode for a comms aid |
 | P2-8 | Stop appending/stripping `" Template"` — keep the title, mark the kind separately | §2.14 |
 | P2-9 | Guard the Keyboard Page template against creating a second keyboard page, or give each keyboard page its own text buffer | §2.14 |
+| P2-11 | Build the keyboard key rows from one data table instead of three copies of the markup | §2.14: three copies that drift |
+| P2-12 | Drop the dead `sceneImage` key from `createPageFromWizard()` | §2.14 |
 | P2-10 | On-device pass on the Pixel 8 Pro for the v2.4 grid: 48 buttons at phone width is the densest layout shipped and has only been checked at 1280×800 headless | Legibility risk for the primary user |

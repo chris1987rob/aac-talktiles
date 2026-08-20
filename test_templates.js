@@ -300,10 +300,84 @@ const hexToRgb = (hex) => {
   );
 
   // --------------------------------------------------------------------------
-  // Check 9: no JS errors anywhere in the run
+  // Check 9: tap all 48 Core Words tiles and assert each speaks its own word
+  // --------------------------------------------------------------------------
+  const c9 = await page.evaluate(() => {
+    window.__spoken = [];
+    window.speechSynthesis.speak = (u) => window.__spoken.push(u.text);
+
+    pages = pages.slice(0, 1);
+    currentPageIndex = 0;
+    useCustomTemplate(0);                 // Core Words (Classic)
+    setEditMode(false);
+    renderCurrentPage();
+
+    const expected = CORE_WORDS_LAYOUT.map(e => e[0]);
+    const taps = [];
+    for (let slot = 1; slot <= 48; slot++) {
+      const el = document.getElementById('tile-slot-' + slot);
+      if (!el) { taps.push({ slot, error: 'no tile' }); continue; }
+      const before = window.__spoken.length;
+      el.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+      taps.push({
+        slot,
+        label: (el.querySelector('.tile-label') || {}).textContent,
+        spoke: window.__spoken.slice(before)
+      });
+    }
+    return {
+      expected,
+      taps,
+      allSpoken: window.__spoken.slice(),
+      chips: [...document.querySelectorAll('.express-chip')].map(c => c.textContent.trim())
+    };
+  });
+
+  const tapsOk = c9.taps.length === 48 && c9.taps.every((t, i) =>
+    t.label === c9.expected[i] && t.spoke.length === 1 && t.spoke[0] === c9.expected[i]);
+
+  check(
+    '9. Every one of the 48 Core Words (Classic) tiles speaks its own word when tapped',
+    tapsOk && JSON.stringify(c9.allSpoken) === JSON.stringify(c9.expected),
+    JSON.stringify({ mismatches: c9.taps.filter((t, i) =>
+      !(t.label === c9.expected[i] && t.spoke.length === 1 && t.spoke[0] === c9.expected[i])) })
+  );
+
+  // --------------------------------------------------------------------------
+  // Check 10: Core Words is an express page (the reference board's message
+  //           window), so the 48 taps also built a 48-chip sentence in order
+  // --------------------------------------------------------------------------
+  const c10 = await page.evaluate(() => {
+    const bar = document.getElementById('express-bar-container');
+    window.__spoken = [];
+    document.getElementById('express-bar').click();
+    return {
+      express: pages[currentPageIndex].express,
+      barOpen: bar.classList.contains('open'),
+      // a chip is [thumbnail][label span]; read the label, not the glyph
+      chips: [...document.querySelectorAll('.express-chip')].map(c => {
+        const span = c.querySelector('span:last-of-type');
+        return (span ? span.textContent : c.textContent).trim();
+      }),
+      thumbs: document.querySelectorAll('.express-chip .express-chip-thumb').length,
+      sentence: window.__spoken.slice()
+    };
+  });
+
+  check(
+    '10. Core Words is an express page: 48 taps chip up in order with their own symbol thumbnails, and the speech bar plays them IN SEQUENCE',
+    c10.express === true && c10.barOpen &&
+      c10.chips.length === 48 && c10.chips.every((t, i) => t === c9.expected[i]) &&
+      c10.sentence.length === 1 && c10.sentence[0] === c9.expected.join(' ') &&
+      c10.thumbs === 24,
+    JSON.stringify({ express: c10.express, barOpen: c10.barOpen, chips: c10.chips, thumbs: c10.thumbs, sentence: c10.sentence })
+  );
+
+  // --------------------------------------------------------------------------
+  // Check 11: no JS errors anywhere in the run
   // --------------------------------------------------------------------------
   check(
-    '9. Zero JS errors during built-in template testing',
+    '11. Zero JS errors during built-in template testing',
     errors.length === 0,
     errors.join('; ')
   );

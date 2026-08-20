@@ -1,0 +1,135 @@
+VIDEO TRANSCRIPT — GoTalk Now AAC app demonstration (Step Up AT)
+Source: https://youtu.be/C5lLOE6sGRg  (duration 5:06, 115 caption segments)
+Fetched 2026-08-20 for Talk Tiles template work. This is the reference app whose
+behavior Talk Tiles should match. Key behaviors called out in the video:
+
+- THREE page styles: standard, express (speech bar), scenes.
+- Page editor shows a customizable page template with page number + bottom toolbar:
+  home (house icon -> home screen), grid-size selector (1..36 locations/page),
+  background/border color settings, express-page toggle (enables speech bar at top
+  that plays selected words IN SEQUENCE when pressed), all-pages button, plus sign.
+- Standard page: action occurs when the location is pressed; tap each button one at
+  a time to set background or border color; type text anywhere in the button; add
+  image from camera/photo library or symbol set; auditory cue = recorded voice OR TTS.
+- Scene pages: built around a single photo/image; INVISIBLE hotspots arranged over
+  people/objects; each hotspot plays speech (recorded or TTS), music, or video;
+  created via plus sign -> blank scene page -> set background image (library/device/photo)
+  -> small plus signs to add as many hotspots as needed.
+- Water bottle / hand sanitizer / elevator are just the demo's scene photos.
+
+--- TIMESTAMPED CAPTIONS ---
+0:05 hi
+0:05 and welcome to step up a t's device
+0:07 demonstration videos
+0:08 today we will be demonstrating the go
+0:10 talk now app from attainment company
+0:18 the go talk now is an easy to use yet
+0:21 powerful app
+0:22 that can serve as an aac option for
+0:24 children who have difficulty speaking
+0:27 the app combines the simplicity of the
+0:29 gotox original aac device
+0:31 with the dynamic capabilities of an ipad
+0:35 go tech now has all the essentials of an
+0:38 aac app
+0:39 like adjustable page layouts
+0:41 customizable navigation
+0:44 recorded and text-to-speech capabilities
+0:47 and an included symbol set it offers
+0:50 three styles of communication pages
+0:53 standard express and scenes
+0:59 let's start by creating a standard page
+1:01 which is a type of page where the action
+1:03 occurs
+1:04 when the location is pressed now let's
+1:07 see how we can create a standard page
+1:10 to get started go to page editor
+1:16 you will see the customizable page
+1:18 template appear
+1:19 on your screen you will see the page
+1:21 number along with several symbols
+1:23 at the bottom of the screen the first
+1:26 one is an image of a house that will
+1:27 take you to the app's home screen
+1:29 the second symbol allows you to select
+1:31 the grid or location size for your
+1:33 communication page
+1:35 with options ranging from 1 to 36 grids
+1:38 or locations per page
+1:42 there are additional settings you can
+1:44 customize like the background and border
+1:46 color
+1:48 you can also turn the express page
+1:50 option to enable the speech bar at the
+1:52 top of the communication board to appear
+1:55 this speech bar will play the selected
+1:56 words in sequence when the bar is
+1:58 pressed
+2:01 this is helpful if you want the child to
+2:03 communicate with more than one word
+2:06 this next button lets you see all the
+2:08 pages you've created
+2:11 the last button the plus sign gives you
+2:14 access to
+2:15 more features for now let's select
+2:18 a grid size for our first page
+2:22 once you select your grid size you can
+2:23 tap on each button
+2:25 one at a time to add the background or
+2:27 border color
+2:29 let's type the word eat
+2:33 you can move the text anywhere in the
+2:34 button and add the image
+2:38 you can use images from your ipad camera
+2:41 photo library or the image symbol set
+2:48 finally you can add the auditory cue by
+2:50 selecting to record your voice
+2:53 or use the app's text to speech voice
+2:57 eat as easy as that you have created
+3:00 your first standard communication page
+3:03 you can continue to create as many
+3:05 communication pages
+3:07 as you need water bottle another cool
+3:10 feature of this app is the ability to
+3:12 also create
+3:12 scene pages games scene pages are built
+3:15 around a single photo or image
+3:18 when you arrange invisible hot spots
+3:19 over people or objects in the photo
+3:22 the hot spots play speech music or even
+3:25 videos
+3:27 let's see how you can create a scene
+3:29 page tap on the plus sign
+3:31 select blank scene page tap here to set
+3:34 the image that will be used for the
+3:36 background of the scene
+3:39 download an image from the gotalk
+3:41 library from your device
+3:43 or take a photo for this example
+3:47 i will use a photo
+3:54 tap on the small plus sign
+3:57 follow the app's prompts
+4:00 tap on the region to set the action or
+4:02 auditory cue
+4:03 this is where you can add the hotspot
+4:05 message by recording audio or using the
+4:07 text to speech feature
+4:19 hand sanitizer continue to tap
+4:23 on the small plus sign to add as many
+4:25 hot spots as necessary
+4:27 remember these hot spots will make
+4:29 sections of the image serve as a voice
+4:31 for the child
+4:32 to communicate his or her needs make
+4:34 comments or direct someone's actions
+4:37 elevator the possibilities are endless
+4:40 feel free to mix and match
+4:42 pages with a communication book for more
+4:44 information on the gotalk device don't
+4:46 forget to check out our video which has
+4:48 been linked below
+4:50 to learn more about how to use aac to
+4:52 increase early literacy skills
+4:54 please visit stepupat.com for our early
+4:58 literacy skills series
+4:59 thank you
