@@ -1,0 +1,372 @@
+[
+ {
+  "id": "my_schedule",
+  "text": "My Schedule",
+  "where": "default:School"
+ },
+ {
+  "id": "friends",
+  "text": "Friends",
+  "where": "default:School"
+ },
+ {
+  "id": "about_me",
+  "text": "About Me",
+  "where": "default:School"
+ },
+ {
+  "id": "math",
+  "text": "Math",
+  "where": "default:School"
+ },
+ {
+  "id": "science",
+  "text": "Science",
+  "where": "default:School"
+ },
+ {
+  "id": "reading",
+  "text": "Reading",
+  "where": "default:School"
+ },
+ {
+  "id": "i_understand",
+  "text": "I understand",
+  "where": "default:School"
+ },
+ {
+  "id": "back",
+  "text": "back",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "help",
+  "text": "help",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "more",
+  "text": "more",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "want",
+  "text": "want",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "eat",
+  "text": "eat",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "drink",
+  "text": "drink",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "play",
+  "text": "play",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "my",
+  "text": "my",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "need",
+  "text": "need",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "come",
+  "text": "come",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "look",
+  "text": "look",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "thank_you",
+  "text": "thank you",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "like",
+  "text": "like",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "hello",
+  "text": "hello",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "have",
+  "text": "have",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "sing",
+  "text": "sing",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "bye",
+  "text": "bye",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "feel",
+  "text": "feel",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "finished",
+  "text": "finished",
+  "where": "template:Core Words (Classic)"
+ },
+ {
+  "id": "i_like",
+  "text": "I like",
+  "where": "gallery:Core Vocabulary Starter (16 Buttons)"
+ },
+ {
+  "id": "look_at_that",
+  "text": "Look at that",
+  "where": "gallery:Core Vocabulary Starter (16 Buttons)"
+ },
+ {
+  "id": "it_hurts_here",
+  "text": "It hurts here",
+  "where": "gallery:Medical & Healthcare Needs (9 Buttons)"
+ },
+ {
+  "id": "i_need_the_doctor",
+  "text": "I need the doctor",
+  "where": "gallery:Medical & Healthcare Needs (9 Buttons)"
+ },
+ {
+  "id": "i_need_my_medicine",
+  "text": "I need my medicine",
+  "where": "gallery:Medical & Healthcare Needs (9 Buttons)"
+ },
+ {
+  "id": "my_stomach_hurts",
+  "text": "My stomach hurts",
+  "where": "gallery:Medical & Healthcare Needs (9 Buttons)"
+ },
+ {
+  "id": "i_need_to_lie_down_and_rest",
+  "text": "I need to lie down and rest",
+  "where": "gallery:Medical & Healthcare Needs (9 Buttons)"
+ },
+ {
+  "id": "emergency_please_help_me_right_now",
+  "text": "Emergency! Please help me right now",
+  "where": "gallery:Medical & Healthcare Needs (9 Buttons)"
+ },
+ {
+  "id": "i_feel_happy_today",
+  "text": "I feel happy today",
+  "where": "gallery:Feelings & Emotions Check-In (9 Buttons)"
+ },
+ {
+  "id": "i_am_feeling_sad",
+  "text": "I am feeling sad",
+  "where": "gallery:Feelings & Emotions Check-In (9 Buttons)"
+ },
+ {
+  "id": "i_am_angry",
+  "text": "I am angry",
+  "where": "gallery:Feelings & Emotions Check-In (9 Buttons)"
+ },
+ {
+  "id": "i_am_very_tired",
+  "text": "I am very tired",
+  "where": "gallery:Feelings & Emotions Check-In (9 Buttons)"
+ },
+ {
+  "id": "i_feel_scared",
+  "text": "I feel scared",
+  "where": "gallery:Feelings & Emotions Check-In (9 Buttons)"
+ },
+ {
+  "id": "i_am_so_excited",
+  "text": "I am so excited!",
+  "where": "gallery:Feelings & Emotions Check-In (9 Buttons)"
+ },
+ {
+  "id": "i_feel_calm_and_ready",
+  "text": "I feel calm and ready",
+  "where": "gallery:Feelings & Emotions Check-In (9 Buttons)"
+ },
+ {
+  "id": "i_need_a_sensory_break_please",
+  "text": "I need a sensory break please",
+  "where": "gallery:Feelings & Emotions Check-In (9 Buttons)"
+ },
+ {
+  "id": "i_want_a_hamburger_please",
+  "text": "I want a hamburger please",
+  "where": "gallery:Restaurant & Ordering Out (9 Buttons)"
+ },
+ {
+  "id": "i_would_like_pizza",
+  "text": "I would like pizza",
+  "where": "gallery:Restaurant & Ordering Out (9 Buttons)"
+ },
+ {
+  "id": "french_fries_please",
+  "text": "French fries please",
+  "where": "gallery:Restaurant & Ordering Out (9 Buttons)"
+ },
+ {
+  "id": "water_with_ice_please",
+  "text": "Water with ice please",
+  "where": "gallery:Restaurant & Ordering Out (9 Buttons)"
+ },
+ {
+  "id": "can_i_have_more_please",
+  "text": "Can I have more please?",
+  "where": "gallery:Restaurant & Ordering Out (9 Buttons)"
+ },
+ {
+  "id": "this_food_is_delicious",
+  "text": "This food is delicious",
+  "where": "gallery:Restaurant & Ordering Out (9 Buttons)"
+ },
+ {
+  "id": "can_we_have_the_bill_please",
+  "text": "Can we have the bill please?",
+  "where": "gallery:Restaurant & Ordering Out (9 Buttons)"
+ },
+ {
+  "id": "may_i_go_to_the_bathroom_please",
+  "text": "May I go to the bathroom please?",
+  "where": "gallery:School & Classroom Routine (9 Buttons)"
+ },
+ {
+  "id": "i_need_a_pencil",
+  "text": "I need a pencil",
+  "where": "gallery:School & Classroom Routine (9 Buttons)"
+ },
+ {
+  "id": "time_to_read_books",
+  "text": "Time to read books",
+  "where": "gallery:School & Classroom Routine (9 Buttons)"
+ },
+ {
+  "id": "time_for_recess_and_playground",
+  "text": "Time for recess and playground",
+  "where": "gallery:School & Classroom Routine (9 Buttons)"
+ },
+ {
+  "id": "time_for_lunch",
+  "text": "Time for lunch",
+  "where": "gallery:School & Classroom Routine (9 Buttons)"
+ },
+ {
+  "id": "quiet_listening_time",
+  "text": "Quiet listening time",
+  "where": "gallery:School & Classroom Routine (9 Buttons)"
+ },
+ {
+  "id": "teacher_can_you_help_me",
+  "text": "Teacher, can you help me?",
+  "where": "gallery:School & Classroom Routine (9 Buttons)"
+ },
+ {
+  "id": "i_am_finished_with_my_school_work",
+  "text": "I am finished with my school work",
+  "where": "gallery:School & Classroom Routine (9 Buttons)"
+ },
+ {
+  "id": "i_want_to_sit_on_the_couch_and_relax",
+  "text": "I want to sit on the couch and relax.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "can_we_turn_on_the_tv_to_watch_a_show",
+  "text": "Can we turn on the TV to watch a show?",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "look_at_the_cute_orange_cat_sleeping",
+  "text": "Look at the cute orange cat sleeping!",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "please_turn_on_the_lamp_light",
+  "text": "Please turn on the lamp light.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "look_out_the_window_it_is_nice_outside",
+  "text": "Look out the window, it is nice outside.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "look_at_the_lesson_on_the_board",
+  "text": "Look at the lesson on the board.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "i_need_help_from_the_teacher_please",
+  "text": "I need help from the teacher please.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "time_to_read_our_story_book",
+  "text": "Time to read our story book.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "let_us_pack_my_backpack",
+  "text": "Let us pack my backpack.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "what_time_is_it_on_the_clock",
+  "text": "What time is it on the clock?",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "i_want_to_climb_up_and_slide_down",
+  "text": "I want to climb up and slide down!",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "push_me_on_the_swing_high_please",
+  "text": "Push me on the swing high please!",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "let_us_kick_the_ball_together",
+  "text": "Let us kick the ball together.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "open_the_fridge_for_a_drink_or_snack",
+  "text": "Open the fridge for a drink or snack.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "time_to_eat_at_the_dining_table",
+  "text": "Time to eat at the dining table.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "i_would_like_some_fresh_apple_slices",
+  "text": "I would like some fresh apple slices.",
+  "where": "scene:undefined"
+ },
+ {
+  "id": "apple_juice_to_drink_please",
+  "text": "Apple juice to drink please.",
+  "where": "scene:undefined"
+ }
+]

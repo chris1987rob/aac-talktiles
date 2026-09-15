@@ -21,3 +21,18 @@ versions/*/app/assets/
 # --- editor / OS noise --------------------------------------------------
 .DS_Store
 *~
+
+# --- symbol_gen scratch (raw renders, untrimmed audio, logs) — ~2 GB -------
+# Only the scripts, prompts and catalogues are tracked; outputs are rebuilt
+# with gen_symbols.py / gen_audio.py / gen_phrases.py.
+symbol_gen/raw/
+symbol_gen/raw_old/
+symbol_gen/audio_raw*/
+symbol_gen/audio_mp3_*/
+symbol_gen/canva_test/
+symbol_gen/*.log
+symbol_gen/*.bak
+symbol_gen/__pycache__/
+
+# Release APKs >50 MB go on GitHub Releases, not in history.
+AAC-Board-v2.6.apk

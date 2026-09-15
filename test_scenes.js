@@ -39,8 +39,10 @@ const SCENE_C_BG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/s
   // Install a mixed book: standard / express / scene(with bg) / scene(no bg) /
   // scene(with bg, express) / keyboard, and capture everything spoken.
   await page.evaluate((bgA, bgC) => {
-    window.__spoken = [];
-    window.speechSynthesis.speak = (u) => window.__spoken.push(u.text);
+    window.__spoken = window.__spokenHistory = [];
+    // Words with a Bella clip never reach speechSynthesis, so observe the app's
+    // own speech log (fed by both the clip and the TTS path) instead.
+    window.speechSynthesis.speak = () => {};
     localStorage.removeItem('talk_tiles_custom_templates');
 
     pages = [
@@ -155,7 +157,7 @@ const SCENE_C_BG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/s
     const spokenPerPage = {};
     [2, 3, 4].forEach(i => {
       jumpToPage(i);
-      window.__spoken = [];
+      window.__spoken = window.__spokenHistory = [];
       const els = [...document.querySelectorAll('#scene-hotspots-container .scene-hotspot')];
       els.forEach(el => el.click());
       spokenPerPage[pages[i].title] = { clicked: els.length, spoken: window.__spoken.slice() };
@@ -182,7 +184,7 @@ const SCENE_C_BG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/s
     jumpToPage(4);                 // Scene Express
     expressCollectedChips = [];
     renderExpressChips();
-    window.__spoken = [];
+    window.__spoken = window.__spokenHistory = [];
     ['hotspot-1', 'hotspot-2', 'hotspot-3'].forEach(id => document.getElementById(id).click());
     const chips = [...document.querySelectorAll('.express-chip')].map(c => c.textContent.trim());
     document.getElementById('express-bar').click();
@@ -241,7 +243,7 @@ const SCENE_C_BG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/s
       spot.label = key;
       spot.tts = 'this is ' + key;
       renderCurrentPage();
-      window.__spoken = [];
+      window.__spoken = window.__spokenHistory = [];
       document.getElementById('hotspot-' + spot.id).click();
       out[key] = {
         imgDisplay: document.getElementById('scene-image').style.display,
@@ -281,7 +283,7 @@ const SCENE_C_BG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/s
     useCustomTemplate(BUILTIN_TEMPLATES.length);
     const p = pages[currentPageIndex];
 
-    window.__spoken = [];
+    window.__spoken = window.__spokenHistory = [];
     [...document.querySelectorAll('.scene-hotspot')].forEach(el => el.click());
 
     return {
@@ -315,8 +317,10 @@ const SCENE_C_BG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/s
   await new Promise(r => setTimeout(r, 600));
 
   const c8 = await page.evaluate(`(() => {
-    window.__spoken = [];
-    window.speechSynthesis.speak = (u) => window.__spoken.push(u.text);
+    window.__spoken = window.__spokenHistory = [];
+    // Words with a Bella clip never reach speechSynthesis, so observe the app's
+    // own speech log (fed by both the clip and the TTS path) instead.
+    window.speechSynthesis.speak = () => {};
     const types = pages.map(p => p.type + ':' + p.title);
     const trail = [];
     for (let i = 0; i < pages.length; i++) { jumpToPage(i); trail.push(${viewProbe}); }

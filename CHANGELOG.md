@@ -6,6 +6,105 @@ an older one.
 
 ---
 
+## v2.6 — 2026-09-13 (versionCode 9)
+
+**Our own symbol pictures — the licensed Mulberry set is gone.** Every symbol in
+the library is now an original illustration generated in-house on the RTX 3090
+with Qwen-Image-2512 (4-step Lightning), in one consistent flat-vector style
+(bold outlines, bright colours, transparent background so it sits on any tile
+colour). No third-party symbol licence applies any more.
+
+- **558 symbols in 16 categories** (was 320 emoji placeholders after the Mulberry
+  removal; 3,436 Mulberry SVGs before that). Added ~240 words the set was missing:
+  body parts, clothing, household objects, school vocabulary, more people, animals,
+  vehicles, time words (today / tomorrow / morning / night), opposites (hot / cold,
+  full / empty, clean / dirty…) and everyday phrases ("I'm done", "say it again",
+  "leave me alone", "can I?").
+- **Symbols page is categorised**: 17 filter chips (All + 16 categories, each with a
+  count) and, in the "All" view, a header per category. The five categories added
+  last time (Vehicles, Nature, Numbers, Colors, Social) finally have chips.
+- **Hear any symbol**: the 🔊 button on every card (library and the inline strip in
+  the tile editor) speaks the word with the app voice; picking a symbol also speaks it.
+- **Search is ranked, not just filtered**: "dog" puts Dog before Hot Dog, "bus" the
+  School Bus before the Bus Driver. Exact word → keyword → prefix → substring.
+- **Old tiles keep working**: a tile saved with a Mulberry path
+  (`symbols/en/<name>.svg`) is mapped at render time onto the in-house picture with
+  the same name (`legacyMulberryToModern()`), or the word's emoji, or just its label.
+  Nothing in storage is rewritten.
+- Built-in **Core Words** template and the five **Online Gallery** boards use catalogue
+  ids, so they draw the new pictures; `resolveSymbolToken()` now prefers a catalogue
+  picture over the hard-coded legacy glyphs.
+- Pictures are 384 px WebP with alpha (`symbols/modern/<id>.webp`, ~20 MB total),
+  emoji kept as the `onerror` fallback. Generator + prompts live in `symbol_gen/`
+  (re-run `gen_symbols.py --only <id> --force` to redo one picture).
+- iPad edition: same changes in both copies; service-worker cache bumped to v2 so an
+  installed iPad drops the stale index/catalogue.
+- Tests updated for the new catalogue (library ≥ 500, 17 chips, 34 pictured Core Words).
+
+**Voice sync (2026-09-14).** Chris: "the voices are out of sync — they say the word
+but it's like AFTER." Three things added up to the lag and all three are fixed:
+
+- **The player.** A tap did `new Audio(url).play()` cold: the WebView had to open
+  the file, decode it and bring up a media player before the first sample, on
+  every tap. The board now decodes the clips for the page on screen (and its
+  neighbours) ahead of time — XHR → `decodeAudioData` → `AudioBuffer`, LRU of 160 —
+  and a tap starts an `AudioBufferSourceNode`, which begins on the audio thread's
+  next quantum. Measured JS-side tap→start: 0.2–0.6 ms (was a cold element open).
+  The `<audio>` element remains the cold-start fallback and plays at once while
+  the buffer warms. Tile recordings (Blobs) use the same cache. The
+  `AudioContext` is resumed on the very first pointer so no tap pays for it.
+  `MainActivity` sets `setAllowFileAccessFromFileURLs(true)` so the packaged app
+  can read its own clips with XHR.
+- **The gesture.** Tiles played on `pointerup`; the whole finger-down time sat
+  between the tap and the word. Play mode now fires on `pointerdown` (edit mode
+  still opens the editor on release; a release with no press — synthetic or
+  assistive input — still plays once).
+- **The clips.** The TTS + "recorded"/--room chain left 60–260 ms of dead air in
+  front of every word (median 112 ms) and it was in the raw WAVs, not added by
+  LAME (whose 46 ms priming Chrome's decoder trims). `symbol_gen/encode_clip.py`
+  now trims to the first 5 ms window above −40 dB RMS, keeping 20 ms: leads are
+  p50 21 ms / p99 68 ms / max 136 ms. Peak-per-sample detection was tried first
+  and rejected: it fires on room-tone spikes, and the 20 ms RMS default ate the
+  /k/ burst off "clap". `gen_audio.py` uses the same encoder. The un-trimmed
+  bella set is kept in `symbol_gen/audio_mp3_bella_untrimmed/`.
+- **Every tile speaks Bella.** A tile used to get the clip only if it carried a
+  library picture with the catalogue phrase. Now any tile or hotspot whose phrase
+  matches a catalogue phrase (`clipForPhrase`, keyed by what the clip actually
+  says) plays the clip; the express bar chains clips when every chip has one.
+  74 phrases the built-in boards speak that no symbol says verbatim ("help",
+  "more", "My Schedule", the gallery sentences, the scene-preset hotspots) were
+  rendered by `symbol_gen/gen_phrases.py` into `symbols/audio/phrases/` and are
+  registered as `AAC_PHRASE_CLIPS` in `symbols_data.js`. All 135 built-in phrases
+  now resolve to a clip (2,284 clips total).
+- **Checkers.** `symbol_gen/check_audio.py` (ffmpeg silencedetect) flags any clip
+  with > 150 ms before the first −30 dBFS sample, silent or short clips, and
+  catalogue entries whose file is missing. New suite `test_voice.js` (11 checks):
+  real-click tap→start latency < 15 ms on the buffer path, press-not-release,
+  one-voice-at-a-time, cold path, Blob path, 100 % built-in phrase coverage, Core
+  Words says exactly its words, and an in-browser decode of all 2,284 clips
+  asserting lead ≤ 150 ms / duration ≥ 0.2 s / peak ≥ −20 dB.
+- **Build.** `build.sh` staged assets with `cp -r` into an existing directory,
+  which nested a second `symbols/symbols/` and never refreshed the tree — a v2.6
+  build would have shipped without pictures or clips. It now rebuilds
+  `assets/symbols` from `modern/` + `audio/` only (no Mulberry `en/`).
+- **Gap taps (follow-up, same day).** Chris: "you press between tiles and it plays
+  the NEXT symbol's word." Reproduced with real touch input: Chromium's
+  touch-target adjustment snaps a finger that lands in the 12 px gap onto the
+  nearest tile and delivers `pointerdown` there (the next tile across, or the one
+  below) — with the finger's true coordinates. A tile now accepts a press only if
+  those coordinates are inside its own box; gaps do nothing. For the synthesised
+  `click` Chromium also moves the coordinates inside the target, so an empty
+  slot in edit mode opens its editor only after a `pointerdown` that really landed
+  in it. `test_voice.js` check 11 taps the column gap, row gap and grid corner
+  through the real touch pipeline (nothing plays), every tile at its centre and
+  all four edges (its own word), and a gap in edit mode (no editor). 112/112.
+- Tests that stubbed `speechSynthesis.speak` now read the app's own speech log
+  (`__spokenHistory`, fed by both paths), as `test_templates` already did.
+  **111/111 across 9 suites.** iPad edition: same script + clips in both copies,
+  service worker cache v7.
+
+---
+
 ## v2.5 — 2026-08-20 (versionCode 8)
 
 **Persistence rebuilt & real controls.** Fixes the P0 data loss bug where saving a

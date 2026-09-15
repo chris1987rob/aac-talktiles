@@ -192,7 +192,7 @@ const path = require('path');
   check(
     '6. Editor opens with an inline symbol strip seeded from the tile label ("apple"), no second modal',
     c6.editorOpen && !c6.libraryModalOpen && c6.searchBoxPresent &&
-      c6.librarySize > 3400 &&
+      c6.librarySize > 500 &&
       c6.querySource === 'label' && c6.query === 'apple' &&
       c6.cardCount > 0 && c6.everyCardHasValue &&
       c6.labels.some(l => /apple/i.test(l)) &&

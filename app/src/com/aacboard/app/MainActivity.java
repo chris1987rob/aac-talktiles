@@ -70,6 +70,11 @@ public class MainActivity extends Activity {
         s.setDomStorageEnabled(true);           // IndexedDB persistence for tiles
         s.setAllowFileAccess(true);
         s.setAllowContentAccess(true);
+        // The board decodes its voice clips ahead of time with XMLHttpRequest
+        // (file:///android_asset/symbols/audio/*.mp3) so a tap starts the word
+        // from memory. Without this a file: page may not read file: URLs and
+        // every tap falls back to a cold <audio> element -- the lag Chris heard.
+        s.setAllowFileAccessFromFileURLs(true);
         s.setMediaPlaybackRequiresUserGesture(false);
 
         web.setWebViewClient(new WebViewClient());

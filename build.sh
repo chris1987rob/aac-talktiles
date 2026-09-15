@@ -7,9 +7,9 @@
 set -euo pipefail
 
 # --- release knobs ---------------------------------------------------------
-VERSION_CODE=8
-VERSION_NAME="2.5"
-APK_NAME="AAC-Board-v2.5.apk"
+VERSION_CODE=9
+VERSION_NAME="2.6"
+APK_NAME="AAC-Board-v2.6.apk"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # The signing key is shared by every version and lives in the project root.
@@ -53,9 +53,17 @@ if [ -f "$ROOT/symbols_data.js" ]; then
   cp "$ROOT/symbols_data.js" "$APP/assets/symbols_data.js"
 fi
 if [ -d "$ROOT/symbols" ]; then
-  # -L: version archives symlink `symbols` back at the project copy (same 3,436
-  # Mulberry files since v2.3); dereference so the APK gets real files.
-  cp -rL "$ROOT/symbols" "$APP/assets/symbols"
+  # Start from nothing: `cp -r` into an existing assets/symbols nests a second
+  # copy inside it and leaves the old files in place, which shipped a v2.6
+  # build with no pictures and no voice clips. -L: version archives symlink
+  # `symbols` back at the project copy; dereference so the APK gets real files.
+  # Only the in-house pictures and the Bella clips ship; symbols/en (the old
+  # Mulberry SVGs) is unreferenced since v2.6 and stays out of the APK.
+  rm -rf "$APP/assets/symbols"
+  mkdir -p "$APP/assets/symbols"
+  for sub in modern audio; do
+    [ -d "$ROOT/symbols/$sub" ] && cp -rL "$ROOT/symbols/$sub" "$APP/assets/symbols/$sub"
+  done
 fi
 # v2.2 also shipped an ONNX segmentation model here for automatic background
 # removal. That feature was dropped in v2.3; the runtime and model are archived

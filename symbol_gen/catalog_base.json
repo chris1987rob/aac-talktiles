@@ -1,0 +1,4526 @@
+[
+ {
+  "id": "i_me",
+  "label": "I / Me",
+  "category": "core",
+  "emoji": "\ud83d\ude4b",
+  "tts": "I",
+  "tags": [
+   "i",
+   "me",
+   "myself",
+   "person",
+   "self"
+  ]
+ },
+ {
+  "id": "you",
+  "label": "You",
+  "category": "core",
+  "emoji": "\ud83d\udc49",
+  "tts": "You",
+  "tags": [
+   "you",
+   "your",
+   "friend",
+   "point"
+  ]
+ },
+ {
+  "id": "he",
+  "label": "He / Him",
+  "category": "core",
+  "emoji": "\ud83d\udc66",
+  "tts": "He",
+  "tags": [
+   "he",
+   "him",
+   "boy",
+   "man"
+  ]
+ },
+ {
+  "id": "she",
+  "label": "She / Her",
+  "category": "core",
+  "emoji": "\ud83d\udc67",
+  "tts": "She",
+  "tags": [
+   "she",
+   "her",
+   "girl",
+   "woman"
+  ]
+ },
+ {
+  "id": "they",
+  "label": "They / Them",
+  "category": "core",
+  "emoji": "\ud83e\uddd1\u200d\ud83e\udd1d\u200d\ud83e\uddd1",
+  "tts": "They",
+  "tags": [
+   "they",
+   "them",
+   "people",
+   "group"
+  ]
+ },
+ {
+  "id": "we",
+  "label": "We / Us",
+  "category": "core",
+  "emoji": "\ud83d\udc65",
+  "tts": "We",
+  "tags": [
+   "we",
+   "us",
+   "together",
+   "group"
+  ]
+ },
+ {
+  "id": "it",
+  "label": "It",
+  "category": "core",
+  "emoji": "\ud83d\udce6",
+  "tts": "It",
+  "tags": [
+   "it",
+   "thing",
+   "object"
+  ]
+ },
+ {
+  "id": "want",
+  "label": "Want",
+  "category": "core",
+  "emoji": "\ud83e\udd32",
+  "tts": "I want",
+  "tags": [
+   "want",
+   "desire",
+   "need",
+   "wish",
+   "please"
+  ]
+ },
+ {
+  "id": "like",
+  "label": "Like",
+  "category": "core",
+  "emoji": "\ud83d\udc4d",
+  "tts": "I like that",
+  "tags": [
+   "like",
+   "good",
+   "love",
+   "favorite",
+   "thumbs up"
+  ]
+ },
+ {
+  "id": "dont_like",
+  "label": "Don't Like",
+  "category": "core",
+  "emoji": "\ud83d\udc4e",
+  "tts": "I do not like that",
+  "tags": [
+   "don't like",
+   "dislike",
+   "hate",
+   "bad",
+   "thumbs down"
+  ]
+ },
+ {
+  "id": "need",
+  "label": "Need",
+  "category": "core",
+  "emoji": "\u2757",
+  "tts": "I need",
+  "tags": [
+   "need",
+   "must",
+   "require",
+   "important"
+  ]
+ },
+ {
+  "id": "more",
+  "label": "More",
+  "category": "core",
+  "emoji": "\u2795",
+  "tts": "More please",
+  "tags": [
+   "more",
+   "again",
+   "add",
+   "extra",
+   "another"
+  ]
+ },
+ {
+  "id": "help",
+  "label": "Help",
+  "category": "core",
+  "emoji": "\ud83c\udd98",
+  "tts": "Help me please",
+  "tags": [
+   "help",
+   "assist",
+   "support",
+   "emergency",
+   "need help"
+  ]
+ },
+ {
+  "id": "stop",
+  "label": "Stop",
+  "category": "core",
+  "emoji": "\ud83d\uded1",
+  "tts": "Stop",
+  "tags": [
+   "stop",
+   "halt",
+   "quit",
+   "end",
+   "red light"
+  ]
+ },
+ {
+  "id": "go",
+  "label": "Go",
+  "category": "core",
+  "emoji": "\ud83d\udfe2",
+  "tts": "Go",
+  "tags": [
+   "go",
+   "start",
+   "move",
+   "proceed",
+   "green light"
+  ]
+ },
+ {
+  "id": "yes",
+  "label": "Yes",
+  "category": "core",
+  "emoji": "\u2705",
+  "tts": "Yes",
+  "tags": [
+   "yes",
+   "yeah",
+   "agree",
+   "correct",
+   "ok",
+   "okay"
+  ]
+ },
+ {
+  "id": "no",
+  "label": "No",
+  "category": "core",
+  "emoji": "\u274c",
+  "tts": "No",
+  "tags": [
+   "no",
+   "nope",
+   "don't want",
+   "refuse",
+   "disagree"
+  ]
+ },
+ {
+  "id": "good",
+  "label": "Good",
+  "category": "core",
+  "emoji": "\u2b50",
+  "tts": "Good",
+  "tags": [
+   "good",
+   "great",
+   "awesome",
+   "nice",
+   "star",
+   "well done"
+  ]
+ },
+ {
+  "id": "bad",
+  "label": "Bad",
+  "category": "core",
+  "emoji": "\u26a0\ufe0f",
+  "tts": "Bad",
+  "tags": [
+   "bad",
+   "poor",
+   "wrong",
+   "awful",
+   "trouble"
+  ]
+ },
+ {
+  "id": "look",
+  "label": "Look",
+  "category": "core",
+  "emoji": "\ud83d\udc40",
+  "tts": "Look at this",
+  "tags": [
+   "look",
+   "see",
+   "watch",
+   "eyes",
+   "view"
+  ]
+ },
+ {
+  "id": "see",
+  "label": "See",
+  "category": "core",
+  "emoji": "\ud83d\udc41\ufe0f",
+  "tts": "I see",
+  "tags": [
+   "see",
+   "look",
+   "vision",
+   "spot",
+   "notice"
+  ]
+ },
+ {
+  "id": "get",
+  "label": "Get",
+  "category": "core",
+  "emoji": "\ud83d\udd90\ufe0f",
+  "tts": "Get",
+  "tags": [
+   "get",
+   "take",
+   "grab",
+   "fetch",
+   "receive"
+  ]
+ },
+ {
+  "id": "give",
+  "label": "Give",
+  "category": "core",
+  "emoji": "\ud83c\udf81",
+  "tts": "Give",
+  "tags": [
+   "give",
+   "pass",
+   "share",
+   "offer",
+   "hand"
+  ]
+ },
+ {
+  "id": "put",
+  "label": "Put",
+  "category": "core",
+  "emoji": "\ud83d\udce6",
+  "tts": "Put",
+  "tags": [
+   "put",
+   "place",
+   "set",
+   "store",
+   "drop"
+  ]
+ },
+ {
+  "id": "make",
+  "label": "Make",
+  "category": "core",
+  "emoji": "\ud83d\udd28",
+  "tts": "Make",
+  "tags": [
+   "make",
+   "build",
+   "create",
+   "craft",
+   "do"
+  ]
+ },
+ {
+  "id": "open",
+  "label": "Open",
+  "category": "core",
+  "emoji": "\ud83d\udcc2",
+  "tts": "Open",
+  "tags": [
+   "open",
+   "unlock",
+   "door",
+   "box",
+   "unfold"
+  ]
+ },
+ {
+  "id": "close",
+  "label": "Close",
+  "category": "core",
+  "emoji": "\ud83d\udcc1",
+  "tts": "Close",
+  "tags": [
+   "close",
+   "shut",
+   "lock",
+   "cover"
+  ]
+ },
+ {
+  "id": "turn",
+  "label": "Turn",
+  "category": "core",
+  "emoji": "\ud83d\udd04",
+  "tts": "Turn",
+  "tags": [
+   "turn",
+   "rotate",
+   "spin",
+   "switch",
+   "flip"
+  ]
+ },
+ {
+  "id": "turn_on",
+  "label": "Turn On",
+  "category": "core",
+  "emoji": "\ud83d\udd1b",
+  "tts": "Turn on",
+  "tags": [
+   "turn on",
+   "power on",
+   "start",
+   "switch on"
+  ]
+ },
+ {
+  "id": "turn_off",
+  "label": "Turn Off",
+  "category": "core",
+  "emoji": "\ud83d\udcf4",
+  "tts": "Turn off",
+  "tags": [
+   "turn off",
+   "power off",
+   "stop",
+   "switch off"
+  ]
+ },
+ {
+  "id": "again",
+  "label": "Again",
+  "category": "core",
+  "emoji": "\ud83d\udd01",
+  "tts": "Again",
+  "tags": [
+   "again",
+   "repeat",
+   "one more time",
+   "replay"
+  ]
+ },
+ {
+  "id": "all_done",
+  "label": "All Done",
+  "category": "core",
+  "emoji": "\ud83c\udfc1",
+  "tts": "All done",
+  "tags": [
+   "all done",
+   "finished",
+   "done",
+   "complete",
+   "end",
+   "finish"
+  ]
+ },
+ {
+  "id": "wait",
+  "label": "Wait",
+  "category": "core",
+  "emoji": "\u23f3",
+  "tts": "Wait a minute",
+  "tags": [
+   "wait",
+   "hold on",
+   "pause",
+   "minute",
+   "time"
+  ]
+ },
+ {
+  "id": "now",
+  "label": "Now",
+  "category": "core",
+  "emoji": "\u23f1\ufe0f",
+  "tts": "Right now",
+  "tags": [
+   "now",
+   "current",
+   "immediately",
+   "today"
+  ]
+ },
+ {
+  "id": "later",
+  "label": "Later",
+  "category": "core",
+  "emoji": "\ud83d\udd52",
+  "tts": "Later",
+  "tags": [
+   "later",
+   "soon",
+   "after",
+   "not yet"
+  ]
+ },
+ {
+  "id": "here",
+  "label": "Here",
+  "category": "core",
+  "emoji": "\ud83d\udccd",
+  "tts": "Here",
+  "tags": [
+   "here",
+   "this place",
+   "location",
+   "spot",
+   "pin"
+  ]
+ },
+ {
+  "id": "there",
+  "label": "There",
+  "category": "core",
+  "emoji": "\ud83d\udc49",
+  "tts": "There",
+  "tags": [
+   "there",
+   "that place",
+   "over there",
+   "point"
+  ]
+ },
+ {
+  "id": "what",
+  "label": "What",
+  "category": "core",
+  "emoji": "\u2753",
+  "tts": "What?",
+  "tags": [
+   "what",
+   "question",
+   "ask",
+   "wonder"
+  ]
+ },
+ {
+  "id": "where",
+  "label": "Where",
+  "category": "core",
+  "emoji": "\ud83d\uddfa\ufe0f",
+  "tts": "Where?",
+  "tags": [
+   "where",
+   "location",
+   "place",
+   "find",
+   "map"
+  ]
+ },
+ {
+  "id": "who",
+  "label": "Who",
+  "category": "core",
+  "emoji": "\ud83d\udc64",
+  "tts": "Who?",
+  "tags": [
+   "who",
+   "person",
+   "someone",
+   "identity"
+  ]
+ },
+ {
+  "id": "when",
+  "label": "When",
+  "category": "core",
+  "emoji": "\ud83d\udcc5",
+  "tts": "When?",
+  "tags": [
+   "when",
+   "time",
+   "date",
+   "calendar",
+   "day"
+  ]
+ },
+ {
+  "id": "why",
+  "label": "Why",
+  "category": "core",
+  "emoji": "\ud83e\udd14",
+  "tts": "Why?",
+  "tags": [
+   "why",
+   "reason",
+   "because",
+   "wonder"
+  ]
+ },
+ {
+  "id": "how",
+  "label": "How",
+  "category": "core",
+  "emoji": "\u2699\ufe0f",
+  "tts": "How?",
+  "tags": [
+   "how",
+   "process",
+   "way",
+   "method"
+  ]
+ },
+ {
+  "id": "my_turn",
+  "label": "My Turn",
+  "category": "core",
+  "emoji": "\ud83d\ude4b",
+  "tts": "My turn please",
+  "tags": [
+   "my turn",
+   "me",
+   "first",
+   "take turn"
+  ]
+ },
+ {
+  "id": "your_turn",
+  "label": "Your Turn",
+  "category": "core",
+  "emoji": "\ud83d\udc49",
+  "tts": "Your turn",
+  "tags": [
+   "your turn",
+   "you",
+   "next",
+   "friend"
+  ]
+ },
+ {
+  "id": "big",
+  "label": "Big",
+  "category": "core",
+  "emoji": "\ud83d\udc18",
+  "tts": "Big",
+  "tags": [
+   "big",
+   "large",
+   "huge",
+   "giant",
+   "tall"
+  ]
+ },
+ {
+  "id": "little",
+  "label": "Little",
+  "category": "core",
+  "emoji": "\ud83e\udd0f",
+  "tts": "Little",
+  "tags": [
+   "little",
+   "small",
+   "tiny",
+   "mini"
+  ]
+ },
+ {
+  "id": "fast",
+  "label": "Fast",
+  "category": "core",
+  "emoji": "\u26a1",
+  "tts": "Fast",
+  "tags": [
+   "fast",
+   "quick",
+   "speed",
+   "hurry",
+   "lightning"
+  ]
+ },
+ {
+  "id": "slow",
+  "label": "Slow",
+  "category": "core",
+  "emoji": "\ud83d\udc22",
+  "tts": "Slow",
+  "tags": [
+   "slow",
+   "gentle",
+   "careful",
+   "turtle"
+  ]
+ },
+ {
+  "id": "in",
+  "label": "In",
+  "category": "core",
+  "emoji": "\ud83d\udce5",
+  "tts": "In",
+  "tags": [
+   "in",
+   "inside",
+   "enter",
+   "box"
+  ]
+ },
+ {
+  "id": "out",
+  "label": "Out",
+  "category": "core",
+  "emoji": "\ud83d\udce4",
+  "tts": "Out",
+  "tags": [
+   "out",
+   "outside",
+   "exit",
+   "leave"
+  ]
+ },
+ {
+  "id": "on",
+  "label": "On",
+  "category": "core",
+  "emoji": "\ud83d\udd1b",
+  "tts": "On",
+  "tags": [
+   "on",
+   "start",
+   "turn on",
+   "top"
+  ]
+ },
+ {
+  "id": "off",
+  "label": "Off",
+  "category": "core",
+  "emoji": "\ud83d\udcf4",
+  "tts": "Off",
+  "tags": [
+   "off",
+   "stop",
+   "turn off",
+   "power"
+  ]
+ },
+ {
+  "id": "up",
+  "label": "Up",
+  "category": "core",
+  "emoji": "\u2b06\ufe0f",
+  "tts": "Up",
+  "tags": [
+   "up",
+   "high",
+   "rise",
+   "climb",
+   "arrow"
+  ]
+ },
+ {
+  "id": "down",
+  "label": "Down",
+  "category": "core",
+  "emoji": "\u2b07\ufe0f",
+  "tts": "Down",
+  "tags": [
+   "down",
+   "low",
+   "floor",
+   "sit",
+   "arrow"
+  ]
+ },
+ {
+  "id": "same",
+  "label": "Same",
+  "category": "core",
+  "emoji": "\ud83d\udff0",
+  "tts": "Same",
+  "tags": [
+   "same",
+   "equal",
+   "match",
+   "twin",
+   "identical"
+  ]
+ },
+ {
+  "id": "different",
+  "label": "Different",
+  "category": "core",
+  "emoji": "\ud83d\udd00",
+  "tts": "Different",
+  "tags": [
+   "different",
+   "other",
+   "change",
+   "new",
+   "distinct"
+  ]
+ },
+ {
+  "id": "break",
+  "label": "Take a Break",
+  "category": "core",
+  "emoji": "\u23f8\ufe0f",
+  "tts": "I need a break",
+  "tags": [
+   "break",
+   "pause",
+   "rest",
+   "calm down",
+   "space"
+  ]
+ },
+ {
+  "id": "happy",
+  "label": "Happy",
+  "category": "feelings",
+  "emoji": "\ud83d\ude0a",
+  "tts": "I am happy",
+  "tags": [
+   "happy",
+   "glad",
+   "joy",
+   "smile",
+   "cheerful",
+   "good"
+  ]
+ },
+ {
+  "id": "sad",
+  "label": "Sad",
+  "category": "feelings",
+  "emoji": "\ud83d\ude22",
+  "tts": "I am sad",
+  "tags": [
+   "sad",
+   "cry",
+   "unhappy",
+   "tear",
+   "upset",
+   "down"
+  ]
+ },
+ {
+  "id": "mad",
+  "label": "Mad",
+  "category": "feelings",
+  "emoji": "\ud83d\ude20",
+  "tts": "I am mad",
+  "tags": [
+   "mad",
+   "angry",
+   "furious",
+   "grumpy",
+   "annoyed",
+   "frustrated"
+  ]
+ },
+ {
+  "id": "excited",
+  "label": "Excited",
+  "category": "feelings",
+  "emoji": "\ud83e\udd29",
+  "tts": "I am excited",
+  "tags": [
+   "excited",
+   "thrilled",
+   "yay",
+   "star eyes",
+   "happy",
+   "pumped"
+  ]
+ },
+ {
+  "id": "tired",
+  "label": "Tired",
+  "category": "feelings",
+  "emoji": "\ud83d\ude34",
+  "tts": "I am tired",
+  "tags": [
+   "tired",
+   "sleepy",
+   "exhausted",
+   "yawn",
+   "bed",
+   "rest"
+  ]
+ },
+ {
+  "id": "sick",
+  "label": "Sick",
+  "category": "feelings",
+  "emoji": "\ud83e\udd12",
+  "tts": "I feel sick",
+  "tags": [
+   "sick",
+   "ill",
+   "fever",
+   "unwell",
+   "flu",
+   "thermometer",
+   "doctor"
+  ]
+ },
+ {
+  "id": "hurt",
+  "label": "Hurt",
+  "category": "feelings",
+  "emoji": "\ud83e\ude79",
+  "tts": "I am hurt",
+  "tags": [
+   "hurt",
+   "pain",
+   "ouch",
+   "boo boo",
+   "bandage",
+   "injury",
+   "ache"
+  ]
+ },
+ {
+  "id": "scared",
+  "label": "Scared",
+  "category": "feelings",
+  "emoji": "\ud83d\ude28",
+  "tts": "I am scared",
+  "tags": [
+   "scared",
+   "afraid",
+   "fear",
+   "frightened",
+   "nervous",
+   "spooked"
+  ]
+ },
+ {
+  "id": "silly",
+  "label": "Silly",
+  "category": "feelings",
+  "emoji": "\ud83e\udd2a",
+  "tts": "I feel silly",
+  "tags": [
+   "silly",
+   "goofy",
+   "funny",
+   "crazy",
+   "playful",
+   "joke"
+  ]
+ },
+ {
+  "id": "surprised",
+  "label": "Surprised",
+  "category": "feelings",
+  "emoji": "\ud83d\ude32",
+  "tts": "I am surprised",
+  "tags": [
+   "surprised",
+   "shocked",
+   "whoa",
+   "gasp",
+   "amazed"
+  ]
+ },
+ {
+  "id": "calm",
+  "label": "Calm",
+  "category": "feelings",
+  "emoji": "\ud83d\ude0c",
+  "tts": "I feel calm",
+  "tags": [
+   "calm",
+   "relaxed",
+   "peaceful",
+   "quiet",
+   "zen",
+   "ready",
+   "relax"
+  ]
+ },
+ {
+  "id": "proud",
+  "label": "Proud",
+  "category": "feelings",
+  "emoji": "\ud83e\udd81",
+  "tts": "I am proud",
+  "tags": [
+   "proud",
+   "accomplished",
+   "brave",
+   "good job",
+   "great"
+  ]
+ },
+ {
+  "id": "nervous",
+  "label": "Nervous",
+  "category": "feelings",
+  "emoji": "\ud83d\ude2c",
+  "tts": "I feel nervous",
+  "tags": [
+   "nervous",
+   "anxious",
+   "worried",
+   "tense",
+   "scared"
+  ]
+ },
+ {
+  "id": "bored",
+  "label": "Bored",
+  "category": "feelings",
+  "emoji": "\ud83e\udd71",
+  "tts": "I am bored",
+  "tags": [
+   "bored",
+   "nothing to do",
+   "yawn",
+   "dull"
+  ]
+ },
+ {
+  "id": "confused",
+  "label": "Confused",
+  "category": "feelings",
+  "emoji": "\ud83e\udd14",
+  "tts": "I am confused",
+  "tags": [
+   "confused",
+   "unsure",
+   "thinking",
+   "wonder",
+   "puzzle",
+   "don't know"
+  ]
+ },
+ {
+  "id": "loved",
+  "label": "Loved",
+  "category": "feelings",
+  "emoji": "\ud83e\udd70",
+  "tts": "I feel loved",
+  "tags": [
+   "loved",
+   "love",
+   "cared for",
+   "heart",
+   "warm",
+   "family"
+  ]
+ },
+ {
+  "id": "shy",
+  "label": "Shy",
+  "category": "feelings",
+  "emoji": "\ud83d\ude48",
+  "tts": "I feel shy",
+  "tags": [
+   "shy",
+   "quiet",
+   "timid",
+   "blush",
+   "hiding"
+  ]
+ },
+ {
+  "id": "hungry",
+  "label": "Hungry",
+  "category": "feelings",
+  "emoji": "\ud83d\ude0b",
+  "tts": "I am hungry",
+  "tags": [
+   "hungry",
+   "food",
+   "eat",
+   "starving",
+   "appetite",
+   "snack"
+  ]
+ },
+ {
+  "id": "thirsty",
+  "label": "Thirsty",
+  "category": "feelings",
+  "emoji": "\ud83e\udd75",
+  "tts": "I am thirsty",
+  "tags": [
+   "thirsty",
+   "drink",
+   "water",
+   "juice",
+   "parched"
+  ]
+ },
+ {
+  "id": "hot_feeling",
+  "label": "Hot",
+  "category": "feelings",
+  "emoji": "\ud83d\udd25",
+  "tts": "I am hot",
+  "tags": [
+   "hot",
+   "warm",
+   "sweaty",
+   "summer",
+   "sun"
+  ]
+ },
+ {
+  "id": "cold_feeling",
+  "label": "Cold",
+  "category": "feelings",
+  "emoji": "\ud83e\udd76",
+  "tts": "I am cold",
+  "tags": [
+   "cold",
+   "freezing",
+   "chilly",
+   "shivering",
+   "winter",
+   "ice"
+  ]
+ },
+ {
+  "id": "too_loud",
+  "label": "Too Loud",
+  "category": "feelings",
+  "emoji": "\ud83c\udfa7",
+  "tts": "It is too loud",
+  "tags": [
+   "too loud",
+   "noisy",
+   "sound",
+   "volume",
+   "headphones",
+   "quiet please"
+  ]
+ },
+ {
+  "id": "frustrated",
+  "label": "Frustrated",
+  "category": "feelings",
+  "emoji": "\ud83d\ude24",
+  "tts": "I feel frustrated",
+  "tags": [
+   "frustrated",
+   "annoyed",
+   "steam",
+   "upset"
+  ]
+ },
+ {
+  "id": "worried",
+  "label": "Worried",
+  "category": "feelings",
+  "emoji": "\ud83d\ude1f",
+  "tts": "I am worried",
+  "tags": [
+   "worried",
+   "anxious",
+   "fret",
+   "care"
+  ]
+ },
+ {
+  "id": "pizza",
+  "label": "Pizza",
+  "category": "food",
+  "emoji": "\ud83c\udf55",
+  "tts": "Pizza please",
+  "tags": [
+   "pizza",
+   "slice",
+   "dinner",
+   "cheese",
+   "pepperoni",
+   "lunch"
+  ]
+ },
+ {
+  "id": "burger",
+  "label": "Burger",
+  "category": "food",
+  "emoji": "\ud83c\udf54",
+  "tts": "Hamburger please",
+  "tags": [
+   "burger",
+   "hamburger",
+   "cheeseburger",
+   "lunch",
+   "dinner",
+   "fast food"
+  ]
+ },
+ {
+  "id": "french_fries",
+  "label": "French Fries",
+  "category": "food",
+  "emoji": "\ud83c\udf5f",
+  "tts": "French fries",
+  "tags": [
+   "fries",
+   "french fries",
+   "chips",
+   "potato",
+   "snack",
+   "fast food"
+  ]
+ },
+ {
+  "id": "hotdog",
+  "label": "Hot Dog",
+  "category": "food",
+  "emoji": "\ud83c\udf2d",
+  "tts": "Hot dog",
+  "tags": [
+   "hot dog",
+   "hotdog",
+   "frank",
+   "bun",
+   "lunch",
+   "dinner"
+  ]
+ },
+ {
+  "id": "sandwich",
+  "label": "Sandwich",
+  "category": "food",
+  "emoji": "\ud83e\udd6a",
+  "tts": "Sandwich please",
+  "tags": [
+   "sandwich",
+   "lunch",
+   "bread",
+   "sub",
+   "pb&j",
+   "turkey"
+  ]
+ },
+ {
+  "id": "taco",
+  "label": "Taco",
+  "category": "food",
+  "emoji": "\ud83c\udf2e",
+  "tts": "Taco please",
+  "tags": [
+   "taco",
+   "mexican",
+   "lunch",
+   "dinner",
+   "crispy"
+  ]
+ },
+ {
+  "id": "burrito",
+  "label": "Burrito",
+  "category": "food",
+  "emoji": "\ud83c\udf2f",
+  "tts": "Burrito please",
+  "tags": [
+   "burrito",
+   "wrap",
+   "mexican",
+   "lunch",
+   "dinner"
+  ]
+ },
+ {
+  "id": "pasta",
+  "label": "Pasta",
+  "category": "food",
+  "emoji": "\ud83c\udf5d",
+  "tts": "Spaghetti pasta",
+  "tags": [
+   "pasta",
+   "spaghetti",
+   "noodles",
+   "dinner",
+   "italian",
+   "sauce"
+  ]
+ },
+ {
+  "id": "rice",
+  "label": "Rice",
+  "category": "food",
+  "emoji": "\ud83c\udf5a",
+  "tts": "Rice",
+  "tags": [
+   "rice",
+   "bowl",
+   "dinner",
+   "asian",
+   "side"
+  ]
+ },
+ {
+  "id": "chicken",
+  "label": "Chicken",
+  "category": "food",
+  "emoji": "\ud83c\udf57",
+  "tts": "Chicken nuggets",
+  "tags": [
+   "chicken",
+   "nuggets",
+   "meat",
+   "dinner",
+   "tenders",
+   "drumstick"
+  ]
+ },
+ {
+  "id": "apple",
+  "label": "Apple",
+  "category": "food",
+  "emoji": "\ud83c\udf4e",
+  "tts": "Apple",
+  "tags": [
+   "apple",
+   "fruit",
+   "red",
+   "snack",
+   "healthy"
+  ]
+ },
+ {
+  "id": "banana",
+  "label": "Banana",
+  "category": "food",
+  "emoji": "\ud83c\udf4c",
+  "tts": "Banana",
+  "tags": [
+   "banana",
+   "fruit",
+   "yellow",
+   "peel",
+   "snack"
+  ]
+ },
+ {
+  "id": "orange_fruit",
+  "label": "Orange",
+  "category": "food",
+  "emoji": "\ud83c\udf4a",
+  "tts": "Orange",
+  "tags": [
+   "orange",
+   "fruit",
+   "citrus",
+   "vitamin c",
+   "slice"
+  ]
+ },
+ {
+  "id": "strawberries",
+  "label": "Strawberries",
+  "category": "food",
+  "emoji": "\ud83c\udf53",
+  "tts": "Strawberries",
+  "tags": [
+   "strawberries",
+   "strawberry",
+   "fruit",
+   "berry",
+   "red",
+   "sweet"
+  ]
+ },
+ {
+  "id": "grapes",
+  "label": "Grapes",
+  "category": "food",
+  "emoji": "\ud83c\udf47",
+  "tts": "Grapes",
+  "tags": [
+   "grapes",
+   "fruit",
+   "purple",
+   "green",
+   "bunch",
+   "snack"
+  ]
+ },
+ {
+  "id": "watermelon",
+  "label": "Watermelon",
+  "category": "food",
+  "emoji": "\ud83c\udf49",
+  "tts": "Watermelon",
+  "tags": [
+   "watermelon",
+   "melon",
+   "fruit",
+   "summer",
+   "sweet",
+   "slice"
+  ]
+ },
+ {
+  "id": "pineapple",
+  "label": "Pineapple",
+  "category": "food",
+  "emoji": "\ud83c\udf4d",
+  "tts": "Pineapple",
+  "tags": [
+   "pineapple",
+   "fruit",
+   "tropical",
+   "sweet"
+  ]
+ },
+ {
+  "id": "carrots",
+  "label": "Carrots",
+  "category": "food",
+  "emoji": "\ud83e\udd55",
+  "tts": "Carrots",
+  "tags": [
+   "carrots",
+   "carrot",
+   "vegetable",
+   "orange",
+   "crunchy",
+   "healthy"
+  ]
+ },
+ {
+  "id": "broccoli",
+  "label": "Broccoli",
+  "category": "food",
+  "emoji": "\ud83e\udd66",
+  "tts": "Broccoli",
+  "tags": [
+   "broccoli",
+   "vegetable",
+   "green",
+   "healthy",
+   "dinner"
+  ]
+ },
+ {
+  "id": "corn",
+  "label": "Corn",
+  "category": "food",
+  "emoji": "\ud83c\udf3d",
+  "tts": "Corn on the cob",
+  "tags": [
+   "corn",
+   "vegetable",
+   "yellow",
+   "cob",
+   "dinner"
+  ]
+ },
+ {
+  "id": "bread",
+  "label": "Bread",
+  "category": "food",
+  "emoji": "\ud83c\udf5e",
+  "tts": "Bread",
+  "tags": [
+   "bread",
+   "toast",
+   "loaf",
+   "bakery",
+   "slice"
+  ]
+ },
+ {
+  "id": "cereal",
+  "label": "Cereal",
+  "category": "food",
+  "emoji": "\ud83e\udd63",
+  "tts": "Bowl of cereal",
+  "tags": [
+   "cereal",
+   "breakfast",
+   "bowl",
+   "milk",
+   "oats"
+  ]
+ },
+ {
+  "id": "pancakes",
+  "label": "Pancakes",
+  "category": "food",
+  "emoji": "\ud83e\udd5e",
+  "tts": "Pancakes with syrup",
+  "tags": [
+   "pancakes",
+   "waffles",
+   "breakfast",
+   "syrup",
+   "butter",
+   "sweet"
+  ]
+ },
+ {
+  "id": "waffles",
+  "label": "Waffles",
+  "category": "food",
+  "emoji": "\ud83e\uddc7",
+  "tts": "Waffles",
+  "tags": [
+   "waffles",
+   "breakfast",
+   "syrup",
+   "butter"
+  ]
+ },
+ {
+  "id": "eggs",
+  "label": "Eggs",
+  "category": "food",
+  "emoji": "\ud83c\udf73",
+  "tts": "Fried eggs",
+  "tags": [
+   "eggs",
+   "egg",
+   "breakfast",
+   "fried egg",
+   "scrambled"
+  ]
+ },
+ {
+  "id": "cheese",
+  "label": "Cheese",
+  "category": "food",
+  "emoji": "\ud83e\uddc0",
+  "tts": "Cheese",
+  "tags": [
+   "cheese",
+   "dairy",
+   "snack",
+   "slice",
+   "yellow"
+  ]
+ },
+ {
+  "id": "soup",
+  "label": "Soup",
+  "category": "food",
+  "emoji": "\ud83c\udf72",
+  "tts": "Bowl of soup",
+  "tags": [
+   "soup",
+   "bowl",
+   "hot",
+   "warm",
+   "lunch",
+   "dinner",
+   "broth"
+  ]
+ },
+ {
+  "id": "salad",
+  "label": "Salad",
+  "category": "food",
+  "emoji": "\ud83e\udd57",
+  "tts": "Salad",
+  "tags": [
+   "salad",
+   "vegetables",
+   "healthy",
+   "green",
+   "lunch"
+  ]
+ },
+ {
+  "id": "cookie",
+  "label": "Cookie",
+  "category": "food",
+  "emoji": "\ud83c\udf6a",
+  "tts": "Chocolate chip cookie",
+  "tags": [
+   "cookie",
+   "cookies",
+   "snack",
+   "treat",
+   "dessert",
+   "chocolate chip",
+   "sweet"
+  ]
+ },
+ {
+  "id": "cake",
+  "label": "Cake",
+  "category": "food",
+  "emoji": "\ud83c\udf82",
+  "tts": "Birthday cake",
+  "tags": [
+   "cake",
+   "birthday",
+   "dessert",
+   "celebration",
+   "sweet",
+   "frosting"
+  ]
+ },
+ {
+  "id": "cupcake",
+  "label": "Cupcake",
+  "category": "food",
+  "emoji": "\ud83e\uddc1",
+  "tts": "Cupcake",
+  "tags": [
+   "cupcake",
+   "dessert",
+   "snack",
+   "sweet",
+   "frosting"
+  ]
+ },
+ {
+  "id": "ice_cream",
+  "label": "Ice Cream",
+  "category": "food",
+  "emoji": "\ud83c\udf66",
+  "tts": "Ice cream cone",
+  "tags": [
+   "ice cream",
+   "cone",
+   "dessert",
+   "cold",
+   "sweet",
+   "treat",
+   "scoop"
+  ]
+ },
+ {
+  "id": "donut",
+  "label": "Donut",
+  "category": "food",
+  "emoji": "\ud83c\udf69",
+  "tts": "Donut",
+  "tags": [
+   "donut",
+   "doughnut",
+   "sweet",
+   "pastry",
+   "breakfast",
+   "treat"
+  ]
+ },
+ {
+  "id": "popcorn",
+  "label": "Popcorn",
+  "category": "food",
+  "emoji": "\ud83c\udf7f",
+  "tts": "Popcorn",
+  "tags": [
+   "popcorn",
+   "snack",
+   "movie",
+   "corn",
+   "butter"
+  ]
+ },
+ {
+  "id": "chocolate",
+  "label": "Chocolate",
+  "category": "food",
+  "emoji": "\ud83c\udf6b",
+  "tts": "Chocolate bar",
+  "tags": [
+   "chocolate",
+   "candy",
+   "sweet",
+   "bar",
+   "treat"
+  ]
+ },
+ {
+  "id": "candy",
+  "label": "Candy",
+  "category": "food",
+  "emoji": "\ud83c\udf6c",
+  "tts": "Candy",
+  "tags": [
+   "candy",
+   "sweet",
+   "lollipop",
+   "treat",
+   "sugar"
+  ]
+ },
+ {
+  "id": "crackers",
+  "label": "Crackers",
+  "category": "food",
+  "emoji": "\ud83c\udf58",
+  "tts": "Crackers",
+  "tags": [
+   "crackers",
+   "snack",
+   "crunchy",
+   "goldfish",
+   "saltine"
+  ]
+ },
+ {
+  "id": "yogurt",
+  "label": "Yogurt",
+  "category": "food",
+  "emoji": "\ud83c\udf67",
+  "tts": "Yogurt",
+  "tags": [
+   "yogurt",
+   "dairy",
+   "snack",
+   "fruit",
+   "spoon"
+  ]
+ },
+ {
+  "id": "chips_snack",
+  "label": "Potato Chips",
+  "category": "food",
+  "emoji": "\ud83e\udd54",
+  "tts": "Potato chips",
+  "tags": [
+   "chips",
+   "potato chips",
+   "snack",
+   "crisps",
+   "salty"
+  ]
+ },
+ {
+  "id": "muffin",
+  "label": "Muffin",
+  "category": "food",
+  "emoji": "\ud83e\uddc1",
+  "tts": "Blueberry muffin",
+  "tags": [
+   "muffin",
+   "blueberry",
+   "breakfast",
+   "bakery",
+   "snack"
+  ]
+ },
+ {
+  "id": "water",
+  "label": "Water",
+  "category": "drinks",
+  "emoji": "\ud83d\udca7",
+  "tts": "Water please",
+  "tags": [
+   "water",
+   "drink",
+   "h2o",
+   "bottle",
+   "glass",
+   "thirsty",
+   "cold water"
+  ]
+ },
+ {
+  "id": "milk",
+  "label": "Milk",
+  "category": "drinks",
+  "emoji": "\ud83e\udd5b",
+  "tts": "Glass of milk",
+  "tags": [
+   "milk",
+   "dairy",
+   "glass",
+   "white",
+   "cold",
+   "breakfast"
+  ]
+ },
+ {
+  "id": "chocolate_milk",
+  "label": "Chocolate Milk",
+  "category": "drinks",
+  "emoji": "\ud83c\udf6b",
+  "tts": "Chocolate milk please",
+  "tags": [
+   "chocolate milk",
+   "choc milk",
+   "milk",
+   "sweet",
+   "drink"
+  ]
+ },
+ {
+  "id": "apple_juice",
+  "label": "Apple Juice",
+  "category": "drinks",
+  "emoji": "\ud83e\uddc3",
+  "tts": "Apple juice please",
+  "tags": [
+   "apple juice",
+   "juice",
+   "juice box",
+   "apple",
+   "drink"
+  ]
+ },
+ {
+  "id": "orange_juice",
+  "label": "Orange Juice",
+  "category": "drinks",
+  "emoji": "\ud83c\udf4a",
+  "tts": "Orange juice please",
+  "tags": [
+   "orange juice",
+   "oj",
+   "juice",
+   "citrus",
+   "breakfast",
+   "drink"
+  ]
+ },
+ {
+  "id": "juice_box",
+  "label": "Juice Box",
+  "category": "drinks",
+  "emoji": "\ud83e\uddc3",
+  "tts": "Juice box",
+  "tags": [
+   "juice box",
+   "juice",
+   "straw",
+   "pouch",
+   "drink",
+   "snack"
+  ]
+ },
+ {
+  "id": "lemonade",
+  "label": "Lemonade",
+  "category": "drinks",
+  "emoji": "\ud83c\udf4b",
+  "tts": "Lemonade",
+  "tags": [
+   "lemonade",
+   "lemon",
+   "cold drink",
+   "sweet",
+   "sour"
+  ]
+ },
+ {
+  "id": "hot_chocolate",
+  "label": "Hot Cocoa",
+  "category": "drinks",
+  "emoji": "\u2615",
+  "tts": "Hot chocolate",
+  "tags": [
+   "hot chocolate",
+   "hot cocoa",
+   "cocoa",
+   "warm",
+   "mug",
+   "marshmallows"
+  ]
+ },
+ {
+  "id": "smoothie",
+  "label": "Smoothie",
+  "category": "drinks",
+  "emoji": "\ud83e\udd64",
+  "tts": "Fruit smoothie",
+  "tags": [
+   "smoothie",
+   "shake",
+   "fruit",
+   "blender",
+   "straw",
+   "drink"
+  ]
+ },
+ {
+  "id": "tea",
+  "label": "Tea",
+  "category": "drinks",
+  "emoji": "\ud83e\uded6",
+  "tts": "Cup of tea",
+  "tags": [
+   "tea",
+   "warm",
+   "teapot",
+   "cup",
+   "herbal"
+  ]
+ },
+ {
+  "id": "soda",
+  "label": "Soda",
+  "category": "drinks",
+  "emoji": "\ud83e\udd64",
+  "tts": "Soda pop",
+  "tags": [
+   "soda",
+   "pop",
+   "can",
+   "fizzy",
+   "carbonated",
+   "coke"
+  ]
+ },
+ {
+  "id": "ice_water",
+  "label": "Ice Water",
+  "category": "drinks",
+  "emoji": "\ud83e\uddca",
+  "tts": "Cold ice water",
+  "tags": [
+   "ice water",
+   "ice",
+   "cold",
+   "refreshing",
+   "cube"
+  ]
+ },
+ {
+  "id": "bottle",
+  "label": "Water Bottle",
+  "category": "drinks",
+  "emoji": "\ud83c\udf7c",
+  "tts": "Water bottle",
+  "tags": [
+   "bottle",
+   "water bottle",
+   "sippy cup",
+   "thermos",
+   "drink"
+  ]
+ },
+ {
+  "id": "milkshake",
+  "label": "Milkshake",
+  "category": "drinks",
+  "emoji": "\ud83c\udf68",
+  "tts": "Milkshake",
+  "tags": [
+   "milkshake",
+   "shake",
+   "ice cream",
+   "sweet",
+   "strawberry"
+  ]
+ },
+ {
+  "id": "eat",
+  "label": "Eat",
+  "category": "actions",
+  "emoji": "\ud83c\udf7d\ufe0f",
+  "tts": "I want to eat",
+  "tags": [
+   "eat",
+   "food",
+   "meal",
+   "bite",
+   "chew",
+   "lunch",
+   "dinner",
+   "hungry"
+  ]
+ },
+ {
+  "id": "drink_act",
+  "label": "Drink",
+  "category": "actions",
+  "emoji": "\ud83e\udd64",
+  "tts": "I want to drink",
+  "tags": [
+   "drink",
+   "sip",
+   "gulp",
+   "thirsty",
+   "beverage",
+   "liquid"
+  ]
+ },
+ {
+  "id": "play_act",
+  "label": "Play",
+  "category": "actions",
+  "emoji": "\ud83e\uddf8",
+  "tts": "I want to play",
+  "tags": [
+   "play",
+   "game",
+   "fun",
+   "toys",
+   "recess",
+   "activity"
+  ]
+ },
+ {
+  "id": "sleep",
+  "label": "Sleep",
+  "category": "actions",
+  "emoji": "\ud83d\ude34",
+  "tts": "Time to sleep",
+  "tags": [
+   "sleep",
+   "bed",
+   "nap",
+   "rest",
+   "night",
+   "tired",
+   "dream"
+  ]
+ },
+ {
+  "id": "walk",
+  "label": "Walk",
+  "category": "actions",
+  "emoji": "\ud83d\udeb6",
+  "tts": "Walk",
+  "tags": [
+   "walk",
+   "step",
+   "stroll",
+   "outside",
+   "feet",
+   "move"
+  ]
+ },
+ {
+  "id": "run",
+  "label": "Run",
+  "category": "actions",
+  "emoji": "\ud83c\udfc3",
+  "tts": "Run fast",
+  "tags": [
+   "run",
+   "sprint",
+   "fast",
+   "jog",
+   "race",
+   "chase"
+  ]
+ },
+ {
+  "id": "jump",
+  "label": "Jump",
+  "category": "actions",
+  "emoji": "\ud83e\udd98",
+  "tts": "Jump up",
+  "tags": [
+   "jump",
+   "hop",
+   "bounce",
+   "leap",
+   "trampoline"
+  ]
+ },
+ {
+  "id": "swim",
+  "label": "Swim",
+  "category": "actions",
+  "emoji": "\ud83c\udfca",
+  "tts": "Swim in water",
+  "tags": [
+   "swim",
+   "pool",
+   "water",
+   "beach",
+   "splash"
+  ]
+ },
+ {
+  "id": "read",
+  "label": "Read",
+  "category": "actions",
+  "emoji": "\ud83d\udcd6",
+  "tts": "Read a book",
+  "tags": [
+   "read",
+   "book",
+   "story",
+   "pages",
+   "learn",
+   "words"
+  ]
+ },
+ {
+  "id": "write",
+  "label": "Write",
+  "category": "actions",
+  "emoji": "\u270d\ufe0f",
+  "tts": "Write",
+  "tags": [
+   "write",
+   "pencil",
+   "pen",
+   "paper",
+   "words",
+   "letters"
+  ]
+ },
+ {
+  "id": "draw",
+  "label": "Draw",
+  "category": "actions",
+  "emoji": "\ud83d\udd8d\ufe0f",
+  "tts": "Draw and color",
+  "tags": [
+   "draw",
+   "crayon",
+   "color",
+   "paint",
+   "art",
+   "sketch",
+   "picture"
+  ]
+ },
+ {
+  "id": "sing",
+  "label": "Sing",
+  "category": "actions",
+  "emoji": "\ud83c\udfa4",
+  "tts": "Sing a song",
+  "tags": [
+   "sing",
+   "song",
+   "music",
+   "voice",
+   "melody"
+  ]
+ },
+ {
+  "id": "dance",
+  "label": "Dance",
+  "category": "actions",
+  "emoji": "\ud83d\udc83",
+  "tts": "Dance to music",
+  "tags": [
+   "dance",
+   "move",
+   "music",
+   "groove",
+   "spin"
+  ]
+ },
+ {
+  "id": "wash_hands",
+  "label": "Wash Hands",
+  "category": "actions",
+  "emoji": "\ud83e\uddfc",
+  "tts": "Wash hands with soap",
+  "tags": [
+   "wash hands",
+   "wash",
+   "soap",
+   "clean",
+   "water",
+   "sink",
+   "hygiene"
+  ]
+ },
+ {
+  "id": "brush_teeth",
+  "label": "Brush Teeth",
+  "category": "actions",
+  "emoji": "\ud83e\udea5",
+  "tts": "Brush teeth",
+  "tags": [
+   "brush teeth",
+   "toothbrush",
+   "teeth",
+   "clean",
+   "toothpaste",
+   "dentist"
+  ]
+ },
+ {
+  "id": "hug",
+  "label": "Hug",
+  "category": "actions",
+  "emoji": "\ud83e\udec2",
+  "tts": "Give a hug",
+  "tags": [
+   "hug",
+   "embrace",
+   "comfort",
+   "love",
+   "friend",
+   "cuddle"
+  ]
+ },
+ {
+  "id": "listen",
+  "label": "Listen",
+  "category": "actions",
+  "emoji": "\ud83d\udc42",
+  "tts": "Listen carefully",
+  "tags": [
+   "listen",
+   "hear",
+   "ears",
+   "sound",
+   "music",
+   "teacher"
+  ]
+ },
+ {
+  "id": "watch",
+  "label": "Watch TV",
+  "category": "actions",
+  "emoji": "\ud83d\udcfa",
+  "tts": "Watch TV or movie",
+  "tags": [
+   "watch",
+   "tv",
+   "movie",
+   "show",
+   "screen",
+   "video"
+  ]
+ },
+ {
+  "id": "sit",
+  "label": "Sit",
+  "category": "actions",
+  "emoji": "\ud83e\ude91",
+  "tts": "Sit down",
+  "tags": [
+   "sit",
+   "chair",
+   "seat",
+   "down",
+   "floor",
+   "desk"
+  ]
+ },
+ {
+  "id": "stand",
+  "label": "Stand",
+  "category": "actions",
+  "emoji": "\ud83e\uddcd",
+  "tts": "Stand up",
+  "tags": [
+   "stand",
+   "up",
+   "rise",
+   "feet",
+   "line"
+  ]
+ },
+ {
+  "id": "cut",
+  "label": "Cut",
+  "category": "actions",
+  "emoji": "\u2702\ufe0f",
+  "tts": "Cut with scissors",
+  "tags": [
+   "cut",
+   "scissors",
+   "paper",
+   "craft",
+   "art"
+  ]
+ },
+ {
+  "id": "glue",
+  "label": "Glue",
+  "category": "actions",
+  "emoji": "\ud83e\uddf4",
+  "tts": "Glue",
+  "tags": [
+   "glue",
+   "paste",
+   "stick",
+   "craft",
+   "project"
+  ]
+ },
+ {
+  "id": "clean_up",
+  "label": "Clean Up",
+  "category": "actions",
+  "emoji": "\ud83e\uddf9",
+  "tts": "Clean up toys",
+  "tags": [
+   "clean up",
+   "tidy",
+   "sweep",
+   "put away",
+   "neat"
+  ]
+ },
+ {
+  "id": "push",
+  "label": "Push",
+  "category": "actions",
+  "emoji": "\ud83d\udc50",
+  "tts": "Push",
+  "tags": [
+   "push",
+   "shove",
+   "move",
+   "button"
+  ]
+ },
+ {
+  "id": "pull",
+  "label": "Pull",
+  "category": "actions",
+  "emoji": "\ud83e\udea2",
+  "tts": "Pull",
+  "tags": [
+   "pull",
+   "tug",
+   "drag",
+   "rope"
+  ]
+ },
+ {
+  "id": "climb",
+  "label": "Climb",
+  "category": "actions",
+  "emoji": "\ud83e\uddd7",
+  "tts": "Climb up",
+  "tags": [
+   "climb",
+   "ladder",
+   "stairs",
+   "playground",
+   "mountain"
+  ]
+ },
+ {
+  "id": "throw",
+  "label": "Throw",
+  "category": "actions",
+  "emoji": "\u26be",
+  "tts": "Throw ball",
+  "tags": [
+   "throw",
+   "toss",
+   "pitch",
+   "ball"
+  ]
+ },
+ {
+  "id": "catch",
+  "label": "Catch",
+  "category": "actions",
+  "emoji": "\ud83e\udde4",
+  "tts": "Catch ball",
+  "tags": [
+   "catch",
+   "grab",
+   "glove",
+   "ball"
+  ]
+ },
+ {
+  "id": "mom",
+  "label": "Mom",
+  "category": "people",
+  "emoji": "\ud83d\udc69",
+  "tts": "Mom",
+  "tags": [
+   "mom",
+   "mother",
+   "mama",
+   "mommy",
+   "parent",
+   "family"
+  ]
+ },
+ {
+  "id": "dad",
+  "label": "Dad",
+  "category": "people",
+  "emoji": "\ud83d\udc68",
+  "tts": "Dad",
+  "tags": [
+   "dad",
+   "father",
+   "daddy",
+   "papa",
+   "parent",
+   "family"
+  ]
+ },
+ {
+  "id": "grandma",
+  "label": "Grandma",
+  "category": "people",
+  "emoji": "\ud83d\udc75",
+  "tts": "Grandma",
+  "tags": [
+   "grandma",
+   "grandmother",
+   "granny",
+   "nana",
+   "family"
+  ]
+ },
+ {
+  "id": "grandpa",
+  "label": "Grandpa",
+  "category": "people",
+  "emoji": "\ud83d\udc74",
+  "tts": "Grandpa",
+  "tags": [
+   "grandpa",
+   "grandfather",
+   "gramps",
+   "papa",
+   "family"
+  ]
+ },
+ {
+  "id": "brother",
+  "label": "Brother",
+  "category": "people",
+  "emoji": "\ud83d\udc66",
+  "tts": "Brother",
+  "tags": [
+   "brother",
+   "boy",
+   "sibling",
+   "family",
+   "bro"
+  ]
+ },
+ {
+  "id": "sister",
+  "label": "Sister",
+  "category": "people",
+  "emoji": "\ud83d\udc67",
+  "tts": "Sister",
+  "tags": [
+   "sister",
+   "girl",
+   "sibling",
+   "family",
+   "sis"
+  ]
+ },
+ {
+  "id": "baby",
+  "label": "Baby",
+  "category": "people",
+  "emoji": "\ud83d\udc76",
+  "tts": "Baby",
+  "tags": [
+   "baby",
+   "infant",
+   "toddler",
+   "little",
+   "family"
+  ]
+ },
+ {
+  "id": "teacher",
+  "label": "Teacher",
+  "category": "people",
+  "emoji": "\ud83e\uddd1\u200d\ud83c\udfeb",
+  "tts": "Teacher",
+  "tags": [
+   "teacher",
+   "school",
+   "instructor",
+   "class",
+   "educator"
+  ]
+ },
+ {
+  "id": "friend",
+  "label": "Friend",
+  "category": "people",
+  "emoji": "\ud83e\uddd2",
+  "tts": "Friend",
+  "tags": [
+   "friend",
+   "buddy",
+   "classmate",
+   "pal",
+   "peer"
+  ]
+ },
+ {
+  "id": "doctor",
+  "label": "Doctor",
+  "category": "people",
+  "emoji": "\ud83e\uddd1\u200d\u2695\ufe0f",
+  "tts": "Doctor",
+  "tags": [
+   "doctor",
+   "physician",
+   "clinic",
+   "hospital",
+   "medicine"
+  ]
+ },
+ {
+  "id": "nurse",
+  "label": "Nurse",
+  "category": "people",
+  "emoji": "\ud83d\udc69\u200d\u2695\ufe0f",
+  "tts": "Nurse",
+  "tags": [
+   "nurse",
+   "clinic",
+   "hospital",
+   "care",
+   "health"
+  ]
+ },
+ {
+  "id": "police",
+  "label": "Police Officer",
+  "category": "people",
+  "emoji": "\ud83d\udc6e",
+  "tts": "Police officer",
+  "tags": [
+   "police",
+   "cop",
+   "officer",
+   "safety",
+   "help"
+  ]
+ },
+ {
+  "id": "firefighter",
+  "label": "Firefighter",
+  "category": "people",
+  "emoji": "\ud83e\uddd1\u200d\ud83d\ude92",
+  "tts": "Firefighter",
+  "tags": [
+   "firefighter",
+   "fireman",
+   "fire truck",
+   "rescue",
+   "hero"
+  ]
+ },
+ {
+  "id": "therapist",
+  "label": "Speech Therapist",
+  "category": "people",
+  "emoji": "\ud83d\udde3\ufe0f",
+  "tts": "Speech therapist",
+  "tags": [
+   "therapist",
+   "slp",
+   "speech",
+   "ot",
+   "aide",
+   "specialist"
+  ]
+ },
+ {
+  "id": "family",
+  "label": "Family",
+  "category": "people",
+  "emoji": "\ud83d\udc6a",
+  "tts": "Family",
+  "tags": [
+   "family",
+   "parents",
+   "relatives",
+   "together",
+   "home"
+  ]
+ },
+ {
+  "id": "dentist_person",
+  "label": "Dentist",
+  "category": "people",
+  "emoji": "\ud83e\uddb7",
+  "tts": "Dentist",
+  "tags": [
+   "dentist",
+   "teeth",
+   "doctor",
+   "hygiene"
+  ]
+ },
+ {
+  "id": "home",
+  "label": "Home",
+  "category": "places",
+  "emoji": "\ud83c\udfe0",
+  "tts": "Go home",
+  "tags": [
+   "home",
+   "house",
+   "apartment",
+   "inside",
+   "family"
+  ]
+ },
+ {
+  "id": "school",
+  "label": "School",
+  "category": "places",
+  "emoji": "\ud83c\udfeb",
+  "tts": "School",
+  "tags": [
+   "school",
+   "class",
+   "building",
+   "learn",
+   "study"
+  ]
+ },
+ {
+  "id": "classroom",
+  "label": "Classroom",
+  "category": "places",
+  "emoji": "\ud83d\udcda",
+  "tts": "Classroom",
+  "tags": [
+   "classroom",
+   "class",
+   "desk",
+   "room",
+   "school"
+  ]
+ },
+ {
+  "id": "playground",
+  "label": "Playground",
+  "category": "places",
+  "emoji": "\ud83d\udedd",
+  "tts": "Playground",
+  "tags": [
+   "playground",
+   "slide",
+   "swings",
+   "recess",
+   "park",
+   "fun"
+  ]
+ },
+ {
+  "id": "park",
+  "label": "Park",
+  "category": "places",
+  "emoji": "\ud83c\udf33",
+  "tts": "Go to the park",
+  "tags": [
+   "park",
+   "trees",
+   "outside",
+   "nature",
+   "grass",
+   "play"
+  ]
+ },
+ {
+  "id": "store",
+  "label": "Store",
+  "category": "places",
+  "emoji": "\ud83d\uded2",
+  "tts": "Grocery store",
+  "tags": [
+   "store",
+   "grocery",
+   "shop",
+   "market",
+   "buy",
+   "supermarket"
+  ]
+ },
+ {
+  "id": "restaurant",
+  "label": "Restaurant",
+  "category": "places",
+  "emoji": "\ud83c\udf7d\ufe0f",
+  "tts": "Restaurant",
+  "tags": [
+   "restaurant",
+   "diner",
+   "cafe",
+   "fast food",
+   "eat out"
+  ]
+ },
+ {
+  "id": "hospital",
+  "label": "Hospital",
+  "category": "places",
+  "emoji": "\ud83c\udfe5",
+  "tts": "Hospital",
+  "tags": [
+   "hospital",
+   "clinic",
+   "emergency",
+   "doctor",
+   "er"
+  ]
+ },
+ {
+  "id": "bathroom",
+  "label": "Bathroom",
+  "category": "places",
+  "emoji": "\ud83d\udebd",
+  "tts": "Bathroom",
+  "tags": [
+   "bathroom",
+   "restroom",
+   "toilet",
+   "washroom",
+   "potty"
+  ]
+ },
+ {
+  "id": "bedroom",
+  "label": "Bedroom",
+  "category": "places",
+  "emoji": "\ud83d\udecf\ufe0f",
+  "tts": "Bedroom",
+  "tags": [
+   "bedroom",
+   "bed",
+   "sleep",
+   "room",
+   "night"
+  ]
+ },
+ {
+  "id": "kitchen",
+  "label": "Kitchen",
+  "category": "places",
+  "emoji": "\ud83c\udf73",
+  "tts": "Kitchen",
+  "tags": [
+   "kitchen",
+   "cooking",
+   "fridge",
+   "stove",
+   "food"
+  ]
+ },
+ {
+  "id": "living_room",
+  "label": "Living Room",
+  "category": "places",
+  "emoji": "\ud83d\udecb\ufe0f",
+  "tts": "Living room",
+  "tags": [
+   "living room",
+   "couch",
+   "sofa",
+   "tv room",
+   "relax"
+  ]
+ },
+ {
+  "id": "library",
+  "label": "Library",
+  "category": "places",
+  "emoji": "\ud83d\udcd6",
+  "tts": "Library",
+  "tags": [
+   "library",
+   "books",
+   "quiet",
+   "read",
+   "study"
+  ]
+ },
+ {
+  "id": "pool",
+  "label": "Swimming Pool",
+  "category": "places",
+  "emoji": "\ud83c\udfca",
+  "tts": "Swimming pool",
+  "tags": [
+   "pool",
+   "swimming",
+   "water",
+   "splash",
+   "swim"
+  ]
+ },
+ {
+  "id": "zoo",
+  "label": "Zoo",
+  "category": "places",
+  "emoji": "\ud83e\udd81",
+  "tts": "Zoo",
+  "tags": [
+   "zoo",
+   "animals",
+   "safari",
+   "trip",
+   "visit"
+  ]
+ },
+ {
+  "id": "beach",
+  "label": "Beach",
+  "category": "places",
+  "emoji": "\ud83c\udfd6\ufe0f",
+  "tts": "Beach",
+  "tags": [
+   "beach",
+   "ocean",
+   "sand",
+   "sea",
+   "summer",
+   "waves"
+  ]
+ },
+ {
+  "id": "movie_theater",
+  "label": "Movie Theater",
+  "category": "places",
+  "emoji": "\ud83c\udf7f",
+  "tts": "Movie theater",
+  "tags": [
+   "cinema",
+   "movie",
+   "theater",
+   "film",
+   "popcorn"
+  ]
+ },
+ {
+  "id": "gym",
+  "label": "Gymnasium",
+  "category": "places",
+  "emoji": "\ud83c\udfc0",
+  "tts": "School gym",
+  "tags": [
+   "gym",
+   "gymnasium",
+   "sports",
+   "p.e.",
+   "exercise"
+  ]
+ },
+ {
+  "id": "ball",
+  "label": "Ball",
+  "category": "play",
+  "emoji": "\u26bd",
+  "tts": "Play ball",
+  "tags": [
+   "ball",
+   "soccer",
+   "basketball",
+   "throw",
+   "catch",
+   "kick"
+  ]
+ },
+ {
+  "id": "blocks",
+  "label": "Blocks",
+  "category": "play",
+  "emoji": "\ud83e\uddf1",
+  "tts": "Building blocks",
+  "tags": [
+   "blocks",
+   "lego",
+   "build",
+   "stack",
+   "tower",
+   "toy"
+  ]
+ },
+ {
+  "id": "toy_car",
+  "label": "Toy Car",
+  "category": "play",
+  "emoji": "\ud83d\ude97",
+  "tts": "Toy cars",
+  "tags": [
+   "toy car",
+   "cars",
+   "trucks",
+   "hot wheels",
+   "vehicles"
+  ]
+ },
+ {
+  "id": "train_toy",
+  "label": "Toy Train",
+  "category": "play",
+  "emoji": "\ud83d\ude82",
+  "tts": "Choo choo train",
+  "tags": [
+   "train",
+   "tracks",
+   "choo choo",
+   "engine",
+   "locomotive"
+  ]
+ },
+ {
+  "id": "doll",
+  "label": "Doll / Teddy",
+  "category": "play",
+  "emoji": "\ud83e\uddf8",
+  "tts": "Teddy bear doll",
+  "tags": [
+   "doll",
+   "teddy bear",
+   "stuffed animal",
+   "plushie",
+   "baby doll"
+  ]
+ },
+ {
+  "id": "puzzle",
+  "label": "Puzzle",
+  "category": "play",
+  "emoji": "\ud83e\udde9",
+  "tts": "Jigsaw puzzle",
+  "tags": [
+   "puzzle",
+   "jigsaw",
+   "pieces",
+   "solve",
+   "game"
+  ]
+ },
+ {
+  "id": "tablet_ipad",
+  "label": "iPad / Tablet",
+  "category": "play",
+  "emoji": "\ud83d\udcf1",
+  "tts": "iPad tablet",
+  "tags": [
+   "ipad",
+   "tablet",
+   "screen",
+   "games",
+   "youtube",
+   "device"
+  ]
+ },
+ {
+  "id": "video_game",
+  "label": "Video Game",
+  "category": "play",
+  "emoji": "\ud83c\udfae",
+  "tts": "Play video game",
+  "tags": [
+   "video game",
+   "controller",
+   "gaming",
+   "nintendo",
+   "switch",
+   "playstation"
+  ]
+ },
+ {
+  "id": "bubbles",
+  "label": "Bubbles",
+  "category": "play",
+  "emoji": "\ud83e\udee7",
+  "tts": "Blow bubbles",
+  "tags": [
+   "bubbles",
+   "blow",
+   "pop",
+   "wand",
+   "soap",
+   "fun"
+  ]
+ },
+ {
+  "id": "crayons",
+  "label": "Crayons / Markers",
+  "category": "play",
+  "emoji": "\ud83d\udd8d\ufe0f",
+  "tts": "Color with crayons",
+  "tags": [
+   "crayons",
+   "markers",
+   "color",
+   "draw",
+   "coloring book",
+   "art"
+  ]
+ },
+ {
+  "id": "swing",
+  "label": "Swings",
+  "category": "play",
+  "emoji": "\ud83c\udfa0",
+  "tts": "Swing on swings",
+  "tags": [
+   "swing",
+   "swings",
+   "playground",
+   "park",
+   "push me"
+  ]
+ },
+ {
+  "id": "slide",
+  "label": "Slide",
+  "category": "play",
+  "emoji": "\ud83d\udedd",
+  "tts": "Go down slide",
+  "tags": [
+   "slide",
+   "playground",
+   "park",
+   "climb",
+   "down"
+  ]
+ },
+ {
+  "id": "music_play",
+  "label": "Music",
+  "category": "play",
+  "emoji": "\ud83c\udfb5",
+  "tts": "Listen to music",
+  "tags": [
+   "music",
+   "song",
+   "tune",
+   "dance",
+   "audio",
+   "radio"
+  ]
+ },
+ {
+  "id": "playdough",
+  "label": "Play Dough",
+  "category": "play",
+  "emoji": "\ud83c\udfa8",
+  "tts": "Play dough",
+  "tags": [
+   "playdough",
+   "clay",
+   "mold",
+   "squish",
+   "craft"
+  ]
+ },
+ {
+  "id": "bike",
+  "label": "Bicycle",
+  "category": "play",
+  "emoji": "\ud83d\udeb2",
+  "tts": "Ride bicycle",
+  "tags": [
+   "bike",
+   "bicycle",
+   "tricycle",
+   "scooter",
+   "ride",
+   "helmet"
+  ]
+ },
+ {
+  "id": "board_game",
+  "label": "Board Game",
+  "category": "play",
+  "emoji": "\ud83c\udfb2",
+  "tts": "Board game",
+  "tags": [
+   "board game",
+   "dice",
+   "cards",
+   "turn",
+   "winner"
+  ]
+ },
+ {
+  "id": "sandbox",
+  "label": "Sandbox",
+  "category": "play",
+  "emoji": "\ud83c\udfd6\ufe0f",
+  "tts": "Play in sandbox",
+  "tags": [
+   "sandbox",
+   "sand",
+   "shovel",
+   "bucket",
+   "castle"
+  ]
+ },
+ {
+  "id": "stickers",
+  "label": "Stickers",
+  "category": "play",
+  "emoji": "\u2b50",
+  "tts": "Stickers",
+  "tags": [
+   "stickers",
+   "craft",
+   "fun",
+   "reward",
+   "book"
+  ]
+ },
+ {
+  "id": "potty",
+  "label": "Toilet / Potty",
+  "category": "daily",
+  "emoji": "\ud83d\udebd",
+  "tts": "I need the toilet",
+  "tags": [
+   "toilet",
+   "potty",
+   "pee",
+   "poop",
+   "bathroom",
+   "restroom"
+  ]
+ },
+ {
+  "id": "bath",
+  "label": "Bath / Shower",
+  "category": "daily",
+  "emoji": "\ud83d\udec1",
+  "tts": "Take a bath",
+  "tags": [
+   "bath",
+   "shower",
+   "tub",
+   "wash",
+   "clean",
+   "bubbles"
+  ]
+ },
+ {
+  "id": "soap",
+  "label": "Soap",
+  "category": "daily",
+  "emoji": "\ud83e\uddfc",
+  "tts": "Soap",
+  "tags": [
+   "soap",
+   "wash",
+   "clean",
+   "hands",
+   "bubbles"
+  ]
+ },
+ {
+  "id": "shirt",
+  "label": "Shirt",
+  "category": "daily",
+  "emoji": "\ud83d\udc55",
+  "tts": "Shirt",
+  "tags": [
+   "shirt",
+   "t-shirt",
+   "top",
+   "clothes",
+   "wear"
+  ]
+ },
+ {
+  "id": "pants",
+  "label": "Pants",
+  "category": "daily",
+  "emoji": "\ud83d\udc56",
+  "tts": "Pants",
+  "tags": [
+   "pants",
+   "jeans",
+   "shorts",
+   "trousers",
+   "clothes"
+  ]
+ },
+ {
+  "id": "shoes",
+  "label": "Shoes",
+  "category": "daily",
+  "emoji": "\ud83d\udc5f",
+  "tts": "Shoes",
+  "tags": [
+   "shoes",
+   "sneakers",
+   "boots",
+   "feet",
+   "laces",
+   "tie"
+  ]
+ },
+ {
+  "id": "socks",
+  "label": "Socks",
+  "category": "daily",
+  "emoji": "\ud83e\udde6",
+  "tts": "Socks",
+  "tags": [
+   "socks",
+   "feet",
+   "warm",
+   "toes"
+  ]
+ },
+ {
+  "id": "jacket",
+  "label": "Jacket / Coat",
+  "category": "daily",
+  "emoji": "\ud83e\udde5",
+  "tts": "Jacket coat",
+  "tags": [
+   "jacket",
+   "coat",
+   "winter",
+   "cold",
+   "zip",
+   "hoodie"
+  ]
+ },
+ {
+  "id": "hat",
+  "label": "Hat",
+  "category": "daily",
+  "emoji": "\ud83e\udde2",
+  "tts": "Hat",
+  "tags": [
+   "hat",
+   "cap",
+   "beanie",
+   "sun hat",
+   "head"
+  ]
+ },
+ {
+  "id": "pajamas",
+  "label": "Pajamas",
+  "category": "daily",
+  "emoji": "\ud83d\udca4",
+  "tts": "Pajamas",
+  "tags": [
+   "pajamas",
+   "pjs",
+   "sleep",
+   "bedtime",
+   "night"
+  ]
+ },
+ {
+  "id": "backpack",
+  "label": "Backpack",
+  "category": "daily",
+  "emoji": "\ud83c\udf92",
+  "tts": "Backpack",
+  "tags": [
+   "backpack",
+   "school bag",
+   "bag",
+   "pack",
+   "school"
+  ]
+ },
+ {
+  "id": "glasses",
+  "label": "Glasses",
+  "category": "daily",
+  "emoji": "\ud83d\udc53",
+  "tts": "Glasses",
+  "tags": [
+   "glasses",
+   "spectacles",
+   "eyes",
+   "vision",
+   "see"
+  ]
+ },
+ {
+  "id": "blanket",
+  "label": "Blanket",
+  "category": "daily",
+  "emoji": "\ud83d\udecb\ufe0f",
+  "tts": "Cozy blanket",
+  "tags": [
+   "blanket",
+   "cozy",
+   "warm",
+   "sleep",
+   "bed",
+   "quilt"
+  ]
+ },
+ {
+  "id": "pillow",
+  "label": "Pillow",
+  "category": "daily",
+  "emoji": "\ud83d\udecf\ufe0f",
+  "tts": "Pillow",
+  "tags": [
+   "pillow",
+   "bed",
+   "sleep",
+   "head",
+   "cushion"
+  ]
+ },
+ {
+  "id": "towel",
+  "label": "Towel",
+  "category": "daily",
+  "emoji": "\ud83e\uddd6",
+  "tts": "Towel",
+  "tags": [
+   "towel",
+   "dry",
+   "bath",
+   "shower",
+   "clean"
+  ]
+ },
+ {
+  "id": "dog",
+  "label": "Dog",
+  "category": "animals",
+  "emoji": "\ud83d\udc36",
+  "tts": "Dog puppy",
+  "tags": [
+   "dog",
+   "puppy",
+   "pet",
+   "bark",
+   "woof",
+   "canine"
+  ]
+ },
+ {
+  "id": "cat",
+  "label": "Cat",
+  "category": "animals",
+  "emoji": "\ud83d\udc31",
+  "tts": "Cat kitty",
+  "tags": [
+   "cat",
+   "kitty",
+   "kitten",
+   "pet",
+   "meow",
+   "feline"
+  ]
+ },
+ {
+  "id": "bird",
+  "label": "Bird",
+  "category": "animals",
+  "emoji": "\ud83d\udc26",
+  "tts": "Bird",
+  "tags": [
+   "bird",
+   "fly",
+   "tweet",
+   "feather",
+   "wings",
+   "pet"
+  ]
+ },
+ {
+  "id": "fish",
+  "label": "Fish",
+  "category": "animals",
+  "emoji": "\ud83d\udc1f",
+  "tts": "Fish",
+  "tags": [
+   "fish",
+   "swim",
+   "water",
+   "goldfish",
+   "aquarium"
+  ]
+ },
+ {
+  "id": "rabbit",
+  "label": "Rabbit",
+  "category": "animals",
+  "emoji": "\ud83d\udc30",
+  "tts": "Bunny rabbit",
+  "tags": [
+   "rabbit",
+   "bunny",
+   "hop",
+   "ears",
+   "pet"
+  ]
+ },
+ {
+  "id": "horse",
+  "label": "Horse",
+  "category": "animals",
+  "emoji": "\ud83d\udc34",
+  "tts": "Horse pony",
+  "tags": [
+   "horse",
+   "pony",
+   "neigh",
+   "farm",
+   "ride"
+  ]
+ },
+ {
+  "id": "cow",
+  "label": "Cow",
+  "category": "animals",
+  "emoji": "\ud83d\udc2e",
+  "tts": "Cow",
+  "tags": [
+   "cow",
+   "moo",
+   "farm",
+   "milk",
+   "cattle"
+  ]
+ },
+ {
+  "id": "pig",
+  "label": "Pig",
+  "category": "animals",
+  "emoji": "\ud83d\udc37",
+  "tts": "Pig",
+  "tags": [
+   "pig",
+   "piggy",
+   "oink",
+   "farm",
+   "pink"
+  ]
+ },
+ {
+  "id": "sheep",
+  "label": "Sheep",
+  "category": "animals",
+  "emoji": "\ud83d\udc11",
+  "tts": "Sheep",
+  "tags": [
+   "sheep",
+   "lamb",
+   "baa",
+   "farm",
+   "wool"
+  ]
+ },
+ {
+  "id": "duck",
+  "label": "Duck",
+  "category": "animals",
+  "emoji": "\ud83e\udd86",
+  "tts": "Duck",
+  "tags": [
+   "duck",
+   "quack",
+   "pond",
+   "water",
+   "yellow"
+  ]
+ },
+ {
+  "id": "lion",
+  "label": "Lion",
+  "category": "animals",
+  "emoji": "\ud83e\udd81",
+  "tts": "Lion roar",
+  "tags": [
+   "lion",
+   "wild",
+   "roar",
+   "king",
+   "zoo",
+   "safari"
+  ]
+ },
+ {
+  "id": "tiger",
+  "label": "Tiger",
+  "category": "animals",
+  "emoji": "\ud83d\udc2f",
+  "tts": "Tiger",
+  "tags": [
+   "tiger",
+   "stripes",
+   "wild",
+   "zoo",
+   "cat"
+  ]
+ },
+ {
+  "id": "elephant",
+  "label": "Elephant",
+  "category": "animals",
+  "emoji": "\ud83d\udc18",
+  "tts": "Elephant",
+  "tags": [
+   "elephant",
+   "trunk",
+   "big",
+   "zoo",
+   "safari"
+  ]
+ },
+ {
+  "id": "monkey",
+  "label": "Monkey",
+  "category": "animals",
+  "emoji": "\ud83d\udc35",
+  "tts": "Monkey",
+  "tags": [
+   "monkey",
+   "banana",
+   "climb",
+   "zoo",
+   "jungle"
+  ]
+ },
+ {
+  "id": "bear",
+  "label": "Bear",
+  "category": "animals",
+  "emoji": "\ud83d\udc3b",
+  "tts": "Bear",
+  "tags": [
+   "bear",
+   "grizzly",
+   "teddy",
+   "wild",
+   "forest"
+  ]
+ },
+ {
+  "id": "turtle",
+  "label": "Turtle",
+  "category": "animals",
+  "emoji": "\ud83d\udc22",
+  "tts": "Turtle",
+  "tags": [
+   "turtle",
+   "slow",
+   "shell",
+   "green",
+   "reptile"
+  ]
+ },
+ {
+  "id": "frog",
+  "label": "Frog",
+  "category": "animals",
+  "emoji": "\ud83d\udc38",
+  "tts": "Frog",
+  "tags": [
+   "frog",
+   "ribbit",
+   "hop",
+   "green",
+   "pond"
+  ]
+ },
+ {
+  "id": "butterfly",
+  "label": "Butterfly",
+  "category": "animals",
+  "emoji": "\ud83e\udd8b",
+  "tts": "Butterfly",
+  "tags": [
+   "butterfly",
+   "wings",
+   "caterpillar",
+   "insect",
+   "pretty"
+  ]
+ },
+ {
+  "id": "dinosaur",
+  "label": "Dinosaur",
+  "category": "animals",
+  "emoji": "\ud83e\udd96",
+  "tts": "Dinosaur T-Rex",
+  "tags": [
+   "dinosaur",
+   "trex",
+   "dino",
+   "rawr",
+   "jurassic",
+   "toy"
+  ]
+ },
+ {
+  "id": "dolphin",
+  "label": "Dolphin",
+  "category": "animals",
+  "emoji": "\ud83d\udc2c",
+  "tts": "Dolphin",
+  "tags": [
+   "dolphin",
+   "ocean",
+   "swim",
+   "sea",
+   "smart"
+  ]
+ },
+ {
+  "id": "penguin",
+  "label": "Penguin",
+  "category": "animals",
+  "emoji": "\ud83d\udc27",
+  "tts": "Penguin",
+  "tags": [
+   "penguin",
+   "snow",
+   "ice",
+   "antarctica",
+   "bird",
+   "waddle"
+  ]
+ },
+ {
+  "id": "headache",
+  "label": "Headache",
+  "category": "health",
+  "emoji": "\ud83e\udd15",
+  "tts": "My head hurts",
+  "tags": [
+   "headache",
+   "head",
+   "hurts",
+   "pain",
+   "ouch",
+   "dizzy"
+  ]
+ },
+ {
+  "id": "tummy_ache",
+  "label": "Tummy Ache",
+  "category": "health",
+  "emoji": "\ud83e\udd22",
+  "tts": "My tummy hurts",
+  "tags": [
+   "tummy ache",
+   "stomach",
+   "belly",
+   "nausea",
+   "hurts",
+   "sick"
+  ]
+ },
+ {
+  "id": "fever",
+  "label": "Fever",
+  "category": "health",
+  "emoji": "\ud83e\udd12",
+  "tts": "I have a fever",
+  "tags": [
+   "fever",
+   "hot",
+   "temperature",
+   "thermometer",
+   "sick",
+   "doctor"
+  ]
+ },
+ {
+  "id": "cough_cold",
+  "label": "Cough / Cold",
+  "category": "health",
+  "emoji": "\ud83e\udd27",
+  "tts": "I have a cold and cough",
+  "tags": [
+   "cough",
+   "cold",
+   "sneeze",
+   "tissue",
+   "flu",
+   "runny nose"
+  ]
+ },
+ {
+  "id": "bandaid",
+  "label": "Band-Aid",
+  "category": "health",
+  "emoji": "\ud83e\ude79",
+  "tts": "I need a bandage",
+  "tags": [
+   "band-aid",
+   "bandage",
+   "boo boo",
+   "cut",
+   "scrape",
+   "first aid"
+  ]
+ },
+ {
+  "id": "medicine",
+  "label": "Medicine",
+  "category": "health",
+  "emoji": "\ud83d\udc8a",
+  "tts": "Medicine pill",
+  "tags": [
+   "medicine",
+   "pill",
+   "syrup",
+   "prescription",
+   "doctor",
+   "health"
+  ]
+ },
+ {
+  "id": "doctor_health",
+  "label": "Doctor",
+  "category": "health",
+  "emoji": "\ud83e\uddd1\u200d\u2695\ufe0f",
+  "tts": "Doctor visit",
+  "tags": [
+   "doctor",
+   "checkup",
+   "clinic",
+   "hospital",
+   "stethoscope"
+  ]
+ },
+ {
+  "id": "dentist",
+  "label": "Dentist",
+  "category": "health",
+  "emoji": "\ud83e\uddb7",
+  "tts": "Dentist tooth checkup",
+  "tags": [
+   "dentist",
+   "teeth",
+   "tooth",
+   "brush",
+   "clean",
+   "hygiene"
+  ]
+ },
+ {
+  "id": "head",
+  "label": "Head",
+  "category": "health",
+  "emoji": "\ud83d\udc66",
+  "tts": "Head",
+  "tags": [
+   "head",
+   "face",
+   "hair",
+   "forehead",
+   "body"
+  ]
+ },
+ {
+  "id": "eyes",
+  "label": "Eyes",
+  "category": "health",
+  "emoji": "\ud83d\udc40",
+  "tts": "Eyes",
+  "tags": [
+   "eyes",
+   "see",
+   "look",
+   "vision",
+   "body"
+  ]
+ },
+ {
+  "id": "ears",
+  "label": "Ears",
+  "category": "health",
+  "emoji": "\ud83d\udc42",
+  "tts": "Ears",
+  "tags": [
+   "ears",
+   "listen",
+   "hear",
+   "sound",
+   "body"
+  ]
+ },
+ {
+  "id": "mouth",
+  "label": "Mouth",
+  "category": "health",
+  "emoji": "\ud83d\udc44",
+  "tts": "Mouth",
+  "tags": [
+   "mouth",
+   "lips",
+   "teeth",
+   "tongue",
+   "eat",
+   "speak",
+   "body"
+  ]
+ },
+ {
+  "id": "hands",
+  "label": "Hands",
+  "category": "health",
+  "emoji": "\ud83d\udd90\ufe0f",
+  "tts": "Hands",
+  "tags": [
+   "hands",
+   "fingers",
+   "touch",
+   "hold",
+   "body"
+  ]
+ },
+ {
+  "id": "feet",
+  "label": "Feet",
+  "category": "health",
+  "emoji": "\ud83e\uddb6",
+  "tts": "Feet",
+  "tags": [
+   "feet",
+   "toes",
+   "walk",
+   "shoes",
+   "body"
+  ]
+ },
+ {
+  "id": "wheelchair",
+  "label": "Wheelchair",
+  "category": "health",
+  "emoji": "\ud83e\uddd1\u200d\ud83e\uddbd",
+  "tts": "Wheelchair",
+  "tags": [
+   "wheelchair",
+   "accessibility",
+   "mobility",
+   "ramp",
+   "seat"
+  ]
+ },
+ {
+  "id": "emergency",
+  "label": "Emergency Help",
+  "category": "health",
+  "emoji": "\ud83d\udea8",
+  "tts": "Emergency! Please help me now",
+  "tags": [
+   "emergency",
+   "911",
+   "danger",
+   "urgent",
+   "help",
+   "siren"
+  ]
+ },
+ {
+  "id": "car_veh",
+  "label": "Car",
+  "category": "vehicles",
+  "emoji": "\ud83d\ude97",
+  "tts": "Ride in car",
+  "tags": [
+   "car",
+   "auto",
+   "drive",
+   "ride",
+   "wheels",
+   "seatbelt"
+  ]
+ },
+ {
+  "id": "school_bus",
+  "label": "School Bus",
+  "category": "vehicles",
+  "emoji": "\ud83d\ude8c",
+  "tts": "School bus",
+  "tags": [
+   "school bus",
+   "bus",
+   "yellow bus",
+   "school",
+   "ride"
+  ]
+ },
+ {
+  "id": "train_veh",
+  "label": "Train",
+  "category": "vehicles",
+  "emoji": "\ud83d\ude86",
+  "tts": "Train ride",
+  "tags": [
+   "train",
+   "railway",
+   "subway",
+   "tracks",
+   "travel"
+  ]
+ },
+ {
+  "id": "airplane",
+  "label": "Airplane",
+  "category": "vehicles",
+  "emoji": "\u2708\ufe0f",
+  "tts": "Airplane flight",
+  "tags": [
+   "airplane",
+   "plane",
+   "fly",
+   "airport",
+   "travel",
+   "sky"
+  ]
+ },
+ {
+  "id": "boat_veh",
+  "label": "Boat",
+  "category": "vehicles",
+  "emoji": "\u26f5",
+  "tts": "Boat",
+  "tags": [
+   "boat",
+   "ship",
+   "water",
+   "sail",
+   "lake",
+   "ocean"
+  ]
+ },
+ {
+  "id": "fire_truck",
+  "label": "Fire Truck",
+  "category": "vehicles",
+  "emoji": "\ud83d\ude92",
+  "tts": "Fire truck siren",
+  "tags": [
+   "fire truck",
+   "firetruck",
+   "siren",
+   "rescue",
+   "emergency"
+  ]
+ },
+ {
+  "id": "police_car",
+  "label": "Police Car",
+  "category": "vehicles",
+  "emoji": "\ud83d\ude93",
+  "tts": "Police car",
+  "tags": [
+   "police car",
+   "cop car",
+   "siren",
+   "officer"
+  ]
+ },
+ {
+  "id": "ambulance_veh",
+  "label": "Ambulance",
+  "category": "vehicles",
+  "emoji": "\ud83d\ude91",
+  "tts": "Ambulance emergency",
+  "tags": [
+   "ambulance",
+   "hospital",
+   "emergency",
+   "paramedic",
+   "siren"
+  ]
+ },
+ {
+  "id": "truck",
+  "label": "Truck",
+  "category": "vehicles",
+  "emoji": "\ud83d\ude9a",
+  "tts": "Truck",
+  "tags": [
+   "truck",
+   "delivery",
+   "semi",
+   "big rig",
+   "cargo"
+  ]
+ },
+ {
+  "id": "helicopter",
+  "label": "Helicopter",
+  "category": "vehicles",
+  "emoji": "\ud83d\ude81",
+  "tts": "Helicopter",
+  "tags": [
+   "helicopter",
+   "chopper",
+   "fly",
+   "blades",
+   "sky"
+  ]
+ },
+ {
+  "id": "bicycle_veh",
+  "label": "Bicycle",
+  "category": "vehicles",
+  "emoji": "\ud83d\udeb2",
+  "tts": "Ride bicycle",
+  "tags": [
+   "bicycle",
+   "bike",
+   "ride",
+   "pedal",
+   "helmet"
+  ]
+ },
+ {
+  "id": "sun",
+  "label": "Sunny",
+  "category": "nature",
+  "emoji": "\u2600\ufe0f",
+  "tts": "Sunny outside",
+  "tags": [
+   "sunny",
+   "sun",
+   "warm",
+   "bright",
+   "day",
+   "clear"
+  ]
+ },
+ {
+  "id": "rain",
+  "label": "Rainy",
+  "category": "nature",
+  "emoji": "\ud83c\udf27\ufe0f",
+  "tts": "Rainy outside",
+  "tags": [
+   "rain",
+   "rainy",
+   "umbrella",
+   "puddle",
+   "water",
+   "wet"
+  ]
+ },
+ {
+  "id": "snow",
+  "label": "Snowy",
+  "category": "nature",
+  "emoji": "\u2744\ufe0f",
+  "tts": "Snowy cold",
+  "tags": [
+   "snow",
+   "snowy",
+   "winter",
+   "snowman",
+   "ice",
+   "cold",
+   "snowflake"
+  ]
+ },
+ {
+  "id": "wind",
+  "label": "Windy",
+  "category": "nature",
+  "emoji": "\ud83d\udca8",
+  "tts": "Windy",
+  "tags": [
+   "wind",
+   "windy",
+   "breeze",
+   "blow",
+   "air"
+  ]
+ },
+ {
+  "id": "cloud",
+  "label": "Cloudy",
+  "category": "nature",
+  "emoji": "\u2601\ufe0f",
+  "tts": "Cloudy sky",
+  "tags": [
+   "cloud",
+   "cloudy",
+   "overcast",
+   "sky",
+   "gray"
+  ]
+ },
+ {
+  "id": "thunder",
+  "label": "Storm / Thunder",
+  "category": "nature",
+  "emoji": "\u26c8\ufe0f",
+  "tts": "Thunder storm",
+  "tags": [
+   "storm",
+   "thunder",
+   "lightning",
+   "rain",
+   "loud"
+  ]
+ },
+ {
+  "id": "rainbow",
+  "label": "Rainbow",
+  "category": "nature",
+  "emoji": "\ud83c\udf08",
+  "tts": "Pretty rainbow",
+  "tags": [
+   "rainbow",
+   "colors",
+   "sky",
+   "pretty",
+   "after rain"
+  ]
+ },
+ {
+  "id": "tree",
+  "label": "Tree",
+  "category": "nature",
+  "emoji": "\ud83c\udf33",
+  "tts": "Tree",
+  "tags": [
+   "tree",
+   "nature",
+   "leaves",
+   "green",
+   "park",
+   "wood"
+  ]
+ },
+ {
+  "id": "flower",
+  "label": "Flower",
+  "category": "nature",
+  "emoji": "\ud83c\udf38",
+  "tts": "Flower",
+  "tags": [
+   "flower",
+   "blossom",
+   "garden",
+   "plant",
+   "pretty",
+   "petal"
+  ]
+ },
+ {
+  "id": "moon_stars",
+  "label": "Moon & Stars",
+  "category": "nature",
+  "emoji": "\ud83c\udf19",
+  "tts": "Moon and stars",
+  "tags": [
+   "moon",
+   "stars",
+   "night",
+   "sky",
+   "bedtime",
+   "dark"
+  ]
+ },
+ {
+  "id": "num_1",
+  "label": "1 / One",
+  "category": "concepts",
+  "emoji": "1\ufe0f\u20e3",
+  "tts": "One",
+  "tags": [
+   "1",
+   "one",
+   "number",
+   "first",
+   "count"
+  ]
+ },
+ {
+  "id": "num_2",
+  "label": "2 / Two",
+  "category": "concepts",
+  "emoji": "2\ufe0f\u20e3",
+  "tts": "Two",
+  "tags": [
+   "2",
+   "two",
+   "number",
+   "pair",
+   "count"
+  ]
+ },
+ {
+  "id": "num_3",
+  "label": "3 / Three",
+  "category": "concepts",
+  "emoji": "3\ufe0f\u20e3",
+  "tts": "Three",
+  "tags": [
+   "3",
+   "three",
+   "number",
+   "count"
+  ]
+ },
+ {
+  "id": "num_4",
+  "label": "4 / Four",
+  "category": "concepts",
+  "emoji": "4\ufe0f\u20e3",
+  "tts": "Four",
+  "tags": [
+   "4",
+   "four",
+   "number",
+   "count"
+  ]
+ },
+ {
+  "id": "num_5",
+  "label": "5 / Five",
+  "category": "concepts",
+  "emoji": "5\ufe0f\u20e3",
+  "tts": "Five",
+  "tags": [
+   "5",
+   "five",
+   "number",
+   "count",
+   "hand"
+  ]
+ },
+ {
+  "id": "num_6",
+  "label": "6 / Six",
+  "category": "concepts",
+  "emoji": "6\ufe0f\u20e3",
+  "tts": "Six",
+  "tags": [
+   "6",
+   "six",
+   "number",
+   "count"
+  ]
+ },
+ {
+  "id": "num_7",
+  "label": "7 / Seven",
+  "category": "concepts",
+  "emoji": "7\ufe0f\u20e3",
+  "tts": "Seven",
+  "tags": [
+   "7",
+   "seven",
+   "number",
+   "count"
+  ]
+ },
+ {
+  "id": "num_8",
+  "label": "8 / Eight",
+  "category": "concepts",
+  "emoji": "8\ufe0f\u20e3",
+  "tts": "Eight",
+  "tags": [
+   "8",
+   "eight",
+   "number",
+   "count"
+  ]
+ },
+ {
+  "id": "num_9",
+  "label": "9 / Nine",
+  "category": "concepts",
+  "emoji": "9\ufe0f\u20e3",
+  "tts": "Nine",
+  "tags": [
+   "9",
+   "nine",
+   "number",
+   "count"
+  ]
+ },
+ {
+  "id": "num_10",
+  "label": "10 / Ten",
+  "category": "concepts",
+  "emoji": "\ud83d\udd1f",
+  "tts": "Ten",
+  "tags": [
+   "10",
+   "ten",
+   "number",
+   "count",
+   "all ten"
+  ]
+ },
+ {
+  "id": "all_concept",
+  "label": "All",
+  "category": "concepts",
+  "emoji": "\ud83d\udcaf",
+  "tts": "All of them",
+  "tags": [
+   "all",
+   "everything",
+   "full",
+   "whole",
+   "complete"
+  ]
+ },
+ {
+  "id": "none_concept",
+  "label": "None",
+  "category": "concepts",
+  "emoji": "\ud83d\udeab",
+  "tts": "None",
+  "tags": [
+   "none",
+   "zero",
+   "empty",
+   "no more"
+  ]
+ },
+ {
+  "id": "red",
+  "label": "Red",
+  "category": "colors",
+  "emoji": "\ud83d\udd34",
+  "tts": "Red",
+  "tags": [
+   "red",
+   "color",
+   "circle"
+  ]
+ },
+ {
+  "id": "blue",
+  "label": "Blue",
+  "category": "colors",
+  "emoji": "\ud83d\udd35",
+  "tts": "Blue",
+  "tags": [
+   "blue",
+   "color",
+   "circle"
+  ]
+ },
+ {
+  "id": "green",
+  "label": "Green",
+  "category": "colors",
+  "emoji": "\ud83d\udfe2",
+  "tts": "Green",
+  "tags": [
+   "green",
+   "color",
+   "circle"
+  ]
+ },
+ {
+  "id": "yellow",
+  "label": "Yellow",
+  "category": "colors",
+  "emoji": "\ud83d\udfe1",
+  "tts": "Yellow",
+  "tags": [
+   "yellow",
+   "color",
+   "circle"
+  ]
+ },
+ {
+  "id": "orange_col",
+  "label": "Orange",
+  "category": "colors",
+  "emoji": "\ud83d\udfe0",
+  "tts": "Orange",
+  "tags": [
+   "orange",
+   "color",
+   "circle"
+  ]
+ },
+ {
+  "id": "purple",
+  "label": "Purple",
+  "category": "colors",
+  "emoji": "\ud83d\udfe3",
+  "tts": "Purple",
+  "tags": [
+   "purple",
+   "violet",
+   "color",
+   "circle"
+  ]
+ },
+ {
+  "id": "pink",
+  "label": "Pink",
+  "category": "colors",
+  "emoji": "\ud83c\udf38",
+  "tts": "Pink",
+  "tags": [
+   "pink",
+   "color"
+  ]
+ },
+ {
+  "id": "star_shape",
+  "label": "Star",
+  "category": "colors",
+  "emoji": "\u2b50",
+  "tts": "Star",
+  "tags": [
+   "star",
+   "shape",
+   "yellow star"
+  ]
+ },
+ {
+  "id": "heart_shape",
+  "label": "Heart",
+  "category": "colors",
+  "emoji": "\u2764\ufe0f",
+  "tts": "Heart",
+  "tags": [
+   "heart",
+   "love",
+   "shape",
+   "red heart"
+  ]
+ },
+ {
+  "id": "hello",
+  "label": "Hello / Hi",
+  "category": "social",
+  "emoji": "\ud83d\udc4b",
+  "tts": "Hello, how are you?",
+  "tags": [
+   "hello",
+   "hi",
+   "hey",
+   "greetings",
+   "wave"
+  ]
+ },
+ {
+  "id": "goodbye",
+  "label": "Goodbye / Bye",
+  "category": "social",
+  "emoji": "\ud83d\udc4b",
+  "tts": "Goodbye, see you later!",
+  "tags": [
+   "goodbye",
+   "bye",
+   "see you",
+   "farewell",
+   "wave"
+  ]
+ },
+ {
+  "id": "please",
+  "label": "Please",
+  "category": "social",
+  "emoji": "\ud83d\ude4f",
+  "tts": "Please",
+  "tags": [
+   "please",
+   "polite",
+   "ask",
+   "courtesy"
+  ]
+ },
+ {
+  "id": "thank_you",
+  "label": "Thank You",
+  "category": "social",
+  "emoji": "\ud83d\ude4f",
+  "tts": "Thank you so much!",
+  "tags": [
+   "thank you",
+   "thanks",
+   "grateful",
+   "polite"
+  ]
+ },
+ {
+  "id": "youre_welcome",
+  "label": "You're Welcome",
+  "category": "social",
+  "emoji": "\ud83d\ude0a",
+  "tts": "You are very welcome",
+  "tags": [
+   "you're welcome",
+   "welcome",
+   "glad to help"
+  ]
+ },
+ {
+  "id": "sorry",
+  "label": "I'm Sorry",
+  "category": "social",
+  "emoji": "\ud83e\udd7a",
+  "tts": "I am sorry",
+  "tags": [
+   "sorry",
+   "apologize",
+   "excuse me",
+   "forgive"
+  ]
+ },
+ {
+  "id": "excuse_me",
+  "label": "Excuse Me",
+  "category": "social",
+  "emoji": "\ud83d\ude4b",
+  "tts": "Excuse me please",
+  "tags": [
+   "excuse me",
+   "pardon",
+   "attention"
+  ]
+ },
+ {
+  "id": "i_love_you",
+  "label": "I Love You",
+  "category": "social",
+  "emoji": "\u2764\ufe0f",
+  "tts": "I love you!",
+  "tags": [
+   "i love you",
+   "love",
+   "heart",
+   "hug",
+   "family"
+  ]
+ },
+ {
+  "id": "ready",
+  "label": "I am Ready",
+  "category": "social",
+  "emoji": "\ud83d\udc4d",
+  "tts": "I am ready!",
+  "tags": [
+   "ready",
+   "set",
+   "go",
+   "prepared"
+  ]
+ },
+ {
+  "id": "great_job",
+  "label": "Great Job",
+  "category": "social",
+  "emoji": "\ud83c\udf89",
+  "tts": "Great job! Awesome!",
+  "tags": [
+   "great job",
+   "congrats",
+   "awesome",
+   "celebrate",
+   "party"
+  ]
+ }
+]

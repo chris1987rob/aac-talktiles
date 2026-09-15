@@ -159,7 +159,7 @@ const hexToRgb = (hex) => {
       };
     });
     const p = pages[currentPageIndex];
-    const svgSymbols = Object.values(p.tiles).filter(t => t.symbol && t.symbol.indexOf('symbols/en/') === 0).length;
+    const svgSymbols = Object.values(p.tiles).filter(t => t.symbol && t.symbol.indexOf('symbols/modern/') === 0).length;
     const brokenImgs = [...document.querySelectorAll('#tiles-grid img')].filter(i => i.complete && i.naturalWidth === 0).length;
     return { tiles: out, svgSymbols, brokenImgs };
   }, expectedColors);
@@ -170,7 +170,7 @@ const hexToRgb = (hex) => {
   });
 
   check(
-    '5. Core Words tiles match the reference colours (navy row, lavender/green/blue/white/teal columns) with working Mulberry symbols',
+    '5. Core Words tiles match the reference colours (navy row, lavender/green/blue/white/teal columns) with working in-house symbol pictures',
     colorsOk && c5.svgSymbols >= 20 && c5.brokenImgs === 0,
     JSON.stringify(c5)
   );
@@ -303,8 +303,11 @@ const hexToRgb = (hex) => {
   // Check 9: tap all 48 Core Words tiles and assert each speaks its own word
   // --------------------------------------------------------------------------
   const c9 = await page.evaluate(() => {
-    window.__spoken = [];
-    window.speechSynthesis.speak = (u) => window.__spoken.push(u.text);
+    // Library-picture tiles play a pre-rendered voice clip instead of calling
+    // speechSynthesis, so observe the app's own speech log (fed by both paths).
+    window.__spokenHistory = [];
+    window.__spoken = window.__spokenHistory;
+    window.speechSynthesis.speak = () => {};
 
     pages = pages.slice(0, 1);
     currentPageIndex = 0;
@@ -349,7 +352,8 @@ const hexToRgb = (hex) => {
   // --------------------------------------------------------------------------
   const c10 = await page.evaluate(() => {
     const bar = document.getElementById('express-bar-container');
-    window.__spoken = [];
+    window.__spokenHistory = [];
+    window.__spoken = window.__spokenHistory;
     document.getElementById('express-bar').click();
     return {
       express: pages[currentPageIndex].express,
@@ -365,11 +369,11 @@ const hexToRgb = (hex) => {
   });
 
   check(
-    '10. Core Words is an express page: 48 taps chip up in order with their own symbol thumbnails, and the speech bar plays them IN SEQUENCE',
+    '10. Core Words is an express page: 48 taps chip up in order with their own symbol thumbnails (34 pictured words), and the speech bar plays them IN SEQUENCE',
     c10.express === true && c10.barOpen &&
       c10.chips.length === 48 && c10.chips.every((t, i) => t === c9.expected[i]) &&
       c10.sentence.length === 1 && c10.sentence[0] === c9.expected.join(' ') &&
-      c10.thumbs === 24,
+      c10.thumbs === 34,
     JSON.stringify({ express: c10.express, barOpen: c10.barOpen, chips: c10.chips, thumbs: c10.thumbs, sentence: c10.sentence })
   );
 
